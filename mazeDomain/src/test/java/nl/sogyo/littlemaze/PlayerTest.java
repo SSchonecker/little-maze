@@ -17,6 +17,9 @@ class PlayerTest {
 	
 	@Test
 	void getPlayerPosition() {
+		Tile playersTile = new Tile(0,0);
+		playersTile.moveTo(thePlayer);
+		
 		int[] expectedPosition = {0,0};
 		
 		assertArrayEquals(expectedPosition, thePlayer.getPosition());
