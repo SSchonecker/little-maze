@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import nl.sogyo.littlemaze.Grid;
+
 /**
  * Unit tests for the entire grid.
  */

@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import nl.sogyo.littlemaze.Direction;
+import nl.sogyo.littlemaze.Player;
+import nl.sogyo.littlemaze.Tile;
+
 /**
  * Unit tests for the basic player functions.
  */
