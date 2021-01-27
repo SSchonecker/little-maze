@@ -25,9 +25,9 @@ maven_test:
     when: always
     reports:
       junit:
-        - target/surefire-reports/TEST-*.xml
+        - mazeDomain/target/surefire-reports/TEST-*.xml
     paths: 
-      - target/surefire-reports/TEST-nl.sogyo.littlemaze.GridTest.xml
-      - target/surefire-reports/TEST-nl.sogyo.littlemaze.TileTest.xml
-      - target/surefire-reports/TEST-nl.sogyo.littlemaze.PlayerTest.xml
-      - target/site/jacoco/jacoco.xml
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.GridTest.xml
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.TileTest.xml
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.PlayerTest.xml
+      - mazeDomain/target/site/jacoco/jacoco.xml
