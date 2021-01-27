@@ -4,9 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//import java.time.Duration;
+//import java.time.Instant;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests mainly for the separate tiles and the player movement.
+ */
 class TileTest {
 	
 	private Tile firstTile;
@@ -139,6 +145,40 @@ class TileTest {
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
 		assertEquals(127, aPlayer.getScore());
 		assertTrue(aPlayer.isGameOver());
+		
+		aPlayer.moveBackward();
+		assertArrayEquals(expectedPosition, aPlayer.getPosition());
 	}
+	@Test
+	void oneChestOnly() {
+		Tile[][] bigMaze = new Tile[10][10];
+		@SuppressWarnings("unused")
+		Tile firstTile = new Tile(bigMaze);
+		int nrOfChests = 0;
+		for (Tile[] row : bigMaze) {
+			for (Tile aTile : row ) {
+				if (aTile.containsChest()) {
+					nrOfChests++;
+				}
+			}
+		}
+		assertEquals(1, nrOfChests);
+	}
+	
+	/**@Test
+	void mazeBuildSpeed() {
+		Instant start = Instant.now();
+		Tile[][] bigMaze = new Tile[85][85];
+		Tile firstTile = new Tile(bigMaze);
+		Instant finish = Instant.now();
+		long timeElapsed = Duration.between(start, finish).toMillis();
+		System.out.println("It takes " + timeElapsed + "ms to build a 85x85 maze");
+		
+		start = Instant.now();
+		Tile aTile = firstTile.getTileAt(40, 38);
+		finish = Instant.now();
+		timeElapsed = Duration.between(start, finish).toMillis();
+		System.out.println("It takes " + timeElapsed + "ms to find a specific tile");
+	}*/
 
 }

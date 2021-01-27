@@ -3,7 +3,7 @@ package nl.sogyo.littlemaze;
 public class Spike extends Tile {
 
 	private boolean revealed = false;
-	private final int PAIN = 20;
+	private static final int PAIN = 20;
 
 	public Spike(int x, int y) {
 		super(x, y);

@@ -9,7 +9,7 @@ class Tile {
 	private boolean revealed = false;
 	Tile[] neighbours = new Tile[4];
 	private boolean hasChest = false;
-	private final int TREASURE = 100;
+	private static final int TREASURE = 100;
 	private Tile[][] maze;
 
 	public Tile(int x, int y) {
@@ -45,22 +45,21 @@ class Tile {
 					neighbours[dir.nr] = new Tile(mazeGrid, dir, this);
 				}
 			}
-		}
-		
-		if (!contains(mazeGrid, null)) {
-			this.hasChest = true;
+			if (shouldPutchest(mazeGrid)) {
+				this.hasChest = true;
+			}
 		}
 	}
 
-	private boolean contains(Tile[][] mazeGrid, Object object) {
-		for (int i = mazeGrid.length - 1; i >= 0; i--) {
-			for (int j = mazeGrid.length - 1; j >= 0; j--) {
-				if (mazeGrid[i][j] == null) {
-					return true;
+	private boolean shouldPutchest(Tile[][] mazeGrid) {
+		for (int i = (mazeGrid.length - 1); i >= 0; i = i-1) {
+			for (int j = (mazeGrid.length - 1); j >= 0; j = j-1) {
+				if (mazeGrid[i][j] == null || mazeGrid[i][j].hasChest) {
+					return false;
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private boolean between(int value, int max) {
@@ -89,6 +88,7 @@ class Tile {
 		aPlayer.putHere(this);
 		if (hasChest) {
 			aPlayer.setScore(TREASURE);
+			Arrays.fill(this.neighbours, null);
 		}
 	}
 
@@ -106,6 +106,14 @@ class Tile {
 		else {
 			System.out.println("You can't move there.");
 		}
+	}
+
+	public boolean containsChest() {
+		return hasChest;
+	}
+
+	public Tile getNeighbour(int n) {
+		return neighbours[n];
 	}
 
 }

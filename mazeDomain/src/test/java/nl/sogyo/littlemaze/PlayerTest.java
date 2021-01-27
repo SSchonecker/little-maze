@@ -2,10 +2,14 @@ package nl.sogyo.littlemaze;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the basic player functions.
+ */
 class PlayerTest {
 	
 	Player thePlayer;
@@ -42,8 +46,10 @@ class PlayerTest {
 	}
 	
 	@Test
-	void getPlayerOrientation() {
-		assertEquals(Direction.EAST, thePlayer.getOrientation());
+	void killPlayer() {
+		thePlayer.suffer(52);
+		assertEquals(0, thePlayer.getHealth());
+		assertTrue(thePlayer.isGameOver());
 	}
 	
 	@Test

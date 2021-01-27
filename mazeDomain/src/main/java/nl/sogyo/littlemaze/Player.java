@@ -27,8 +27,15 @@ public class Player {
 	}
 
 	public void suffer(int pain) {
-		System.out.println("Ouch! You lost " + pain + " hp...");
-		myLife -= pain;
+		if (pain < myLife) {
+			System.out.println("Ouch! You lost " + pain + " hp...");
+			myLife -= pain;
+		}
+		else {
+			System.out.println("Oops! You lost your life...");
+			myLife = 0;
+			endOfGame = true;
+		}
 	}
 
 	public Direction getOrientation() {
