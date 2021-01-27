@@ -98,6 +98,10 @@ class Tile {
 		}
 		return null; 
 	}
+	
+	public Tile getTileAt(int[] position) {
+		return getTileAt(position[0], position[1]);
+	}
 
 	public void walkTo(Direction dir, Player aPlayer) {
 		if (neighbours[dir.nr] != null) {

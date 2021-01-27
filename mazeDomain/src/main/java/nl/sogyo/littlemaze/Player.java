@@ -78,4 +78,8 @@ public class Player {
 		return endOfGame;
 	}
 
+	public int getSteps() {
+		return mySteps;
+	}
+
 }

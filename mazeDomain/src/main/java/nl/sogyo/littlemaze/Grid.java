@@ -1,5 +1,7 @@
 package nl.sogyo.littlemaze;
 
+import java.util.Arrays;
+
 public class Grid {
 	
 	private Tile firstTile;
@@ -66,6 +68,57 @@ public class Grid {
 		}
 		
 		return mazeLayout;
+	}
+
+	public int getSteps() {
+		return myPlayer.getSteps();
+	}
+
+	public Integer getPlayerHealth() {
+		return myPlayer.getHealth();
+	}
+
+	public void stirPlayer(String key) throws InvalidMoveException {
+		int[] initPosition = myPlayer.getPosition();
+		Direction initFacing = myPlayer.getOrientation();
+		switch (key.toLowerCase()) {
+		case("w"):
+			myPlayer.moveForward();
+			break;
+		case("s"):
+			myPlayer.moveBackward();
+			break;
+		case("a"):
+			myPlayer.turnLeft();
+			break;
+		case("d"):
+			myPlayer.turnRight();
+			break;
+		default:
+			throw new InvalidMoveException("Not a valid key");
+		}
+		
+		if (myPlayer.getPosition() == initPosition &&
+				myPlayer.getOrientation().equals(initFacing)) {
+			throw new InvalidMoveException("You can't move there.");
+		}
+	}
+
+	public String getPlayerOrientation() {
+		return myPlayer.getOrientation().toString();
+	}
+
+	public void selectTile(int i, int j) throws InvalidMoveException {
+		int[] target = {i, j};
+		for (int n = 0; n < 4; n++) {
+			Tile aNeighbour = firstTile.getTileAt(myPlayer.getPosition()).getNeighbour(n);
+			if (aNeighbour != null 
+					&& Arrays.equals(target, aNeighbour.getPosition())) {
+				aNeighbour.select();
+				return;
+			}
+		}
+		throw new InvalidMoveException("You can't see this tile from here.");
 	}
 	
 	

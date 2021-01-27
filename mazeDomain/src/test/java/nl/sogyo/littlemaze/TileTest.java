@@ -2,6 +2,7 @@ package nl.sogyo.littlemaze;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //import java.time.Duration;
@@ -9,10 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import nl.sogyo.littlemaze.Player;
-import nl.sogyo.littlemaze.Spike;
-import nl.sogyo.littlemaze.Tile;
 
 /**
  * Unit tests mainly for the separate tiles and the player movement.
@@ -84,6 +81,11 @@ class TileTest {
 	}
 	
 	@Test
+	void tryGetWrongTile() {
+		assertNull(miniMaze.getTileAt(2,4));
+	}
+	
+	@Test
 	void movePlayer() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
@@ -142,6 +144,7 @@ class TileTest {
 		aPlayer.turnLeft();
 		aPlayer.moveForward();
 		aPlayer.turnLeft();
+		firstTile.getTileAt(aPlayer.getPosition()).getNeighbour(3).select();
 		aPlayer.moveForward();
 		
 		int[] expectedPosition = {0, 1};
