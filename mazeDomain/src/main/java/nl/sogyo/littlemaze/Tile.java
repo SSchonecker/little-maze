@@ -1,47 +1,70 @@
 package nl.sogyo.littlemaze;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 class Tile {
 	
 	private int[] position = new int[2];
 	private boolean revealed = false;
-	Tile nextTile;
-	Tile prevTile;
+	Tile[] neighbours = new Tile[4];
 	private boolean hasChest = false;
 	private final int TREASURE = 100;
+	private Tile[][] maze;
 
 	public Tile(int x, int y) {
 		position[0] = x;
 		position[1] = y;
 	}
+	
+	public Tile(Tile[][] mazeGrid) {
+		mazeGrid[0][0] = this;
+		this.maze = mazeGrid;
+		position[0] = 0;
+		position[1] = 0;
+		neighbours[Direction.EAST.nr] = new Tile(mazeGrid, Direction.EAST, this); 
+	}
+	
+	public Tile(Tile[][] mazeGrid, Direction fromLast, Tile last) {
+		this.position[0] = last.getPosition()[0] + fromLast.dx;
+		this.position[1] = last.getPosition()[1] + fromLast.dy;
+		mazeGrid[position[0]][position[1]] = this;
+		neighbours[fromLast.opposite.nr] = last;
+		
+		Direction[] dirs = Direction.values();
+		Collections.shuffle(Arrays.asList(dirs));
+		for (Direction dir : dirs) {
+			int nx = position[0] + dir.dx;
+			int ny = position[1] + dir.dy;
+			if (between(nx, mazeGrid.length) && between(ny, mazeGrid.length)
+					&& (mazeGrid[nx][ny] == null)) {
+				if (nx == ny) {
+					neighbours[dir.nr] = new Spike(mazeGrid, dir, this);
+				}
+				else {
+					neighbours[dir.nr] = new Tile(mazeGrid, dir, this);
+				}
+			}
+		}
+		
+		if (!contains(mazeGrid, null)) {
+			this.hasChest = true;
+		}
+	}
 
-	public Tile(List<String> mazeList, Tile previousTile) {
-		prevTile = previousTile;
-		
-		String info = mazeList.remove(0);
-		String positionInfo = info.split(";")[1];
-		position[0] = Character.getNumericValue(positionInfo.charAt(0));
-		position[1] = Character.getNumericValue(positionInfo.charAt(1));
-		
-		if (info.split(";")[0].equals("C")) {
-			hasChest = true;
-			prevTile = null;
-		}
-		else {
-			String nextTileInfo = info.split(";")[2];
-			if (nextTileInfo.equals("O")) {
-				nextTile = new Tile(mazeList, this);
-			}
-			else if (nextTileInfo.equals("P")) {
-				String nextInfo = mazeList.remove(0);
-				String nextPositionInfo = nextInfo.split(";")[1];
-				nextTile = new Spike(Character.getNumericValue(nextPositionInfo.charAt(0)),
-						Character.getNumericValue(nextPositionInfo.charAt(1)),
-						nextInfo, mazeList, this);
+	private boolean contains(Tile[][] mazeGrid, Object object) {
+		for (int i = mazeGrid.length - 1; i >= 0; i--) {
+			for (int j = mazeGrid.length - 1; j >= 0; j--) {
+				if (mazeGrid[i][j] == null) {
+					return true;
+				}
 			}
 		}
+		return false;
+	}
+
+	private boolean between(int value, int max) {
+		return (value >= 0) && (value < max);
 	}
 
 	public int[] getPosition() {
@@ -70,27 +93,15 @@ class Tile {
 	}
 
 	public Tile getTileAt(int i, int j) {
-		if (position[0] == i && position[1] == j) {
-			return this;
+		if (between(i, maze.length) && between (j, maze.length)) {
+			return maze[i][j];
 		}
-		return nextTile.getTileAt(i, j);
+		return null; 
 	}
 
-	public Tile getTileNr(int n) {
-		if (n == 0) {
-			return this;
-		}
-		return nextTile.getTileNr(n-1);
-	}
-
-	public void walkTo(int[] temp, Player aPlayer) {
-		if (nextTile != null && Arrays.equals(nextTile.getPosition(), temp)) {
-			nextTile.moveTo(aPlayer);
-			return;
-		}
-		else if (prevTile != null && Arrays.equals(prevTile.getPosition(), temp)) {
-			prevTile.moveTo(aPlayer);
-			return;
+	public void walkTo(Direction dir, Player aPlayer) {
+		if (neighbours[dir.nr] != null) {
+			neighbours[dir.nr].moveTo(aPlayer);
 		}
 		else {
 			System.out.println("You can't move there.");

@@ -1,7 +1,5 @@
 package nl.sogyo.littlemaze;
 
-import java.util.Arrays;
-
 public class Player {
 
 	private Tile currentTile;
@@ -38,11 +36,11 @@ public class Player {
 	}
 
 	public void turnLeft() {
-		facing = facing.left();
+		facing = facing.left;
 	}
 
 	public void turnRight() {
-		facing = facing.right();
+		facing = facing.right;
 	}
 
 	public void putHere(Tile someTile) {
@@ -51,42 +49,12 @@ public class Player {
 	}
 
 	public void moveForward() {
-		int[] temp = Arrays.copyOf(currentTile.getPosition(), 2);
-		switch (facing) {
-		case NORTH: 
-			temp[1] += 1;
-			break;
-		case EAST: 
-			temp[0] += 1;
-			break;
-		case SOUTH: 
-			temp[1] -= 1;
-			break;
-		case WEST: 
-			temp[0] -= 1;
-		}
-		
-		currentTile.walkTo(temp, this);
+		currentTile.walkTo(facing, this);
 		
 	}
 
 	public void moveBackward() {
-		int[] temp = Arrays.copyOf(currentTile.getPosition(), 2);
-		switch (facing) {
-		case NORTH: 
-			temp[1] -= 1;
-			break;
-		case EAST: 
-			temp[0] -= 1;
-			break;
-		case SOUTH: 
-			temp[1] += 1;
-			break;
-		case WEST: 
-			temp[0] += 1;
-		}
-		
-		currentTile.walkTo(temp, this);
+		currentTile.walkTo(facing.opposite, this);
 		
 	}
 

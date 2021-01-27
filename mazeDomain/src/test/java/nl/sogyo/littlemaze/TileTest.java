@@ -4,10 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +14,13 @@ class TileTest {
 	private Tile miniMaze;
 	private Player aPlayer;
 	
-	private String[] testMazeString = {"O;00;O", "O;10;P", "P;20;O", "O;21;O", "C;22"};
-	private List<String> testMaze = new LinkedList<>(Arrays.asList(testMazeString));
+	private Tile[][] testMaze = new Tile[2][2];
 	
 	@BeforeEach
 	void setTiles() {
 		aPlayer = new Player("R");
-		miniMaze = new Tile(testMaze, null);
-		firstTile = miniMaze.getTileNr(0);
+		miniMaze = new Tile(testMaze);
+		firstTile = miniMaze.getTileAt(0, 0);
 		spikedTile = new Spike(2, 5);
 	}
 	
@@ -71,15 +66,11 @@ class TileTest {
 	void makeMiniMaze() {
 		int[] expectedPosition = {0, 0};
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileNr(0).getPosition());
-		assertArrayEquals(expectedPosition,
 				miniMaze.getTileAt(0,0).getPosition());
 		
-		expectedPosition[0] = 2;
+		expectedPosition[0] = 1;
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileAt(2,0).getPosition());
-		assertArrayEquals(expectedPosition,
-				miniMaze.getTileNr(2).getPosition());
+				miniMaze.getTileAt(1,0).getPosition());
 	}
 	
 	@Test
@@ -96,6 +87,7 @@ class TileTest {
 	void spikePlayer() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
+		aPlayer.turnLeft();
 		aPlayer.moveForward();
 		
 		assertTrue(50 > aPlayer.getHealth());
@@ -105,7 +97,6 @@ class TileTest {
 	void invalidMove() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
-		aPlayer.turnLeft();
 		aPlayer.moveForward();
 		
 		int[] expectedPosition = {1, 0};
@@ -138,15 +129,15 @@ class TileTest {
 	void walkOnChest() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
+		aPlayer.turnLeft();
 		aPlayer.moveForward();
 		aPlayer.turnLeft();
 		aPlayer.moveForward();
-		aPlayer.moveForward();
 		
-		int[] expectedPosition = {2, 2};
+		int[] expectedPosition = {0, 1};
 		
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-		assertEquals(126, aPlayer.getScore());
+		assertEquals(127, aPlayer.getScore());
 		assertTrue(aPlayer.isGameOver());
 	}
 
