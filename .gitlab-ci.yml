@@ -27,5 +27,7 @@ maven_test:
       junit:
         - target/surefire-reports/TEST-*.xml
     paths: 
-      - target/surefire-reports/TEST-nl.sogyo.mancala.domain.PitTest.xml
+      - target/surefire-reports/TEST-nl.sogyo.littlemaze.GridTest.xml
+      - target/surefire-reports/TEST-nl.sogyo.littlemaze.TileTest.xml
+      - target/surefire-reports/TEST-nl.sogyo.littlemaze.PlayerTest.xml
       - target/site/jacoco/jacoco.xml
