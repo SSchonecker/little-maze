@@ -1,0 +1,33 @@
+stages:
+  - domain-compile
+  - domain-test
+  
+first_build:
+  stage: domain-compile
+  tags:
+    - maven
+  script:
+    - cd mazeDomain
+    - mvn clean compile
+
+maven_test:
+  stage: domain-test
+  tags:
+    - maven
+    - shell
+  script:
+    - cd mazeDomain
+    - mvn clean verify
+    - $missed=0
+    - $covered=0
+    - Get-Content .\target\site\jacoco\jacoco.csv | select-object -skip 1 | %{ [int]$missed+=$_.Split(',')[3]; [int]$covered+=$_.Split(',')[4]; } ; Write-Host "$covered / $($missed+$covered) instructions covered. Total $(100*$covered/$($missed+$covered))% covered"
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - mazeDomain/target/surefire-reports/TEST-*.xml
+    paths: 
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.GridTest.xml
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.TileTest.xml
+      - mazeDomain/target/surefire-reports/TEST-nl.sogyo.littlemaze.PlayerTest.xml
+      - mazeDomain/target/site/jacoco/jacoco.xml
