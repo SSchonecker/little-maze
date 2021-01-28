@@ -1,0 +1,10 @@
+button {
+	border: solid black 2px;
+	color: purple;
+}
+
+body {
+	text-align: center;
+	color: brown;
+	background-color: lightgreen;
+}

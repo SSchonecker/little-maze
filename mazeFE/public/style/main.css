@@ -1,0 +1,27 @@
+button {
+	border: solid rgb(77, 38, 0) 2px;
+	color: var(--purple-color);
+}
+
+body {
+	text-align: center;
+	color: lightgreen;
+	background-color: var(--mybrown-color);
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    padding: 2%;
+    margin: 2%;
+	color: var(--sogyo-color);
+	text-align: center;
+
+    --sogyo-color: #007936;
+	--light-sogyo: #66ffab;
+    --accent-color: #eee;
+    --light-text-color: #ffffcc;
+	--purple-color: #6600ff;
+    --orange-color: #ff9933;
+    --dark-orange-color: #cc6600;
+	--mybrown-color: rgb(77, 38, 0);
+}
