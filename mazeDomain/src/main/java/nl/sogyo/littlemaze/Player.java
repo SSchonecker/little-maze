@@ -4,9 +4,9 @@ public class Player {
 
 	private Tile currentTile;
 	private int myLife = 50;
-	private int mySteps = -1;
+	private int mySteps = -1; // Initiate at -1, because the first tile will also add 1
 	private String myName;
-	private Direction facing = Direction.EAST;
+	private Direction facing = Direction.EAST; // Same direction as the first tile's neighbour
 	private boolean endOfGame = false;
 	private int score;
 	
@@ -28,12 +28,11 @@ public class Player {
 
 	public void suffer(int pain) {
 		if (pain < myLife) {
-			System.out.println("Ouch! You lost " + pain + " hp...");
 			myLife -= pain;
 		}
 		else {
-			System.out.println("Oops! You lost your life...");
 			myLife = 0;
+			score = -mySteps;
 			endOfGame = true;
 		}
 	}
@@ -50,6 +49,11 @@ public class Player {
 		facing = facing.right;
 	}
 
+	/**
+	 * Method for putting the player on some tile. Increases step count.
+	 * 
+	 * @param someTile the tile unto which the player is put
+	 */
 	public void putHere(Tile someTile) {
 		currentTile = someTile;
 		mySteps += 1;
@@ -57,14 +61,17 @@ public class Player {
 
 	public void moveForward() {
 		currentTile.walkTo(facing, this);
-		
 	}
 
 	public void moveBackward() {
 		currentTile.walkTo(facing.opposite, this);
-		
 	}
 
+	/**
+	 * Method for finishing the game and setting the score, once the chest is found. 
+	 * 
+	 * @param chestContent The amount of treasure found in the chest
+	 */
 	public void setScore(int chestContent) {
 		score = chestContent + myLife - mySteps;
 		endOfGame = true;

@@ -21,7 +21,7 @@ class TileTest {
 	private Tile miniMaze;
 	private Player aPlayer;
 	
-	private Tile[][] testMaze = new Tile[2][2];
+	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the east, this is a fixed maze
 	
 	@BeforeEach
 	void setTiles() {
@@ -41,6 +41,15 @@ class TileTest {
 	void selectTile() {
 		firstTile.select();
 		assertTrue(firstTile.isChecked());
+	}
+	
+	@Test
+	void correctTileType() {
+		assertEquals("t", firstTile.type());
+		assertEquals("s", spikedTile.type());
+		spikedTile.select();
+		assertEquals("h", spikedTile.type());
+		assertEquals("c", miniMaze.getTileAt(0,1).type());
 	}
 	
 	@Test
@@ -171,21 +180,4 @@ class TileTest {
 		}
 		assertEquals(1, nrOfChests);
 	}
-	
-	/**@Test
-	void mazeBuildSpeed() {
-		Instant start = Instant.now();
-		Tile[][] bigMaze = new Tile[85][85];
-		Tile firstTile = new Tile(bigMaze);
-		Instant finish = Instant.now();
-		long timeElapsed = Duration.between(start, finish).toMillis();
-		System.out.println("It takes " + timeElapsed + "ms to build a 85x85 maze");
-		
-		start = Instant.now();
-		Tile aTile = firstTile.getTileAt(40, 38);
-		finish = Instant.now();
-		timeElapsed = Duration.between(start, finish).toMillis();
-		System.out.println("It takes " + timeElapsed + "ms to find a specific tile");
-	}*/
-
 }

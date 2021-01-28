@@ -1,6 +1,13 @@
 package nl.sogyo.littlemaze;
 
+/**
+ * Enum for the four directions of the maze.
+ * The directions are numbered (.nr) for list indices,
+ * contain a change along x (.dx) and y (.dy) axes
+ * and know their relatives (.opposite, .left, .right)
+ */
 public enum Direction {
+	
 	NORTH(0, 0, 1), EAST(1, 1, 0), SOUTH(2, 0, -1), WEST(3, -1, 0);
 
 	final int nr;
@@ -9,8 +16,7 @@ public enum Direction {
 	Direction opposite;
 	Direction left;
 	Direction right;
-
-	// use the static initializer to resolve forward references
+	
 	static {
 		NORTH.opposite = SOUTH;
 		SOUTH.opposite = NORTH;

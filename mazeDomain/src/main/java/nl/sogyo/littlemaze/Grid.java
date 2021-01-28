@@ -2,6 +2,11 @@ package nl.sogyo.littlemaze;
 
 import java.util.Arrays;
 
+/**
+ * This class contains all the information on one Player object
+ * and one maze, built from the firstTile.
+ * It is constructed with the maze size.
+ */
 public class Grid {
 	
 	private Tile firstTile;
@@ -9,13 +14,18 @@ public class Grid {
 	private Player myPlayer;
 
 	public Grid(int size) {
-		if (size > 85) {
+		if (size > 85) { // Too large grids may cause a StackOverflow
 			throw new IndexOutOfBoundsException();
 		}
 		theMaze = new Tile[size][size];
 		firstTile = new Tile(theMaze);
 	}
 	
+	/**
+	 * Method to put a new player at the entrance of the maze
+	 * 
+	 * @param playerName The player's name
+	 */
 	public void putPlayer(String playerName) {
 		myPlayer = new Player(playerName);
 		firstTile.moveTo(myPlayer);
@@ -27,17 +37,31 @@ public class Grid {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Method to find out if the game has ended.
+	 * 
+	 * @return false if the game has not ended yet, true if it has.
+	 */
 	public boolean getGameStatus() {
-		return myPlayer.isGameOver();
+		if (myPlayer != null) {
+			return myPlayer.isGameOver();
+		}
+		return true;
 	}
 
 	public int getScore() {
-		return myPlayer.getScore();
+		if (myPlayer != null) {
+			return myPlayer.getScore();
+		}
+		return 0;
 	}
 
 	public int[] getPlayerLocation() {
-		return myPlayer.getPosition();
+		if (myPlayer != null) {
+			return myPlayer.getPosition();
+		}
+		return null;
 	}
 
 	public int[] getChestLocation() {
@@ -51,13 +75,21 @@ public class Grid {
 		return null;
 	}
 
+	/**
+	 * Method to create a matrix of the cells of the maze,
+	 * on each cell saving the cell type, and the object in each direction
+	 * ('_' for a wall, '.' for an opening)
+	 * 
+	 * @return grid[x][y]{type, North, East, South, West}
+	 */
 	public char[][][] getLayout() {
-		char[][][] mazeLayout = new char[theMaze.length][theMaze.length][4];
+		char[][][] mazeLayout = new char[theMaze.length][theMaze.length][5];
 		for (int x = 0; x < theMaze.length; x++) {
 			for (int y = 0; y < theMaze.length; y++) {
 				Tile cell = theMaze[x][y];
-				for (int n = 0; n < 4; n++) {
-					if(cell.getNeighbour(n) == null) {
+				mazeLayout[x][y][0] = cell.type().charAt(0);
+				for (int n = 1; n < 5; n++) {
+					if(cell.getNeighbour(n-1) == null) {
 						mazeLayout[x][y][n] = '_';
 					}
 					else {
@@ -71,16 +103,20 @@ public class Grid {
 	}
 
 	public int getSteps() {
-		return myPlayer.getSteps();
+		if (myPlayer != null) {
+			return myPlayer.getSteps();
+		}
+		return 0;
 	}
 
-	public Integer getPlayerHealth() {
-		return myPlayer.getHealth();
+	public int getPlayerHealth() {
+		if (myPlayer != null) {
+			return myPlayer.getHealth();
+		}
+		return 0;
 	}
 
-	public void stirPlayer(String key) throws InvalidMoveException {
-		int[] initPosition = myPlayer.getPosition();
-		Direction initFacing = myPlayer.getOrientation();
+	public void stirPlayer(String key) throws InvalidKeyException {
 		switch (key.toLowerCase()) {
 		case("w"):
 			myPlayer.moveForward();
@@ -95,31 +131,43 @@ public class Grid {
 			myPlayer.turnRight();
 			break;
 		default:
-			throw new InvalidMoveException("Not a valid key");
-		}
-		
-		if (myPlayer.getPosition() == initPosition &&
-				myPlayer.getOrientation().equals(initFacing)) {
-			throw new InvalidMoveException("You can't move there.");
+			throw new InvalidKeyException("Not a valid key.");
 		}
 	}
 
 	public String getPlayerOrientation() {
-		return myPlayer.getOrientation().toString();
+		if (myPlayer != null) {
+			return myPlayer.getOrientation().toString();
+		}
+		return null;
 	}
 
-	public void selectTile(int i, int j) throws InvalidMoveException {
+	public void selectTile(int i, int j) {
 		int[] target = {i, j};
 		for (int n = 0; n < 4; n++) {
 			Tile aNeighbour = firstTile.getTileAt(myPlayer.getPosition()).getNeighbour(n);
 			if (aNeighbour != null 
 					&& Arrays.equals(target, aNeighbour.getPosition())) {
 				aNeighbour.select();
-				return;
 			}
 		}
-		throw new InvalidMoveException("You can't see this tile from here.");
 	}
-	
+
+	public boolean getTileRevealed(int x, int y) {
+		return theMaze[x][y].isChecked();
+	}
+
+	public String getTileType(int x, int y) {
+		return theMaze[x][y].type();
+	}
+}
+
+class InvalidKeyException extends Exception {
+
+	private static final long serialVersionUID = 9061183126141731746L;
+
+	public InvalidKeyException(String message) {
+		super(message);
+	}
 	
 }

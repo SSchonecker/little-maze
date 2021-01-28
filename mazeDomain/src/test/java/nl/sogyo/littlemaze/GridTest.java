@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
 class GridTest {
 	
 	private static Grid myGrid;
-	private static Grid miniGrid;
+	private static Grid miniGrid; // Based on the testMaze, so it's always the same
 
 	@BeforeAll
 	static void makeGrid() {
@@ -56,16 +57,20 @@ class GridTest {
 	
 	@Test
 	void getChestPosition() {
-		assertNotNull(myGrid.getChestLocation());
+		assertNotNull(myGrid.getChestLocation()); // Each large grid should have a chest
 
 		int[] expected = {0, 1};
 		assertArrayEquals(expected, miniGrid.getChestLocation());
 	}
 	
 	@Test
-	void getMazeLayout() {
-		char[][][] expected = 	{{{'_', '.', '_', '_'}, {'_', '.', '_', '_'}}, 
-							{{'.', '_', '_', '.'},{'_', '_', '.', '.'}}};
+	void getCorrectMazeLayout() {
+		/*
+		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
+		 * each cell should know its type and where the walls _ are
+		 */
+		char[][][] expected = 	{{{'t','_', '.', '_', '_'}, {'c','_', '.', '_', '_'}}, 
+							{{'t','.', '_', '_', '.'},{'s','_', '_', '.', '.'}}};
 		assertArrayEquals(expected, miniGrid.getLayout());
 	}
 	
@@ -73,32 +78,34 @@ class GridTest {
 	void movePlayer() {
 		try {
 			miniGrid.stirPlayer("w");
-		} catch (InvalidMoveException e) {}
+		} catch (Exception e) { assertFalse(true);}
 		int[] expected = {1,0};
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
 			miniGrid.stirPlayer("a");
-		} catch (InvalidMoveException e) {}
+		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.NORTH.toString(), miniGrid.getPlayerOrientation());
 		
-		assertThrows(InvalidMoveException.class, () -> miniGrid.stirPlayer("s"));
+		try {
+			miniGrid.stirPlayer("s");
+		} catch (Exception e) { assertFalse(true);}
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
 			miniGrid.stirPlayer("d");
-		} catch (InvalidMoveException e) {}
+		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.EAST.toString(), miniGrid.getPlayerOrientation());
 		
-		assertThrows(InvalidMoveException.class, () -> miniGrid.stirPlayer("g"));
+		assertThrows(Exception.class, () -> miniGrid.stirPlayer("g"));
 	}
 	
 	@Test
 	void tileSelect() {
-		try {
-			miniGrid.selectTile(1, 0);
-		} catch (InvalidMoveException e) {assertFalse(true);}
+		miniGrid.selectTile(1, 0);
+		assertTrue(miniGrid.getTileRevealed(1, 0));
+		assertEquals("t", miniGrid.getTileType(1, 0));
 		
-		assertThrows(InvalidMoveException.class, () -> miniGrid.selectTile(0,1));
+		assertEquals("c", miniGrid.getTileType(0, 1));
 	}
 }
