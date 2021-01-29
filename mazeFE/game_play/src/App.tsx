@@ -31,7 +31,7 @@ export function App() {
     const [ errorMessage, setErrorMessage ] = useState("");
 	const [ playError, setPlayError ] = useState("");
 
-    async function tryStartGame(playerName: string) {
+    async function tryStartGame(playerName: string, gridSize: number) {
 
         if (!playerName) {
             setErrorMessage("Player name is required!");
@@ -41,15 +41,15 @@ export function App() {
         setErrorMessage("");
 
         try {
-            const response = await fetch('littlemaze/api/player', {
+            const response = await fetch('littlemaze/api/start', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ nameplayer: playerName })
+                body: JSON.stringify({ nameplayer: playerName , gridSize: gridSize.toString() })
             });
-    
+
             if (response.ok) {
                 const gameState = await response.json();
                 setGameState(gameState);
@@ -68,12 +68,12 @@ export function App() {
         />
     }
 	
-	/*async function MakeTurn(index : number) {
+	async function MakeMove(key: string) {
 		
 		setPlayError("");
 		
 		try {
-            const urlPath = "mancala/api/play/"+ index;
+            const urlPath = "littlemaze/api/move/"+{key};
             const response = await fetch(urlPath, {
                 method: 'PUT',
                 headers: {
@@ -86,8 +86,8 @@ export function App() {
 					const newState = await response.json();
 					setGameState(newState);
 				}
-				else { //The API-server sends a 204 status on selecting empty pits or the wrong side
-					setPlayError("Invalid move! Try again");
+				else { //The API-server sends a 204 status on selecting a tile not directly next to the player
+					setPlayError("You can't see this tile from here.");
 				}
 			}
         } catch (error) {
@@ -98,7 +98,6 @@ export function App() {
 	
 	return <Play gameState={gameState} 
 				 message={playError}
-				 onButtonClick={MakeTurn}
-	/>*/
-	return <div> Todo... </div>;
+				 onButtonClick={MakeMove}
+	/>
 }
