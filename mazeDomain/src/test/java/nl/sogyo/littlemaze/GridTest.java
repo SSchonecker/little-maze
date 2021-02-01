@@ -69,7 +69,7 @@ class GridTest {
 		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
 		 * each cell should know its type and where the walls _ are
 		 */
-		char[][][] expected = 	{{{'t','_', '.', '_', '_'}, {'c','_', '.', '_', '_'}}, 
+		char[][][] expected = 	{{{'p','_', '.', '_', '_'}, {'c','_', '.', '_', '_'}}, 
 							{{'t','.', '_', '_', '.'},{'s','_', '_', '.', '.'}}};
 		assertArrayEquals(expected, miniGrid.getLayout());
 	}

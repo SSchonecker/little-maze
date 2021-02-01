@@ -12,6 +12,7 @@ public class Grid {
 	private Tile firstTile;
 	private Tile[][] theMaze;
 	private Player myPlayer;
+	private char[][][] mazeLayout;
 
 	public Grid(int size) {
 		if (size > 85) { // Too large grids may cause a StackOverflow
@@ -19,6 +20,25 @@ public class Grid {
 		}
 		theMaze = new Tile[size][size];
 		firstTile = new Tile(theMaze);
+		makeMazeLayout();
+	}
+	
+	private void makeMazeLayout() {
+		mazeLayout = new char[theMaze.length][theMaze.length][5];
+		for (int x = 0; x < theMaze.length; x++) {
+			for (int y = 0; y < theMaze.length; y++) {
+				Tile cell = theMaze[x][y];
+				mazeLayout[x][y][0] = cell.type().charAt(0);
+				for (int n = 1; n < 5; n++) {
+					if(cell.getNeighbour(n-1) == null) {
+						mazeLayout[x][y][n] = '_';
+					}
+					else {
+						mazeLayout[x][y][n] = '.';
+					}
+				}
+			}
+		}
 	}
 	
 	/**
@@ -83,22 +103,7 @@ public class Grid {
 	 * @return grid[x][y]{type, North, East, South, West}
 	 */
 	public char[][][] getLayout() {
-		char[][][] mazeLayout = new char[theMaze.length][theMaze.length][5];
-		for (int x = 0; x < theMaze.length; x++) {
-			for (int y = 0; y < theMaze.length; y++) {
-				Tile cell = theMaze[x][y];
-				mazeLayout[x][y][0] = cell.type().charAt(0);
-				for (int n = 1; n < 5; n++) {
-					if(cell.getNeighbour(n-1) == null) {
-						mazeLayout[x][y][n] = '_';
-					}
-					else {
-						mazeLayout[x][y][n] = '.';
-					}
-				}
-			}
-		}
-		
+		mazeLayout[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
 		return mazeLayout;
 	}
 
