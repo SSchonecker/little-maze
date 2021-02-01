@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StartGame } from "./littlemaze/InitGame";
+import { InitGame } from "./littlemaze/InitGame";
 import { Play } from "./littlemaze/Play";
 import { GameState } from "./littlemaze/gameState";
 
@@ -63,7 +63,7 @@ export function App() {
     }
 
     if (!gameState) {
-        return <StartGame onPlayerConfirmed={tryStartGame}
+        return <InitGame onPlayerConfirmed={tryStartGame}
                           message={errorMessage}
         />
     }
