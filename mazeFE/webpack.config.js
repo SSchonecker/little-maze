@@ -28,6 +28,7 @@ module.exports = {
         path: path.resolve("dist"),
     },
     watch: true,
+	target: "node",
     mode: "development",
     devServer: {
         contentBase: path.join(__dirname, 'public'),

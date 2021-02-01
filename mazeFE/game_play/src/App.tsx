@@ -98,6 +98,7 @@ export function App() {
 	
 	return <Play gameState={gameState} 
 				 message={playError}
+				 setMessage={setPlayError}
 				 onButtonClick={MakeMove}
 	/>
 }
