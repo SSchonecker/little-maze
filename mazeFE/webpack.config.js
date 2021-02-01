@@ -2,14 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./game_play/src/startgame.tsx",
+    entry: "./src/startgame.tsx",
     devtool: "inline-source-map",
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 use: "ts-loader",
-                include: path.resolve(__dirname, "game_play/src"),
+                include: path.resolve(__dirname, "src"),
                 exclude: /node_modules/,
             }
         ]

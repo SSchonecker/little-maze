@@ -1,2 +1,0 @@
-Little Maze Rules: You can move with "w" and "s" forward and backward. You can turn with "a" and "d".
-Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health first!

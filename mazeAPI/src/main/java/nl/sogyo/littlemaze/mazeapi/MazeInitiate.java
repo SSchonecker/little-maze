@@ -36,5 +36,4 @@ public class MazeInitiate {
 		var output = new MazeDto(mazeGrid, namePlayer);
 		return Response.status(200).entity(output).build();
 	}
-
 }

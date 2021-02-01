@@ -3,7 +3,6 @@ package nl.sogyo.littlemaze.mazeapi.dtostructures;
 import nl.sogyo.littlemaze.Grid;
 
 public class PlayerDto {
-	
 	String name;
 	int health;
 	int steps;
@@ -13,7 +12,6 @@ public class PlayerDto {
 		this.name = playerName;
 		this.health = mazeGrid.getPlayerHealth();
 		this.steps = mazeGrid.getSteps();
-		
 		this.position = mazeGrid.getPlayerLocation();
 	}
 

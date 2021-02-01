@@ -4,7 +4,7 @@ import { Play } from "./littlemaze/Play";
 import { GameState } from "./littlemaze/gameState";
 
 export function App() {
-
+	
 	/*
 	 * React hooks for the over-all state of the game.
 	 * At refreshing of the page, the local storage is checked for a gamestate.
@@ -26,17 +26,27 @@ export function App() {
 	}, [gameState]);
 	
 	/* 
-	 * Error messages to be shown on the page, one for StartGame, one for Play
+	 * Error messages to be shown on the InitGame page
+	 * and messages for the Play page
 	 */
     const [ errorMessage, setErrorMessage ] = useState("");
-	const [ playError, setPlayError ] = useState("");
+	const [ playMessage, setPlayMessage ] = useState("");
+	function consoleTextMaker( info : string ) {
+		setPlayMessage(info + "\n" + playMessage);
+	}
 
+/* The part for the start game page */
     async function tryStartGame(playerName: string, gridSize: number) {
 
         if (!playerName) {
             setErrorMessage("Player name is required!");
             return;
         }
+		
+		if (gridSize > 50 || gridSize < 2) {
+			setErrorMessage("Pick a decent grid size!");
+			return;
+		}
 
         setErrorMessage("");
 
@@ -67,13 +77,11 @@ export function App() {
                           message={errorMessage}
         />
     }
-	
+
+/* The part for the play game page */
 	async function MakeMove(key: string) {
-		
-		setPlayError("");
-		
 		try {
-            const urlPath = "littlemaze/api/move/"+{key};
+            const urlPath = "littlemaze/api/stir/"+key;
             const response = await fetch(urlPath, {
                 method: 'PUT',
                 headers: {
@@ -86,19 +94,16 @@ export function App() {
 					const newState = await response.json();
 					setGameState(newState);
 				}
-				else { //The API-server sends a 204 status on selecting a tile not directly next to the player
-					setPlayError("You can't see this tile from here.");
-				}
 			}
         } catch (error) {
-            setPlayError(error.toString());
+            setPlayMessage(error.toString());
 			localStorage.removeItem("myGameState");
 		}
     }
 	
 	return <Play gameState={gameState} 
-				 message={playError}
-				 setMessage={setPlayError}
+				 message={playMessage}
+				 consolePrint={consoleTextMaker}
 				 onButtonClick={MakeMove}
 	/>
 }

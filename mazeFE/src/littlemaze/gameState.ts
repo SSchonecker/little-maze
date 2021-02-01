@@ -1,6 +1,6 @@
-
+/* Interfaces for these objects for typescript */
 export interface GameState {
-    player: Player; // a player array contains exactly two Players
+    player: Player;
     gameStatus: GameStatus;
 	layout: string[][];
 }
