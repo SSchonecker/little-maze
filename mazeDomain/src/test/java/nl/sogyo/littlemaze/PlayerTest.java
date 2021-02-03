@@ -55,11 +55,11 @@ class PlayerTest {
 	@Test
 	void letPlayerTurn() {
 		thePlayer.turnLeft();
-		assertEquals(Direction.NORTH, thePlayer.getOrientation());
+		assertEquals(Direction.EAST, thePlayer.getOrientation());
 		
 		thePlayer.turnRight();
 		thePlayer.turnRight();
 		thePlayer.turnRight();
-		assertEquals(Direction.WEST, thePlayer.getOrientation());
+		assertEquals(Direction.NORTH, thePlayer.getOrientation());
 	}
 }

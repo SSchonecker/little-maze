@@ -130,10 +130,10 @@ public class Grid {
 	public void stirPlayer(String key) throws InvalidKeyException {
 		switch (key.toLowerCase()) {
 		case("w"):
-			myPlayer.moveForward();
+			myPlayer.moveUpward();
 			break;
 		case("s"):
-			myPlayer.moveBackward();
+			myPlayer.moveDownward();
 			break;
 		case("q"):
 			myPlayer.turnLeft();

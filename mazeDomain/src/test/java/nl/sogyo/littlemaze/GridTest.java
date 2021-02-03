@@ -69,42 +69,49 @@ class GridTest {
 		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
 		 * each cell should know its type and where the walls _ are
 		 */
-		char[][][] expected = 	{{{'p','_', '.', '_', '_'}, {'c','_', '.', '_', '_'}}, 
-							{{'t','.', '_', '_', '.'},{'s','_', '_', '.', '.'}}};
+		char[][][] expected = 	{{{'p','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+							{{'t','.', '.', '_', '_'},{'s','.', '_', '_', '.'}}};
 		assertArrayEquals(expected, miniGrid.getLayout());
 	}
 	
 	@Test
 	void movePlayer() {
 		try {
-			miniGrid.stirPlayer("w");
+			miniGrid.stirPlayer("s"); // Moving south
 		} catch (Exception e) { assertFalse(true);}
 		int[] expected = {1, 0};
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
-			miniGrid.stirPlayer("q");
-		} catch (Exception e) { assertFalse(true);}
-		assertEquals(Direction.NORTH.toString(), miniGrid.getPlayerOrientation());
-		
-		expected[0] = 0; // Move back to {0, 0}
-		try {
-			miniGrid.stirPlayer("a");
-		} catch (Exception e) { assertFalse(true);}
-		assertArrayEquals(expected, miniGrid.getPlayerLocation());
-		
-		try {
-			miniGrid.stirPlayer("s");
-		} catch (Exception e) { assertFalse(true);}
-		assertArrayEquals(expected, miniGrid.getPlayerLocation());
-		
-		try {
-			miniGrid.stirPlayer("e");
+			miniGrid.stirPlayer("q"); // Turning left from south to east
 		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.EAST.toString(), miniGrid.getPlayerOrientation());
 		
+		expected[0] = 0; // Move north, back to {0, 0}
 		try {
-			miniGrid.stirPlayer("d");
+			miniGrid.stirPlayer("w");
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
+		
+		try {
+			miniGrid.stirPlayer("s"); // Move south again
+		} catch (Exception e) { assertFalse(true);}
+		
+		try {
+			miniGrid.stirPlayer("e"); // Turn right, from east to south
+		} catch (Exception e) { assertFalse(true);}
+		assertEquals(Direction.SOUTH.toString(), miniGrid.getPlayerOrientation());
+		
+		expected[0] = 1;
+		expected[1] = 1;
+		try {
+			miniGrid.stirPlayer("d"); // Move to the east
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
+		
+		expected[1] = 0;
+		try {
+			miniGrid.stirPlayer("a"); // Move to the west
 		} catch (Exception e) { assertFalse(true);}
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
