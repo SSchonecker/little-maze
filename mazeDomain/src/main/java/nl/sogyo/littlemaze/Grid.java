@@ -103,8 +103,14 @@ public class Grid {
 	 * @return grid[x][y]{type, North, East, South, West}
 	 */
 	public char[][][] getLayout() {
-		mazeLayout[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
-		return mazeLayout;
+		char[][][] currentMaze = new char[mazeLayout.length][mazeLayout.length][5];  
+		for(int i = 0; i < mazeLayout.length; i++) {
+			for(int j=0; j < mazeLayout[i].length; j++) {
+				System.arraycopy(mazeLayout[i][j], 0, currentMaze[i][j], 0, 5);
+			}
+		}
+		currentMaze[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
+		return currentMaze;
 	}
 
 	public int getSteps() {
@@ -129,11 +135,17 @@ public class Grid {
 		case("s"):
 			myPlayer.moveBackward();
 			break;
-		case("a"):
+		case("q"):
 			myPlayer.turnLeft();
 			break;
-		case("d"):
+		case("e"):
 			myPlayer.turnRight();
+			break;
+		case("a"):
+			myPlayer.moveLeft();
+			break;
+		case("d"):
+			myPlayer.moveRight();
 			break;
 		default:
 			throw new InvalidKeyException("Not a valid key.");

@@ -79,13 +79,19 @@ class GridTest {
 		try {
 			miniGrid.stirPlayer("w");
 		} catch (Exception e) { assertFalse(true);}
-		int[] expected = {1,0};
+		int[] expected = {1, 0};
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
-			miniGrid.stirPlayer("a");
+			miniGrid.stirPlayer("q");
 		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.NORTH.toString(), miniGrid.getPlayerOrientation());
+		
+		expected[0] = 0; // Move back to {0, 0}
+		try {
+			miniGrid.stirPlayer("a");
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
 			miniGrid.stirPlayer("s");
@@ -93,9 +99,14 @@ class GridTest {
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
-			miniGrid.stirPlayer("d");
+			miniGrid.stirPlayer("e");
 		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.EAST.toString(), miniGrid.getPlayerOrientation());
+		
+		try {
+			miniGrid.stirPlayer("d");
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		assertThrows(Exception.class, () -> miniGrid.stirPlayer("g"));
 	}

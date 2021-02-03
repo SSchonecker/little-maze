@@ -85,13 +85,8 @@ export function App() {
 	
 	/* 
 	 * Error messages to be shown on the InitGame page
-	 * and messages for the Play page
 	 */
     const [ errorMessage, setErrorMessage ] = useState("");
-	const [ playMessage, setPlayMessage ] = useState("");
-	function consoleTextMaker( info : string ) {
-		setPlayMessage(info + "\n" + playMessage);
-	}
 
 /* The part for the start game page */
     async function tryStartGame(playerName: string, gridSize: number) {
@@ -158,14 +153,12 @@ export function App() {
 				}
 			}
         } catch (error) {
-            setPlayMessage(error.toString());
 			localStorage.removeItem("myGameState");
+            setErrorMessage(error.toString());
 		}
     }
 	
 	return <Play gameState={gameState} 
-				 message={playMessage}
-				 consolePrint={consoleTextMaker}
 				 onButtonClick={MakeMove}
 	/>
 }
