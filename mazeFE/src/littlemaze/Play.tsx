@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GameState } from "./gameState";
 import styled from "styled-components";
 
@@ -22,6 +22,7 @@ let Tile = styled.button`
 `; // Fixed sized floor tile
 
 export function Play({ gameState, onButtonClick }: PlayProps) {
+	
 	const [ playMessage, setPlayMessage ] = useState("");
 	function consolePrint( info : string ) {
 		setPlayMessage(info + "\n" + playMessage);
@@ -104,6 +105,39 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 		}
 		return tileList;
 	}
+	
+	const handleKeyDown = (e : KeyboardEvent) => {
+		switch (e.keyCode) {
+			case 81: onButtonClick("q");
+			break;
+			case 87: onButtonClick("w");
+			break;
+			case 69: onButtonClick("e");
+			break;
+			case 65: onButtonClick("a");
+			break;
+			case 83: onButtonClick("s");
+			break;
+			case 68: onButtonClick("d");
+			break;
+			case 82: displayRules();
+			break;
+			case 70: displayPlayerInfo();
+			break;
+			case 27: dropdownFunction();
+			break;
+			default: consolePrint("Try another key, for example \"r\" for the rules.");
+		}
+	};
+	
+	useEffect(() => {
+		window.addEventListener('keydown', handleKeyDown);
+
+		// cleanup this component
+		return () => {
+		  window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
     
     return <div>
         <div>Welcome to the little maze, {gameState.player.name}!</div>
