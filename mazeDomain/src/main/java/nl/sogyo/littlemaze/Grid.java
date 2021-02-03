@@ -159,15 +159,18 @@ public class Grid {
 		return null;
 	}
 
-	public void selectTile(int i, int j) {
+	public boolean selectTile(int i, int j) {
 		int[] target = {i, j};
 		for (int n = 0; n < 4; n++) {
 			Tile aNeighbour = firstTile.getTileAt(myPlayer.getPosition()).getNeighbour(n);
 			if (aNeighbour != null 
 					&& Arrays.equals(target, aNeighbour.getPosition())) {
 				aNeighbour.select();
+				makeMazeLayout();
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public boolean getTileRevealed(int x, int y) {

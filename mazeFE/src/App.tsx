@@ -158,7 +158,31 @@ export function App() {
 		}
     }
 	
-	return <Play gameState={gameState} 
-				 onButtonClick={MakeMove}
+	async function SelectTile(tileMessage : string, tileID : string) {
+		try {
+            const urlPath = "littlemaze/api/stir/tile/"+tileID;
+            const response = await fetch(urlPath, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+    
+            if (response.ok) {
+				if (response.status === 200) {
+					return tileMessage;
+				}
+				else if (response.status === 204) {
+					return "You can't see this tile from here.";
+				}
+			}
+        } catch (error) {
+			return error.toString();
+		}
+	}
+	
+	return <Play gameState={gameState}
+				 onTileSelect={SelectTile}
+				 onMoving={MakeMove}
 	/>
 }

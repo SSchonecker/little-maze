@@ -40,27 +40,24 @@ public class MazePlay {
 	}
 	
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/tile/{position}")
 	public Response tileSelect(
 			@PathParam("position") String position,
 			@Context HttpServletRequest request) {
 		
-		int posX = Integer.valueOf(position.charAt(0));
-		int posY = Integer.valueOf(position.charAt(1));
+		int posX = Character.getNumericValue(position.charAt(0));
+		int posY = Character.getNumericValue(position.charAt(1));
 		
 		HttpSession session = request.getSession(false);
 		Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
 		
-		int responseStatus = 500;
-		try {
-			mazeGrid.selectTile(posX, posY);
+		int responseStatus;
+		if (mazeGrid.selectTile(posX, posY)) {
 			responseStatus = 200;
-			var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
-			return Response.status(responseStatus).entity(output).build();
+			return Response.status(responseStatus).build();
 		}
-		catch (Exception err) {
-			responseStatus = 406;
+		else {
+			responseStatus = 204;
 			return Response.status(responseStatus).build();
 		}
 	}

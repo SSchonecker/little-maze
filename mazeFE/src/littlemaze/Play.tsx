@@ -4,9 +4,8 @@ import styled from "styled-components";
 
 interface PlayProps { // The type of input for the Play function
     gameState: GameState;
-	//message: string;
-	//consolePrint(arg1 : string) : void;
-	onButtonClick(key : string) : void;
+	onMoving(key : string) : void;
+	onTileSelect(tileMessage : string, tileID : string) : Promise<string>;
 }
 
 const Console = styled.p`
@@ -21,7 +20,7 @@ let Tile = styled.button`
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function Play({ gameState, onButtonClick }: PlayProps) {
+export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 	
 	const [ playMessage, setPlayMessage ] = useState("");
 	function consolePrint( info : string ) {
@@ -61,6 +60,12 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 		columnString = columnString + "auto ";
 	} // the number of columns is the amount of auto's, auto means automatic resizing of the width
 
+	async function selectTile(tileMessage : string, tileID : string) {
+		let result = await onTileSelect(tileMessage, tileID);
+		
+		consolePrint(result);
+	}
+
 	function makeGridItem(tileInfo: string, posX: number, posY: number) {
 		let tileID = posX.toString() + posY.toString();
 		let tileMessage = "Hm, that's a weird tile..."; // This should never turn up
@@ -86,14 +91,14 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 			case "s": tileStyle.backgroundColor = "grey";
 				tileMessage = "Careful now! This looks like a spikey tile...";
 			break;
-			case "h": tileStyle.backgroundColor = "grey";
+			case "h": tileStyle.backgroundColor = "purple";
 				tileMessage = "Remain careful, this is still a spikey tile.";
 			break;
 			case "p": tileStyle.backgroundColor = "red";
 				tileMessage = "Looks like you're here!";
 		}
 		
-		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => consolePrint(tileMessage)}></Tile>
+		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => selectTile(tileMessage, tileID)}></Tile>
 	}
 
 	function makeGrid( gameState : GameState) {
@@ -108,17 +113,17 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 	
 	const handleKeyDown = (e : KeyboardEvent) => {
 		switch (e.keyCode) {
-			case 81: onButtonClick("q");
+			case 81: onMoving("q");
 			break;
-			case 87: onButtonClick("w");
+			case 87: onMoving("w");
 			break;
-			case 69: onButtonClick("e");
+			case 69: onMoving("e");
 			break;
-			case 65: onButtonClick("a");
+			case 65: onMoving("a");
 			break;
-			case 83: onButtonClick("s");
+			case 83: onMoving("s");
 			break;
-			case 68: onButtonClick("d");
+			case 68: onMoving("d");
 			break;
 			case 82: displayRules();
 			break;
@@ -158,13 +163,13 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 		</div>
 		
 		<div className="movebuttons">
-			<button onClick={() => onButtonClick("q")}> q </button>
-			<button onClick={() => onButtonClick("w")}> w </button>
-			<button onClick={() => onButtonClick("e")}> e </button>
+			<button onClick={() => onMoving("q")}> q </button>
+			<button onClick={() => onMoving("w")}> w </button>
+			<button onClick={() => onMoving("e")}> e </button>
 			<br></br>
-			<button onClick={() => onButtonClick("a")}> a </button>
-			<button onClick={() => onButtonClick("s")}> s </button>
-			<button onClick={() => onButtonClick("d")}> d </button>
+			<button onClick={() => onMoving("a")}> a </button>
+			<button onClick={() => onMoving("s")}> s </button>
+			<button onClick={() => onMoving("d")}> d </button>
 		</div>
     </div>
 }
