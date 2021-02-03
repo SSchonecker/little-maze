@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface StartGameProps {
     message: string;
+	userName: string;
     onPlayerConfirmed(playerName: string, gridSize: number): void;
 }
 
@@ -26,9 +27,9 @@ const ErrorMessage = styled.p`
 /**
  * Allows the player to enter their name and set the grid size.
  */
-export function InitGame({ message, onPlayerConfirmed }: StartGameProps) {
+export function InitGame({ message, userName, onPlayerConfirmed }: StartGameProps) {
 
-    const [ playerName, setPlayerName ] = useState("");
+    const [ playerName, setPlayerName ] = useState(userName);
 	const [ gridSize, setGridSize ] = useState(10); // Default grid size of 10x10 tiles
     const handleKeypress = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}

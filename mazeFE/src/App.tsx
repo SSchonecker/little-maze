@@ -2,8 +2,66 @@ import React, { useState, useEffect } from "react";
 import { InitGame } from "./littlemaze/InitGame";
 import { Play } from "./littlemaze/Play";
 import { GameState } from "./littlemaze/gameState";
+import { Login, InfoState } from "./littlemaze/Login";
 
 export function App() {
+	
+/* Part for the login */
+	const [ loginMessage, setLoginMessage ] = useState("");
+	const [ infoState, setInfoState ] = useState<InfoState | undefined>(undefined);
+	useEffect(() => {
+		const json = localStorage.getItem("myUserInfo");
+		if (json && json.length > 10) { // The length check ensures that the gamestate from localStorage is not empty
+			const savedInfo = JSON.parse(json);
+			setInfoState(savedInfo);
+		}
+	}, []);
+	
+	async function tryLoginSend(userName : string, userPassword : string) {
+
+        if (!userName) {
+            setLoginMessage("User name is required!");
+            return;
+        }
+		
+		if (!userPassword) {
+			setLoginMessage("Password is required!");
+			return;
+		}
+		
+		else if (userPassword.length < 6) {
+			setLoginMessage("Make your password at least 6 characters long.");
+			return;
+		}
+		
+		if (userPassword.toLowerCase().includes(userName.toLowerCase())) {
+			setLoginMessage("Don't put your name in your password...");
+			return;
+		}
+
+        setLoginMessage("");
+
+        try {
+            const response = await fetch('littlemaze/api/login', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "userName": userName , "password": userPassword })
+            });
+
+            if (response.ok) {
+                const userInfo = await response.json();
+                setInfoState(userInfo);
+            }
+			localStorage.removeItem("myUserInfo");
+            setLoginMessage("Failed to login. Try again.");
+        } catch (error) {
+			localStorage.removeItem("myUserInfo");
+            setLoginMessage(error.toString());
+        }
+    }
 	
 	/*
 	 * React hooks for the over-all state of the game.
@@ -72,10 +130,14 @@ export function App() {
         }
     }
 
-    if (!gameState) {
+	if (!infoState) {
+		return <Login loginSend={tryLoginSend} message={loginMessage} />
+	}
+    else if (!gameState) {
         return <InitGame onPlayerConfirmed={tryStartGame}
-                          message={errorMessage}
-        />
+					  userName={infoState!.userName}
+                      message={errorMessage}
+		/>
     }
 
 /* The part for the play game page */
