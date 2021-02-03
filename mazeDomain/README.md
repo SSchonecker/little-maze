@@ -31,9 +31,9 @@ This ensures the creation of jacoco-code coverage reports.
 Depth-first search is an algorithm that builds a perfect maze by treating the paths in the maze as branches of a tree. A maze is a 2-dimensional grid with walls and connected floor tiles or cells. A perfect maze contains no loops and no empty or unconnected cells. Instead, it has one main road from beginning to end and several splits leading to dead ends along the way. These branches from the main path make the maze comparable to a tree and the 2-d grid to a graph. <br/>
 The depth-first search algorithm starts at one point on the grid (here on (_0, 0_)) and picks a random neighbouring cell that hasn't been visited before. It connects these two cells and then repeats this process on the neighbour. If all cells surrounding the current cell have been visited, the algorithm moves back along the branch to a point where a cell has unvisited neighbours. It ends once all cells have been visited.
 
-For testing reasons, the first neighbour is taken to be to the EAST of the first tile. This ensures that there is only one possible 2x2 maze and that the player's orientation at the start of the game is set correctly.
-test maze	+--+--+
-			| c  s|  c = chest, s = spikey tile
-			+--+  |
-				  |
+For testing reasons, the first neighbour is taken to be to the SOUTH of the first tile. This ensures that there is only one possible 2x2 maze and that the player's orientation at the start of the game is set correctly.
+test maze	+  +--+
+			|  | c|  c = chest, s = spikey tile
+			+  +  |
+			|	 s|
 			+--+--+

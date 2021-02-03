@@ -29,7 +29,7 @@ class Tile {
 		this.maze = mazeGrid;
 		position[0] = 0;
 		position[1] = 0;
-		neighbours[Direction.EAST.nr] = new Tile(mazeGrid, Direction.EAST, this); 
+		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this); 
 	}
 	
 	/**

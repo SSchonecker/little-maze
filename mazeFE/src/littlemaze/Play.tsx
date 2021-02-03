@@ -45,7 +45,7 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 	
 	let rulesButtonMessage = "The Rules";
 	function displayRules() {
-		consolePrint("Little Maze Rules: You can move with \"w\" and \"s\" forward and backward. You can turn with \"a\" and \"d\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");
+		consolePrint("Little Maze Rules: You can move with \"w\" and \"s\" up and down, with \"a\" and \"d\" left and right. You can turn with \"q\" and \"e\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");
 	}
 	
 	/* End of game state setter */
@@ -66,10 +66,10 @@ export function Play({ gameState, onButtonClick }: PlayProps) {
 		let classes = ["grid-item"];
 		
 		/* Setting the walls on each tile */
-		if (tileInfo[1] == "_") { classes.push("rightborder"); }
-		if (tileInfo[2] == "_") { classes.push("bottomborder"); }
-		if (tileInfo[3] == "_") { classes.push("leftborder"); }
-		if (tileInfo[4] == "_") { classes.push("topborder"); }
+		if (tileInfo[1] == "_") { classes.push("topborder"); }
+		if (tileInfo[2] == "_") { classes.push("rightborder"); }
+		if (tileInfo[3] == "_") { classes.push("bottomborder"); }
+		if (tileInfo[4] == "_") { classes.push("leftborder"); }
 		
 		/* Color the tiles dependent on their type */
 		let tileStyle = {
