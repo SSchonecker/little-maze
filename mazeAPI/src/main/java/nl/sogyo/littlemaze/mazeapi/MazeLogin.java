@@ -1,5 +1,8 @@
 package nl.sogyo.littlemaze.mazeapi;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -15,6 +18,9 @@ import nl.sogyo.littlemaze.mazeapi.dtostructures.UserInput;
 
 @Path("login")
 public class MazeLogin {
+	
+	private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
+	private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -33,12 +39,18 @@ public class MazeLogin {
 			//TODO and set in DB
 		}
 		
-		String accessToken = "hello token";
+		String accessToken = generateNewToken();
 		
 		session.setAttribute("userName", userName);
 		session.setAttribute("token", accessToken);
 
 		var output = new UserInfoDto(userName, accessToken);
 		return Response.status(200).entity(output).build();
+	}
+	
+	public static String generateNewToken() {
+		byte[] randomBytes = new byte[24];
+		secureRandom.nextBytes(randomBytes);
+		return base64Encoder.encodeToString(randomBytes);
 	}
 }
