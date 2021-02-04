@@ -3,6 +3,7 @@ package nl.sogyo.littlemaze.mazeapi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -21,19 +22,28 @@ public class MazeInitiate {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response initialize(
-			@Context HttpServletRequest request, 
+			@Context HttpServletRequest request,
+			@HeaderParam("User-Name") String userName,
+			@HeaderParam("Access-Token") String token,
 			PlayerInput player) {
 		
-		HttpSession session = request.getSession(true);
-		Grid mazeGrid = new Grid(Integer.parseInt(player.getGridSize()));
-		
-		String namePlayer = player.getPlayerName();
-		
-		mazeGrid.putPlayer(namePlayer);
-		
-		session.setAttribute("mazegrid", mazeGrid);		
+		HttpSession session = request.getSession(false);
 
-		var output = new MazeDto(mazeGrid, namePlayer);
-		return Response.status(200).entity(output).build();
+		int responseStatus = 403;
+		
+		if (userName.equals(session.getAttribute("userName")) &&
+				token.equals(session.getAttribute("token"))) {
+			Grid mazeGrid = new Grid(Integer.parseInt(player.getGridSize()));
+			
+			String namePlayer = player.getPlayerName();
+			
+			mazeGrid.putPlayer(namePlayer);
+			
+			session.setAttribute("mazegrid", mazeGrid);		
+	
+			var output = new MazeDto(mazeGrid, namePlayer);
+			return Response.status(200).entity(output).build();
+		}
+		return Response.status(responseStatus).build();
 	}
 }

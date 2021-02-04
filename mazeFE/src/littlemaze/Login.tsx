@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export interface InfoState {
 	userName : string;
+	token : string;
 }
 
 // a p element with the specified css style applied to it
@@ -12,7 +13,7 @@ const ErrorMessage = styled.p`
 `;
 
 interface LoginProps {
-	loginSend(name : string, passw : string) : void;
+	loginSend(name : string, passw : string, createNew : boolean) : void;
 	message : string;
 }
 
@@ -21,7 +22,7 @@ export function Login ( { message, loginSend } : LoginProps) {
 	const [ userName, setUserName ] = useState("");
 	const [ userPassword, setUserPassword ] = useState("");
 	const handleKeypress = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {loginSend(userName, userPassword);}
+        if (e.key === "Enter") {loginSend(userName, userPassword, false); setUserPassword("");}
     }; // Pressing the enter key in an input field is the same as pushing the button to enter the game
 	
 	
@@ -44,6 +45,7 @@ export function Login ( { message, loginSend } : LoginProps) {
 		
 		<ErrorMessage>{message}</ErrorMessage>
 		
-		<button onClick={() => loginSend(userName, userPassword)}>Login</button>
+		<button onClick={() => {loginSend(userName, userPassword, false); setUserPassword("");}}>Login</button>
+		<button onClick={() => {loginSend(userName, userPassword, true); setUserPassword("");}}>Create Account</button>
 	</div>
 }

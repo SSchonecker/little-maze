@@ -23,13 +23,22 @@ public class MazeLogin {
 			@Context HttpServletRequest request, 
 			UserInput loginInfo) {
 		
-		//HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(true);
 		
 		String userName = loginInfo.getUserName();
+		boolean createAccount = loginInfo.getCreateAccount();
 		
-		//session.setAttribute("mazegrid", mazeGrid);		
+		//TODO check if password in DB by getting DB.passwordHash and doing loginInfo.checkPassword(savedPasswordHash)
+		if (createAccount) { String password = loginInfo.getPasswordHash(); 
+			//TODO and set in DB
+		}
+		
+		String accessToken = "hello token";
+		
+		session.setAttribute("userName", userName);
+		session.setAttribute("token", accessToken);
 
-		var output = new UserInfoDto(userName);
+		var output = new UserInfoDto(userName, accessToken);
 		return Response.status(200).entity(output).build();
 	}
 }

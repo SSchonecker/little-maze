@@ -11,13 +11,17 @@ export function App() {
 	const [ infoState, setInfoState ] = useState<InfoState | undefined>(undefined);
 	useEffect(() => {
 		const json = localStorage.getItem("myUserInfo");
-		if (json && json.length > 10) { // The length check ensures that the gamestate from localStorage is not empty
+		if (json && json.length > 10) { // The length check ensures that the savedInfo from localStorage is not empty
 			const savedInfo = JSON.parse(json);
 			setInfoState(savedInfo);
 		}
 	}, []);
+	useEffect(() => {
+		const json = JSON.stringify(infoState);
+		localStorage.setItem("myUserInfo", json);
+	}, [infoState]);
 	
-	async function tryLoginSend(userName : string, userPassword : string) {
+	async function tryLoginSend(userName : string, userPassword : string, createNew : boolean) {
 
         if (!userName) {
             setLoginMessage("User name is required!");
@@ -48,7 +52,7 @@ export function App() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ "userName": userName , "password": userPassword })
+                body: JSON.stringify({ "userName": userName , "password": userPassword, "createAccount": createNew })
             });
 
             if (response.ok) {
@@ -107,13 +111,22 @@ export function App() {
 		}
 
         setErrorMessage("");
+		let userName = "";
+		let token = "";
+		
+		if (localStorage.getItem("myUserInfo")) {
+			userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
+			token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
+		}
 
         try {
             const response = await fetch('littlemaze/api/start', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+					'User-Name': userName,
+					'Access-token': token
                 },
                 body: JSON.stringify({ nameplayer: playerName , gridSize: gridSize.toString() })
             });
@@ -122,11 +135,12 @@ export function App() {
                 const gameState = await response.json();
                 setGameState(gameState);
             }
+			localStorage.removeItem("myGameState");
             setErrorMessage("Failed to start the game. Try again.");
-			localStorage.removeItem("myGameState");
         } catch (error) {
-            setErrorMessage(error.toString());
 			localStorage.removeItem("myGameState");
+			localStorage.removeItem("myUserInfo");
+            setErrorMessage(error.toString());
         }
     }
 
@@ -142,12 +156,24 @@ export function App() {
 
 /* The part for the play game page */
 	async function MakeMove(key: string) {
+		
+		setErrorMessage("");
+		let userName = "";
+		let token = "";
+		
+		if (localStorage.getItem("myUserInfo")) {
+			userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
+			token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
+		}
+
 		try {
             const urlPath = "littlemaze/api/stir/"+key;
             const response = await fetch(urlPath, {
                 method: 'PUT',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+					'User-Name': userName,
+					'Access-token': token
                 },
             });
     
@@ -158,8 +184,9 @@ export function App() {
 				}
 			}
         } catch (error) {
-            setPlayMessage(error.toString());
 			localStorage.removeItem("myGameState");
+			localStorage.removeItem("myUserInfo");
+            setPlayMessage(error.toString());
 		}
     }
 	

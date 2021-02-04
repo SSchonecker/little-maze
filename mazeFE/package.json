@@ -6,10 +6,13 @@
   "private": true,
   "scripts": {
     "lint": "node_modules/.bin/eslint src/**/*",
-    "start": "node_modules/.bin/webpack-dev-server"
+    "start": "node_modules/.bin/webpack-dev-server",
+    "start-https": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem",
+    "start-full": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem --cacert ./ca.pem"
   },
   "author": "Silke Schoenecker",
   "dependencies": {
+    "fs": "0.0.1-security",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "styled-components": "^5.0.1"

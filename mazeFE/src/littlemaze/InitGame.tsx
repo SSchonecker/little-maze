@@ -34,9 +34,18 @@ export function InitGame({ message, userName, onPlayerConfirmed }: StartGameProp
     const handleKeypress = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}
     }; // Pressing the enter key in an input field is the same as pushing the button to enter the game
+	
+	let logoutButtonMessage = "Logout";
+	function logout() {
+		localStorage.removeItem("myGameState");
+		localStorage.removeItem("myUserInfo");
+		window.location.reload();
+	}
 
     return <div>
 		<h2>Welcome to a little dungeon crawler!</h2>
+		
+		<button id="logoutButton" onClick={logout}>{logoutButtonMessage}</button>
 		
 		<div className="inputinfo">Enter your name:</div>
 		<input 

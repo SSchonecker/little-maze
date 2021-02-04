@@ -1,0 +1,7 @@
+https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
+https://webpack.js.org/configuration/dev-server/#devserver-https
+https://www.smashingmagazine.com/2017/06/guide-switching-http-https/
+https://stackoverflow.com/questions/7450940/automatic-https-connection-redirect-with-node-js-express
+https://stackoverflow.com/questions/6832445/how-can-bcrypt-have-built-in-salts
+https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/#bcrypt-scrypt
+https://docs.oracle.com/javaee/6/tutorial/doc/gkbaa.html#gkbsa

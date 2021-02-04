@@ -15,7 +15,8 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [ ".tsx", ".ts", ".js" ]
+        extensions: [ ".tsx", ".ts", ".js" ],
+        modules: ["src", "node_modules"]
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -32,6 +33,9 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: path.join(__dirname, 'public'),
+		//https: true,
+		//key: fs.readFileSync('./key.pem'),
+		//cert: fs.readFileSync('./cert.pem'),
         host: '0.0.0.0',
         port: 2200,
         disableHostCheck: true,
