@@ -89,4 +89,12 @@ public class Player {
 		return mySteps;
 	}
 
+	public void moveLeft() {
+		currentTile.walkTo(facing.left, this);		
+	}
+
+	public void moveRight() {
+		currentTile.walkTo(facing.right, this);		
+	}
+
 }

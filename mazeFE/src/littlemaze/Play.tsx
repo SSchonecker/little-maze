@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 interface PlayProps { // The type of input for the Play function
     gameState: GameState;
-	message: string;
-	consolePrint(arg1 : string) : void;
+	//message: string;
+	//consolePrint(arg1 : string) : void;
 	onButtonClick(key : string) : void;
 }
 
@@ -21,7 +21,11 @@ let Tile = styled.button`
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function Play({ gameState, message, consolePrint, onButtonClick }: PlayProps) {
+export function Play({ gameState, onButtonClick }: PlayProps) {
+	const [ playMessage, setPlayMessage ] = useState("");
+	function consolePrint( info : string ) {
+		setPlayMessage(info + "\n" + playMessage);
+	}
 	
 	/* Forming the options */
 	function dropdownFunction() {
@@ -108,7 +112,7 @@ export function Play({ gameState, message, consolePrint, onButtonClick }: PlayPr
 			{makeGrid( gameState )}
 		</div>
 		
-		<Console>{message}</Console>
+		<Console>{playMessage}</Console>
 		
 		<div className="dropdown">
 			<button onClick={() => dropdownFunction()} className="dropbtn">Options</button>
@@ -120,7 +124,10 @@ export function Play({ gameState, message, consolePrint, onButtonClick }: PlayPr
 		</div>
 		
 		<div className="movebuttons">
-			<button onClick={() => onButtonClick("w")}> w </button><br></br>
+			<button onClick={() => onButtonClick("q")}> q </button>
+			<button onClick={() => onButtonClick("w")}> w </button>
+			<button onClick={() => onButtonClick("e")}> e </button>
+			<br></br>
 			<button onClick={() => onButtonClick("a")}> a </button>
 			<button onClick={() => onButtonClick("s")}> s </button>
 			<button onClick={() => onButtonClick("d")}> d </button>
