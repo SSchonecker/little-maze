@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { GameState } from "./gameState";
+import { GameState } from "../typefiles/gameState";
 import styled from "styled-components";
 
 interface PlayProps { // The type of input for the Play function
-    gameState: GameState;
+	gameState: GameState;
 	onMoving(key : string) : void;
-	onTileSelect(tileMessage : string, tileID : string) : Promise<string>;
+	onTileSelect(tileMessage : string, tileID : string) : void;
+	playMessage : string;
+	error : string;
+	dropdownFunction() : void;
+	displayPlayerInfo() : void;
+	displayRules() : void;
 }
+
+const ErrorMessage = styled.p`
+	height: 1em;
+	color: red;
+`;
 
 const Console = styled.p`
 	font-size: 1em;
@@ -20,17 +30,12 @@ let Tile = styled.button`
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
-	
-	const [ playMessage, setPlayMessage ] = useState("");
-	function consolePrint( info : string ) {
-		setPlayMessage(info + "\n" + playMessage);
-	}
+export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, displayPlayerInfo, displayRules, playMessage, error }: PlayProps) {
 	
 	/* Forming the options */
-	function dropdownFunction() {
+	/*function dropdownFunction() {
 		document.getElementById("myDropdown")!.classList.toggle("show");
-	}
+	}*/
 	
 	let resetButtonMessage = "Restart game";
 	function resetGame() {
@@ -39,38 +44,20 @@ export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 	}
 	
 	let playerButtonMessage = "Player info";
-	function displayPlayerInfo() {
-		consolePrint("You have " + gameState.player.health + " hp left, and you took " + gameState.player.steps + " steps so far, " + gameState.player.name);
-	}
+	/*function displayPlayerInfo() {
+		onInfo("You have " + gameState.player.health + " hp left, and you took " + gameState.player.steps + " steps so far, " + gameState.player.name);
+	}*/
 	
 	let rulesButtonMessage = "The Rules";
-	function displayRules() {
-		consolePrint("Little Maze Rules: You can move with \"w\" and \"s\" up and down, with \"a\" and \"d\" left and right. You can turn with \"q\" and \"e\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");
-	}
-	
-	/* End of game state setter */
-	if (gameState.gameStatus.endgame) {
-		if (gameState.player.health == 0) {
-			consolePrint("Oops! You lost your life...");
-		}
-		else {
-			consolePrint("You found the chest!");
-			consolePrint("The game is over!");
-			consolePrint("Your score is " + gameState.gameStatus.score);
-		}
-    }
+	/*function displayRules() {
+		onInfo("Little Maze Rules: You can move with \"w\" and \"s\" up and down, with \"a\" and \"d\" left and right. You can turn with \"q\" and \"e\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");
+	}*/
 	
 	/* Creation of the maze grid, where a tile is a grid cell */
 	let columnString = "";
 	for (var count = 0; count < gameState.layout.length; count ++) {
 		columnString = columnString + "auto ";
 	} // the number of columns is the amount of auto's, auto means automatic resizing of the width
-
-	async function selectTile(tileMessage : string, tileID : string) {
-		let result = await onTileSelect(tileMessage, tileID);
-		
-		consolePrint(result);
-	}
 
 	function makeGridItem(tileInfo: string, posX: number, posY: number) {
 		let tileID = posX.toString() + posY.toString();
@@ -104,7 +91,7 @@ export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 				tileMessage = "Looks like you're here!";
 		}
 		
-		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => selectTile(tileMessage, tileID)}></Tile>
+		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => onTileSelect(tileMessage, tileID)}></Tile>
 	}
 
 	function makeGrid( gameState : GameState) {
@@ -116,42 +103,10 @@ export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 		}
 		return tileList;
 	}
-	
-	const handleKeyDown = (e : KeyboardEvent) => {
-		switch (e.keyCode) {
-			case 81: onMoving("q");
-			break;
-			case 87: onMoving("w");
-			break;
-			case 69: onMoving("e");
-			break;
-			case 65: onMoving("a");
-			break;
-			case 83: onMoving("s");
-			break;
-			case 68: onMoving("d");
-			break;
-			case 82: displayRules();
-			break;
-			case 70: displayPlayerInfo();
-			break;
-			case 27: dropdownFunction();
-			break;
-			default: consolePrint("Try another key, for example \"r\" for the rules.");
-		}
-	};
-	
-	useEffect(() => {
-		window.addEventListener('keydown', handleKeyDown);
 
-		// cleanup this component
-		return () => {
-		  window.removeEventListener('keydown', handleKeyDown);
-		};
-	}, []);
-    
-    return <div>
-        <div>Welcome to the little maze, {gameState.player.name}!</div>
+	return <div>
+		<div>Welcome to the little maze, {gameState.player.name}!</div>
+		<ErrorMessage>{error}</ErrorMessage>
 		
 		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
 			{makeGrid( gameState )}
@@ -177,5 +132,5 @@ export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 			<button onClick={() => onMoving("s")}> s </button>
 			<button onClick={() => onMoving("d")}> d </button>
 		</div>
-    </div>
+	</div>
 }
