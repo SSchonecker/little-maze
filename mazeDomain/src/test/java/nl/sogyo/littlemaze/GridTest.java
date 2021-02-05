@@ -75,6 +75,21 @@ class GridTest {
 	}
 	
 	@Test
+	void getCorrectMazeLayoutOnSpikeSelect() {
+		/*
+		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
+		 * each cell should know its type and where the walls _ are
+		 */
+		try {
+			miniGrid.stirPlayer("s"); // Moving south
+		} catch (Exception e) { assertFalse(true);}
+		miniGrid.selectTile(1, 1);
+		char[][][] expected = 	{{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+							{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
+		assertArrayEquals(expected, miniGrid.getLayout());
+	}
+	
+	@Test
 	void movePlayer() {
 		try {
 			miniGrid.stirPlayer("s"); // Moving south
@@ -120,10 +135,11 @@ class GridTest {
 	
 	@Test
 	void tileSelect() {
-		miniGrid.selectTile(1, 0);
+		assertTrue(miniGrid.selectTile(1, 0));
 		assertTrue(miniGrid.getTileRevealed(1, 0));
-		assertEquals("t", miniGrid.getTileType(1, 0));
+		assertFalse(miniGrid.selectTile(1, 1));
 		
+		assertEquals("t", miniGrid.getTileType(1, 0));
 		assertEquals("c", miniGrid.getTileType(0, 1));
 	}
 }

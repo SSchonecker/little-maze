@@ -5,9 +5,3 @@ Messages to player:
 	"You move carefully past the spikes." : when stepping on revealed spike tile
 	"Careful now! This looks like a spikey tile..." : when selecting a spike
 	"You found the chest!" : when stepping on chest tile
-	"You can't move there." : when position and orientation remain unchanged
-	"There is a chest here!" : when selecting chest tile
-	"This looks like an ordinary tile." : when selecting tile
-	"You can't see this tile from here." : when not selecting neighbouring tile
-
-	"Not a valid key." : exception message thrown by grid.
