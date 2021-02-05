@@ -1,5 +1,7 @@
 CREATE SCHEMA `maze_safe` ;
 
+CREATE SCHEMA `test_maze` ;
+
 CREATE TABLE `maze_safe`.`user` (
   `userID` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(50) NOT NULL,
@@ -31,3 +33,14 @@ CREATE TABLE `maze_safe`.`score` (
     REFERENCES `maze_safe`.`user` (userID)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+CREATE TABLE `test_maze`.`user` (
+  `userID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
+  `savedgameone` JSON NULL,
+  `savedgametwo` JSON NULL,
+  PRIMARY KEY (`userID`),
+  UNIQUE INDEX `userID_UNIQUE` (`userID` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `password_UNIQUE` (`password` ASC) VISIBLE);

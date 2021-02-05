@@ -1,6 +1,7 @@
 package nl.sogyo.littlemaze.mazeapi;
 
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import nl.sogyo.littlemaze.mazeapi.dbconnect.DataRow;
+import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
+import nl.sogyo.littlemaze.mazeapi.dtostructures.JsonError;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.UserInfoDto;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.UserInput;
 
@@ -30,22 +34,45 @@ public class MazeLogin {
 			UserInput loginInfo) {
 		
 		HttpSession session = request.getSession(true);
+		String error = "";
 		
 		String userName = loginInfo.getUserName();
 		boolean createAccount = loginInfo.getCreateAccount();
+		String password = loginInfo.getPasswordHash();
 		
-		//TODO check if password in DB by getting DB.passwordHash and doing loginInfo.checkPassword(savedPasswordHash)
-		if (createAccount) { String password = loginInfo.getPasswordHash(); 
-			//TODO and set in DB
+		SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
+		
+		if (createAccount) {
+			try {
+				dbConnect.addUser(userName, password);
+			} catch (SQLException exc) {
+				error = exc.getMessage();
+			}
+		}
+		else {
+			try {
+				DataRow data = dbConnect.getUserInfo(userName);
+				if (!loginInfo.checkPassword(data.getPassword())) {
+					error = "Invalid password";
+				}
+			} catch (SQLException exc) {
+				error = exc.getMessage();
+			}
 		}
 		
-		String accessToken = generateNewToken();
-		
-		session.setAttribute("userName", userName);
-		session.setAttribute("token", accessToken);
+		if (error.equals("")) {
+			String accessToken = generateNewToken();
+			
+			session.setAttribute("userName", userName);
+			session.setAttribute("token", accessToken);
 
-		var output = new UserInfoDto(userName, accessToken);
-		return Response.status(200).entity(output).build();
+			var output = new UserInfoDto(userName, accessToken);
+			return Response.status(200).entity(output).build();
+		}
+		else {
+			var output = new JsonError(error);
+			return Response.status(406).entity(output).build();
+		}
 	}
 	
 	public static String generateNewToken() {

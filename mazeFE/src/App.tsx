@@ -59,8 +59,13 @@ export function App() {
                 const userInfo = await response.json();
                 setInfoState(userInfo);
             }
-			localStorage.removeItem("myUserInfo");
-            setLoginMessage("Failed to login. Try again.");
+			else if (response.status == 406) {
+				const errorInfo = await response.json();
+				localStorage.removeItem("myUserInfo");
+				setLoginMessage("Failed to login. The error was: " + errorInfo.error);
+			}
+			//localStorage.removeItem("myUserInfo");
+            //setLoginMessage("Failed to login. Try again.");
         } catch (error) {
 			localStorage.removeItem("myUserInfo");
             setLoginMessage(error.toString());

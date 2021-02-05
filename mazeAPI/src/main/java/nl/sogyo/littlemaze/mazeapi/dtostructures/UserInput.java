@@ -33,7 +33,7 @@ public class UserInput {
 	}
 	
 	public boolean checkPassword(String savedPasswordHash) {
-		return BCrypt.checkpw(savedPasswordHash, password);
+		return BCrypt.checkpw(password, savedPasswordHash);
 	}
 
 }
