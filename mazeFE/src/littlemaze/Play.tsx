@@ -50,8 +50,14 @@ export function Play({ gameState, onMoving, onTileSelect }: PlayProps) {
 	
 	/* End of game state setter */
 	if (gameState.gameStatus.endgame) {
-		consolePrint("The game is over!");
-		consolePrint("Your score is " + gameState.gameStatus.score);
+		if (gameState.player.health == 0) {
+			consolePrint("Oops! You lost your life...");
+		}
+		else {
+			consolePrint("You found the chest!");
+			consolePrint("The game is over!");
+			consolePrint("Your score is " + gameState.gameStatus.score);
+		}
     }
 	
 	/* Creation of the maze grid, where a tile is a grid cell */

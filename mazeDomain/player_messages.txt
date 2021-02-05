@@ -1,7 +1,4 @@
 Messages to player:
 	"Ouch! You lost " + pain + " hp..." : when player loses health
-	"Oops! You lost your life..." : when players health reaches 0;
 	"This is a spikey tile!" : when stepping on unrevealed spike tile
 	"You move carefully past the spikes." : when stepping on revealed spike tile
-	"Careful now! This looks like a spikey tile..." : when selecting a spike
-	"You found the chest!" : when stepping on chest tile

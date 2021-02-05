@@ -6,6 +6,16 @@ import { Login, InfoState } from "./littlemaze/Login";
 
 export function App() {
 	
+	/*if (localStorage.getItem("myGameState")) {
+		return PlayPage();
+	}
+	else if (localStorage.get("myUserInfo")) {
+		return StartGamePage();
+	}
+	else {
+		return LoginPage();
+	}*/
+	
 /* Part for the login */
 	const [ loginMessage, setLoginMessage ] = useState("");
 	const [ infoState, setInfoState ] = useState<InfoState | undefined>(undefined);
