@@ -5,6 +5,7 @@ interface StartGameProps {
 	message: string;
 	userName: string;
 	onPlayerConfirmed(playerName: string, gridSize: number): void;
+	logout(): void;
 }
 
 // a button element with the specified css style applied to it
@@ -40,21 +41,14 @@ const Quote = styled.div`
 /**
  * Allows the player to enter their name and set the grid size.
  */
-export function InitGame({ message, userName, onPlayerConfirmed }: StartGameProps) {
-
+export function InitGame({ message, userName, onPlayerConfirmed, logout }: StartGameProps) {
+	
 	const [ playerName, setPlayerName ] = useState(userName);
 	const [ gridSize, setGridSize ] = useState(10); // Default grid size of 10x10 tiles
 	
 	const handleKeypress = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}
 	}; // Pressing the enter key in an input field is the same as pushing the button to enter the game
-	
-	const logoutButtonMessage = "Logout";
-	function logout() {
-		localStorage.removeItem("myGameState");
-		localStorage.removeItem("myUserInfo");
-		window.location.reload();
-	}
 
 	return <div>
 		<h2>Welcome to a little dungeon crawler!</h2>
@@ -84,7 +78,7 @@ export function InitGame({ message, userName, onPlayerConfirmed }: StartGameProp
 		</StartButton>
 		
 		<div id="buttonborder">
-			<LogoutButton onClick={logout}>{logoutButtonMessage}
+			<LogoutButton onClick={logout}>Logout
 			</LogoutButton>
 		</div>
 		

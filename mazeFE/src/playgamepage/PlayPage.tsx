@@ -1,18 +1,36 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Play } from "./Play";
 import { GameState } from "../typefiles/gameState";
+import { Link, withRouter , useHistory } from "react-router-dom";
 
-export function PlayPage() {
+function PlayPage() {
+	const history = useHistory();
+	if (!localStorage.getItem("myGameState")) {
+		history.push('/gamestart');
+	}
 
 /* The part for the play game page */
+	const [ gamePlay, setGamePlay ] = useState<GameState | undefined>(undefined);
+	/*useEffect(() => {
+		const gameState : GameState = JSON.parse(localStorage.getItem('myGameState')!);
+		setGamePlay(gameState);
+	}, []);*/
 	
-	const [ gamePlay, setGamePlay ] = useState<GameState>(JSON.parse(localStorage.getItem("myGameState")!));
+	/*useEffect(() => {
+		const json = JSON.stringify(gamePlay);
+		localStorage.setItem("myGameState", json);
+	}, [gamePlay]);*/
+	
 	const [ errorPlayMessage, setErrorPlayMessage ] = useState("");
 	const [ playMessage, setPlayMessage ] = useState("");
 	
-	const dropdownFunction = useCallback(() => { document.getElementById("myDropdown")!.classList.toggle("show"); }, []);
-	const displayPlayerInfo = useCallback(() => {consolePrint("You have " + gamePlay.player.health + " hp left, and you took " + gamePlay.player.steps + " steps so far, " + gamePlay.player.name);}, [gamePlay, consolePrint]);
+	/*const dropdownFunction = useCallback(() => { document.getElementById("myDropdown")!.classList.toggle("show"); }, []);
+	const displayPlayerInfo = useCallback(() => {consolePrint("You have " + gamePlay!.player.health + " hp left, and you took " + gamePlay!.player.steps + " steps so far, " + gamePlay!.player.name);}, [gamePlay, consolePrint]);
 	const displayRules = useCallback(() => {consolePrint("Little Maze Rules: You can move with \"w\" and \"s\" up and down, with \"a\" and \"d\" left and right. You can turn with \"q\" and \"e\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");}, [consolePrint]);
+	const resetGame = useCallback(() => {
+		localStorage.removeItem("myGameState");
+		history.push('/gamestart');
+	}, [history]);
 	
 	/*useEffect(() => {
 		const handleKeyDown = (e : KeyboardEvent) => {
@@ -45,14 +63,15 @@ export function PlayPage() {
 		};
 	}, [MakeMove, displayRules, displayPlayerInfo, consolePrint, dropdownFunction]);*/
 	
-	function consolePrint( info : string ) {
+	/*function consolePrint( info : string ) {
 		setPlayMessage(info + "\n" + playMessage);
 	}
 	
 	const userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
 	const token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
 	
-	async function MakeMove(key: string) {
+	/*async function MakeMove(key: string) {
+	/*async function MakeMove(key: string) {
 		
 		setErrorPlayMessage("");
 
@@ -80,7 +99,7 @@ export function PlayPage() {
 		}
 	}
 	
-	async function SelectTile(tileMessage : string, tileID : string) {
+	/*async function SelectTile(tileMessage : string, tileID : string) {
 		
 		setErrorPlayMessage("");
 		
@@ -111,25 +130,29 @@ export function PlayPage() {
 	}
 	
 	/* End of game state setter */
-	if (gamePlay.gameStatus.endgame) {
-		if (gamePlay.player.health == 0) {
+	/*if (gamePlay!.gameStatus.endgame) {
+		if (gamePlay!.player.health == 0) {
 			consolePrint("Oops! You lost your life...");
 		}
 		else {
 			consolePrint("You found the chest!");
 			consolePrint("The game is over!");
-			consolePrint("Your score is " + gamePlay.gameStatus.score);
+			consolePrint("Your score is " + gamePlay!.gameStatus.score);
 		}
 	}
 	
-	return <Play gameState={gamePlay}
+	/*return <Play gameState={gamePlay!}
 				onTileSelect={SelectTile}
 				onMoving={MakeMove}
 				dropdownFunction={dropdownFunction}
+				resetGame={resetGame}
 				displayPlayerInfo={displayPlayerInfo}
 				displayRules={displayRules}
 				playMessage={playMessage}
 				error={errorPlayMessage}
-	/>
-	//return <div> came here </div>
+	/>*/
+	
+	return <div> made this </div>
 }
+
+export default withRouter(PlayPage);

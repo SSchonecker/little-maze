@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Login } from "./Login";
 import { LoginState } from "../typefiles/loginState";
+import { Link, withRouter , useHistory } from "react-router-dom";
 
-export function LoginPage() {
-	
+function LoginPage() {
 /* Part for the login */
 	const [ loginMessage, setLoginMessage ] = useState("");
 	const [ infoState, setInfoState ] = useState<LoginState | undefined>(undefined);
@@ -12,6 +12,7 @@ export function LoginPage() {
 		localStorage.setItem("myUserInfo", json);
 		console.log(localStorage.getItem("myUserInfo"));
 	}, [infoState]); // Add the login info to the localStorage
+	const history = useHistory();
 	
 	async function tryLoginSend(userName : string, userPassword : string, createNew : boolean) {
 
@@ -52,7 +53,8 @@ export function LoginPage() {
 			if (response.ok) {
 				const userInfo = await response.json();
 				setInfoState(userInfo);
-				window.location.reload();
+				//history.push('/gamestart');
+				history.push('/game');
 			}
 			else if (response.status == 406) {
 				const errorInfo = await response.json();
@@ -66,5 +68,6 @@ export function LoginPage() {
 	}
 	
 	return <Login loginSend={tryLoginSend} message={loginMessage} />
-
 }
+
+export default withRouter(LoginPage);

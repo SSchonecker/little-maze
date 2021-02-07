@@ -4,14 +4,9 @@ import styled from "styled-components";
 
 interface PlayProps { // The type of input for the Play function
 	gameState: GameState;
-	onMoving(key : string) : void;
-	onTileSelect(tileMessage : string, tileID : string) : void;
 	playMessage : string;
 	error : string;
-	dropdownFunction() : void;
 	resetGame() : void;
-	displayPlayerInfo() : void;
-	displayRules() : void;
 }
 
 const ErrorMessage = styled.p`
@@ -31,12 +26,7 @@ const Tile = styled.button`
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, resetGame, displayPlayerInfo, displayRules, playMessage, error }: PlayProps) {
-	
-	/* Forming the options */
-	const resetButtonMessage = "Restart game";
-	const playerButtonMessage = "Player info";
-	const rulesButtonMessage = "The Rules";
+export function EndGame({ gameState, resetGame, playMessage, error }: PlayProps) {
 	
 	/* Creation of the maze grid, where a tile is a grid cell */
 	let columnString = "";
@@ -76,7 +66,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 				tileMessage = "Looks like you're here!";
 		}
 		
-		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => onTileSelect(tileMessage, tileID)}></Tile>
+		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")}></Tile>
 	}
 
 	function makeGrid( gameState : GameState) {
@@ -99,23 +89,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		
 		<Console>{playMessage}</Console>
 		
-		<div className="dropdown">
-			<button onClick={() => dropdownFunction()} className="dropbtn">Options</button>
-			<div id="myDropdown" className="dropdown-content">
-				<button onClick={() => displayPlayerInfo()}> {playerButtonMessage} </button>
-				<button onClick={() => displayRules()}> {rulesButtonMessage} </button>
-				<button className="resetbutton" onClick={() => resetGame()}>{resetButtonMessage}</button>
-			</div>
-		</div>
-		
-		<div className="movebuttons">
-			<button onClick={() => onMoving("q")}> q </button>
-			<button onClick={() => onMoving("w")}> w </button>
-			<button onClick={() => onMoving("e")}> e </button>
-			<br></br>
-			<button onClick={() => onMoving("a")}> a </button>
-			<button onClick={() => onMoving("s")}> s </button>
-			<button onClick={() => onMoving("d")}> d </button>
-		</div>
+		<button onClick={resetGame}>Restart?</button>
+
 	</div>
 }

@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { InitGame } from "./InitGame";
 import { GameState } from "../typefiles/gameState";
 import { LoginState } from "../typefiles/loginState";
+import { Link, withRouter , useHistory } from "react-router-dom";
 
-export function StartGamePage() {
-	
+function StartGamePage() {
 	/*
 	 * React hooks for the over-all state of the game.
 	 * If the gamestate is updated in the useState, it is also automatically added to localStorage
 	 */
 	const [ gameState, setGameState ] = useState<GameState | undefined>(undefined);
 	const [ errorMessage, setErrorMessage ] = useState("");
+	
 	useEffect(() => {
 		const json = JSON.stringify(gameState);
 		localStorage.setItem("myGameState", json);
 		console.log(localStorage.getItem("myGameState"));
-		window.location.assign("/playgame");
 	}, [gameState]);
+	
+	const history = useHistory();
+	function logout() {
+		localStorage.removeItem("myGameState");
+		localStorage.removeItem("myUserInfo");
+		history.push('/');
+	}
 	
 	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
 	const userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
@@ -52,6 +59,7 @@ export function StartGamePage() {
 			if (response.ok) {
 				const gameState = await response.json();
 				setGameState(gameState);
+				history.push('/playgame');
 			}
 			setErrorMessage("Failed to start the game. Try again.");
 			localStorage.removeItem("myGameState");
@@ -63,7 +71,10 @@ export function StartGamePage() {
 	}
 
 	return <InitGame onPlayerConfirmed={tryStartGame}
+				logout={logout}
 				userName={infoState.userName}
 				message={errorMessage}
 	/>
 }
+
+export default withRouter(StartGamePage);

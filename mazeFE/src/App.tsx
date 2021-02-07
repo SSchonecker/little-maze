@@ -1,20 +1,21 @@
 import React from "react";
-import { PlayPage } from "./playgamepage/PlayPage";
-import { StartGamePage } from "./startgamepage/StartGamePage";
-import { LoginPage } from "./loginpage/LoginPage";
+import PlayPage from "./playgamepage/PlayPage";
+import StartGamePage from "./startgamepage/StartGamePage";
+import LoginPage from "./loginpage/LoginPage";
+import GamePage from "./gamepage/GamePage";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 export function App() {
 	
-	/*if (localStorage.getItem("myGameState")) {
-		//return PlayPage();
-		return <div>game start succes</div>;
-	}*/
-	console.log(localStorage.getItem("myGameState"));
-	if (localStorage.getItem("myUserInfo") && localStorage.getItem("myUserInfo")!.length > 10) {
-		return StartGamePage();
-	}
-	else {
-		return LoginPage();
-	}
+	return <div className="App">
+      <Router>
+        <Switch>
+          <Route path="/" exact component={() => <LoginPage />} />
+		  <Route path="/game" exact component={() => <GamePage />} />
+          //<Route path="/gamestart" exact component={() => <StartGamePage />} />
+          //<Route path="/playpage" exact component={() => <PlayPage />} />
+        </Switch>
+      </Router>
+    </div>
 
 }
