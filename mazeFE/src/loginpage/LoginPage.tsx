@@ -10,6 +10,7 @@ export function LoginPage() {
 	useEffect(() => {
 		const json = JSON.stringify(infoState);
 		localStorage.setItem("myUserInfo", json);
+		console.log(localStorage.getItem("myUserInfo"));
 	}, [infoState]); // Add the login info to the localStorage
 	
 	async function tryLoginSend(userName : string, userPassword : string, createNew : boolean) {
@@ -18,22 +19,20 @@ export function LoginPage() {
 			setLoginMessage("User name is required!");
 			return;
 		}
-		
-		if (!userName.match("^[A-Za-z0-9]+$")) {
+		else if (!userName.match("^[A-Za-z0-9]+$")) {
 			setLoginMessage("No special characters!");
+			return;
 		}
 		
 		if (!userPassword) {
 			setLoginMessage("Password is required!");
 			return;
 		}
-		
 		else if (userPassword.length < 6) {
 			setLoginMessage("Make your password at least 6 characters long.");
 			return;
 		}
-		
-		if (userPassword.toLowerCase().includes(userName.toLowerCase())) {
+		else if (userPassword.toLowerCase().includes(userName.toLowerCase())) {
 			setLoginMessage("Don't put your name in your password...");
 			return;
 		}

@@ -5,14 +5,16 @@ import { LoginPage } from "./loginpage/LoginPage";
 
 export function App() {
 	
-	if (localStorage.getItem("myGameState") && localStorage.getItem("myGameState")!.length > 10) {
-		return PlayPage();
-	}
-	else if (localStorage.getItem("myUserInfo") && localStorage.getItem("myUserInfo")!.length > 10) {
+	/*if (localStorage.getItem("myGameState")) {
+		//return PlayPage();
+		return <div>game start succes</div>;
+	}*/
+	console.log(localStorage.getItem("myGameState"));
+	if (localStorage.getItem("myUserInfo") && localStorage.getItem("myUserInfo")!.length > 10) {
 		return StartGamePage();
 	}
 	else {
 		return LoginPage();
 	}
-	
+
 }

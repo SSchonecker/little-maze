@@ -14,9 +14,13 @@ export function StartGamePage() {
 	useEffect(() => {
 		const json = JSON.stringify(gameState);
 		localStorage.setItem("myGameState", json);
+		console.log(localStorage.getItem("myGameState"));
+		window.location.assign("/playgame");
 	}, [gameState]);
 	
 	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
+	const userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
+	const token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
 
 	async function tryStartGame(playerName: string, gridSize: number) {
 
@@ -31,13 +35,7 @@ export function StartGamePage() {
 		}
 
 		setErrorMessage("");
-		let userName = "";
-		let token = "";
-		
-		if (localStorage.getItem("myUserInfo")) {
-			userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
-			token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
-		}
+		localStorage.removeItem("myGameState");
 
 		try {
 			const response = await fetch('littlemaze/api/start', {
@@ -55,12 +53,12 @@ export function StartGamePage() {
 				const gameState = await response.json();
 				setGameState(gameState);
 			}
-			localStorage.removeItem("myGameState");
 			setErrorMessage("Failed to start the game. Try again.");
+			localStorage.removeItem("myGameState");
 		} catch (error) {
+			console.log(error.toString());
 			localStorage.removeItem("myGameState");
 			localStorage.removeItem("myUserInfo");
-			setErrorMessage(error.toString());
 		}
 	}
 

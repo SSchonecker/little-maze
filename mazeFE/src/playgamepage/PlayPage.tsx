@@ -9,15 +9,12 @@ export function PlayPage() {
 	const [ gamePlay, setGamePlay ] = useState<GameState>(JSON.parse(localStorage.getItem("myGameState")!));
 	const [ errorPlayMessage, setErrorPlayMessage ] = useState("");
 	const [ playMessage, setPlayMessage ] = useState("");
-	function consolePrint( info : string ) {
-		setPlayMessage(info + "\n" + playMessage);
-	}
 	
 	const dropdownFunction = useCallback(() => { document.getElementById("myDropdown")!.classList.toggle("show"); }, []);
 	const displayPlayerInfo = useCallback(() => {consolePrint("You have " + gamePlay.player.health + " hp left, and you took " + gamePlay.player.steps + " steps so far, " + gamePlay.player.name);}, [gamePlay, consolePrint]);
 	const displayRules = useCallback(() => {consolePrint("Little Maze Rules: You can move with \"w\" and \"s\" up and down, with \"a\" and \"d\" left and right. You can turn with \"q\" and \"e\". Tiles in your immediate vicinity can be checked by clicking on them. Try to find the chest without losing all your health!\n");}, [consolePrint]);
 	
-	useEffect(() => {
+	/*useEffect(() => {
 		const handleKeyDown = (e : KeyboardEvent) => {
 			switch (e.keyCode) {
 				case 81: MakeMove("q");
@@ -46,19 +43,18 @@ export function PlayPage() {
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [MakeMove, displayRules, displayPlayerInfo, consolePrint, dropdownFunction]);
+	}, [MakeMove, displayRules, displayPlayerInfo, consolePrint, dropdownFunction]);*/
+	
+	function consolePrint( info : string ) {
+		setPlayMessage(info + "\n" + playMessage);
+	}
+	
+	const userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
+	const token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
 	
 	async function MakeMove(key: string) {
 		
 		setErrorPlayMessage("");
-		
-		let userName = "";
-		let token = "";
-		
-		if (localStorage.getItem("myUserInfo")) {
-			userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
-			token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
-		}
 
 		try {
 			const urlPath = "littlemaze/api/stir/"+key;
@@ -87,14 +83,6 @@ export function PlayPage() {
 	async function SelectTile(tileMessage : string, tileID : string) {
 		
 		setErrorPlayMessage("");
-		
-		let userName = "";
-		let token = "";
-		
-		if (localStorage.getItem("myUserInfo")) {
-			userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
-			token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
-		}
 		
 		try {
 			const urlPath = "littlemaze/api/stir/tile/"+tileID;
@@ -143,4 +131,5 @@ export function PlayPage() {
 				playMessage={playMessage}
 				error={errorPlayMessage}
 	/>
+	//return <div> came here </div>
 }

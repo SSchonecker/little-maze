@@ -44,6 +44,7 @@ export function InitGame({ message, userName, onPlayerConfirmed }: StartGameProp
 
 	const [ playerName, setPlayerName ] = useState(userName);
 	const [ gridSize, setGridSize ] = useState(10); // Default grid size of 10x10 tiles
+	
 	const handleKeypress = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}
 	}; // Pressing the enter key in an input field is the same as pushing the button to enter the game
