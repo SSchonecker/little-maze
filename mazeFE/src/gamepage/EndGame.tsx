@@ -1,32 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { GameState } from "../typefiles/gameState";
 import styled from "styled-components";
+import { withRouter , useHistory } from "react-router-dom";
 
-interface PlayProps { // The type of input for the Play function
-	gameState: GameState;
-	playMessage : string;
-	error : string;
-	resetGame() : void;
-}
-
-const ErrorMessage = styled.p`
-	height: 1em;
-	color: red;
+const Container = styled.div`
+	font-size: 1em;
+	color: var(--light-sogyo);
+	background-color: black;
+	position: absolute;
+	top: 40%;
+	right: 20%;
+	width: 60%;
+	height: 30%;
+	text-align: center;
+	border-style: dotted;
+	border-width: thick;
+	border-color: yellow;
+	border-radius: 25px;
 `;
 
-const Console = styled.p`
-	font-size: 1em;
-	height: 100px;
-	color: var(--light-sogyo);
-	overflow-y: scroll;
-`; // The container for the messages to the player
+const Main = styled.p`
+	font-size: 1.5em;
+`;
 
-const Tile = styled.button`
+const Info = styled.p`
+
+`;
+
+const Score = styled.p`
+	font-size: 1.5em;
+	color: yellow;
+`;
+
+const Tile = styled.div`
 	height: 30px;
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function EndGame({ gameState, resetGame, playMessage, error }: PlayProps) {
+const RestartButton = styled.button`
+	background-color: black;
+	font-size: 1em;
+	color: white;
+	border-color: white;
+	position: absolute;
+	bottom: 20%;
+	left: 46%;
+	width: 8%;
+`;
+
+function EndGame() {
+	const history = useHistory();
+	const gameState = JSON.parse(localStorage.getItem("myGameState")!);
+	
+	const newGame = () => {
+		localStorage.removeItem("myGameState");
+		history.push("/game");
+	};
 	
 	/* Creation of the maze grid, where a tile is a grid cell */
 	let columnString = "";
@@ -51,19 +80,14 @@ export function EndGame({ gameState, resetGame, playMessage, error }: PlayProps)
 		};
 		switch (tileInfo.charAt(0)) {
 			case "t": tileStyle.backgroundColor = "var(--light-sogyo)";
-				tileMessage = "This looks like an ordinary tile.";
 			break;
 			case "c": tileStyle.backgroundColor = "yellow";
-				tileMessage = "There's a chest here!";
 			break;
-			case "s": tileStyle.backgroundColor = "grey";
-				tileMessage = "Careful now! This looks like a spikey tile...";
+			case "s": tileStyle.backgroundColor = "var(--light-sogyo)";
 			break;
-			case "h": tileStyle.backgroundColor = "purple";
-				tileMessage = "Remain careful, this is still a spikey tile.";
+			case "h": tileStyle.backgroundColor = "var(--light-sogyo)";
 			break;
 			case "p": tileStyle.backgroundColor = "red";
-				tileMessage = "Looks like you're here!";
 		}
 		
 		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")}></Tile>
@@ -78,18 +102,37 @@ export function EndGame({ gameState, resetGame, playMessage, error }: PlayProps)
 		}
 		return tileList;
 	}
+	
+	function InfoBox() {
+		if (gameState.player.health == 0) {
+			return (<Container>
+				<Main style={{color: "red"}}>Game over!</Main>
+				<Info>Oops... you lost all your health...</Info>
+				</Container>);
+		}
+		
+		return <Container>
+			<Main style={{color: "yellow"}}>You won!</Main>
+			<Info>You found the chest!<br></br>
+					It took you {gameState.player.steps} steps to get here
+					and you have {gameState.player.health} hp left.<br></br>
+					With the chest's treasure, that leaves you with a score of:
+			</Info>
+			<Score>{gameState.gameStatus.score}</Score>
+			</Container>
+		
+	}
 
 	return <div>
-		<div>Welcome to the little maze, {gameState.player.name}!</div>
-		<ErrorMessage>{error}</ErrorMessage>
-		
 		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
 			{makeGrid( gameState )}
 		</div>
 		
-		<Console>{playMessage}</Console>
+		{InfoBox()}
 		
-		<button onClick={resetGame}>Restart?</button>
+		<RestartButton onClick={newGame}>New grid?</RestartButton>
 
 	</div>
 }
+
+export default withRouter(EndGame);

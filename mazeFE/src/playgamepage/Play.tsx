@@ -24,6 +24,7 @@ const Console = styled.p`
 	font-size: 1em;
 	height: 100px;
 	color: var(--light-sogyo);
+	background-color: black;
 	overflow-y: scroll;
 `; // The container for the messages to the player
 

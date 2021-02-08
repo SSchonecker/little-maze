@@ -62,6 +62,7 @@ body {
 	display: inline-grid;
 	background-color: 2px solid var(--light-sogyo);
 	gap: 0;
+	margin: 0 auto;
 }
 
 /* Show the tiles with walls */

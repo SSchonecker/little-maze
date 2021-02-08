@@ -3,6 +3,7 @@ import PlayPage from "./playgamepage/PlayPage";
 import StartGamePage from "./startgamepage/StartGamePage";
 import LoginPage from "./loginpage/LoginPage";
 import GamePage from "./gamepage/GamePage";
+import EndGame from "./gamepage/EndGame";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 export function App() {
@@ -12,8 +13,7 @@ export function App() {
         <Switch>
           <Route path="/" exact component={() => <LoginPage />} />
 		  <Route path="/game" exact component={() => <GamePage />} />
-          //<Route path="/gamestart" exact component={() => <StartGamePage />} />
-          //<Route path="/playpage" exact component={() => <PlayPage />} />
+          <Route path="/end" exact component={() => <EndGame />} />
         </Switch>
       </Router>
     </div>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { InitGame } from "../startgamepage/InitGame";
 import { Play } from "../playgamepage/Play";
-import { EndGame } from "./EndGame";
 import { GameState } from "../typefiles/gameState";
 import { LoginState } from "../typefiles/loginState";
-import { Link, withRouter , useHistory } from "react-router-dom";
+import { withRouter , useHistory } from "react-router-dom";
 
 function GamePage() {
 	/*
@@ -15,8 +14,8 @@ function GamePage() {
 	
 	const [ gameState, setGameState ] = useState<GameState | undefined>(undefined);
 	useEffect(() => {
-		if (localStorage.getItem('myGameState') && localStorage.getItem('myGameState')!.length > 10) {
-			const gameState = JSON.parse(localStorage.getItem('myGameState')!);
+		if (localStorage.getItem("myGameState") && localStorage.getItem("myGameState")!.length > 10) {
+			const gameState = JSON.parse(localStorage.getItem("myGameState")!);
 			setGameState(gameState);
 		}
 	}, []);
@@ -62,7 +61,6 @@ function GamePage() {
 				break;
 				case 27: dropdownFunction();
 				break;
-				default: consolePrint("Try another key, for example \"r\" for the rules.");
 			}
 		};
 		window.addEventListener('keydown', handleKeyDown);
@@ -214,18 +212,7 @@ function GamePage() {
 	
 	/* End of game state setter */
 	if (gameState!.gameStatus.endgame) {
-		if (gameState!.player.health == 0) {
-			consolePrint("Oops! You lost your life...");
-		}
-		else {
-			consolePrint("You found the chest!");
-			consolePrint("The game is over!");
-			consolePrint("Your score is " + gameState!.gameStatus.score);
-		}
-		return <EndGame gameState={gameState}
-				resetGame={resetGame}
-				playMessage={playMessage}
-				error={errorPlayMessage} />
+		history.push("/end");
 	}
 	
 	return <Play gameState={gameState}
