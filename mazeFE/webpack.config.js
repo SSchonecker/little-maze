@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./src/startgame.tsx",
+	entry: './src/index.tsx',
     devtool: "inline-source-map",
     module: {
         rules: [
@@ -33,9 +33,6 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: path.join(__dirname, 'public'),
-		//https: true,
-		//key: fs.readFileSync('./key.pem'),
-		//cert: fs.readFileSync('./cert.pem'),
         host: '0.0.0.0',
         port: 2200,
         disableHostCheck: true,

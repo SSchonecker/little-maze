@@ -50,7 +50,6 @@ public class MazePlay {
 	}
 	
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/tile/{position}")
 	public Response tileSelect(
 			@PathParam("position") String position,
@@ -58,13 +57,13 @@ public class MazePlay {
 			@HeaderParam("Access-Token") String token,
 			@Context HttpServletRequest request) {
 		
-		int posX = Integer.valueOf(position.charAt(0));
-		int posY = Integer.valueOf(position.charAt(1));
+		int posX = Character.getNumericValue(position.charAt(0));
+		int posY = Character.getNumericValue(position.charAt(1));
 		
 		HttpSession session = request.getSession(false);
-		
+
 		int responseStatus = 403;
-		
+
 		if (userName.equals(session.getAttribute("userName")) &&
 				token.equals(session.getAttribute("token"))) {
 		

@@ -1,0 +1,95 @@
+import React, { useState, useEffect } from "react";
+import { GameState } from "../typefiles/gameState";
+import styled from "styled-components";
+
+interface PlayProps { // The type of input for the Play function
+	gameState: GameState;
+	playMessage : string;
+	error : string;
+	resetGame() : void;
+}
+
+const ErrorMessage = styled.p`
+	height: 1em;
+	color: red;
+`;
+
+const Console = styled.p`
+	font-size: 1em;
+	height: 100px;
+	color: var(--light-sogyo);
+	overflow-y: scroll;
+`; // The container for the messages to the player
+
+const Tile = styled.button`
+	height: 30px;
+	width: 30px;
+`; // Fixed sized floor tile
+
+export function EndGame({ gameState, resetGame, playMessage, error }: PlayProps) {
+	
+	/* Creation of the maze grid, where a tile is a grid cell */
+	let columnString = "";
+	for (var count = 0; count < gameState.layout.length; count ++) {
+		columnString = columnString + "auto ";
+	} // the number of columns is the amount of auto's, auto means automatic resizing of the width
+
+	function makeGridItem(tileInfo: string, posX: number, posY: number) {
+		let tileID = posX.toString() + posY.toString();
+		let tileMessage = "Hm, that's a weird tile..."; // This should never turn up
+		let classes = ["grid-item"];
+		
+		/* Setting the walls on each tile */
+		if (tileInfo[1] == "_") { classes.push("topborder"); }
+		if (tileInfo[2] == "_") { classes.push("rightborder"); }
+		if (tileInfo[3] == "_") { classes.push("bottomborder"); }
+		if (tileInfo[4] == "_") { classes.push("leftborder"); }
+		
+		/* Color the tiles dependent on their type */
+		let tileStyle = {
+			backgroundColor: "black"
+		};
+		switch (tileInfo.charAt(0)) {
+			case "t": tileStyle.backgroundColor = "var(--light-sogyo)";
+				tileMessage = "This looks like an ordinary tile.";
+			break;
+			case "c": tileStyle.backgroundColor = "yellow";
+				tileMessage = "There's a chest here!";
+			break;
+			case "s": tileStyle.backgroundColor = "grey";
+				tileMessage = "Careful now! This looks like a spikey tile...";
+			break;
+			case "h": tileStyle.backgroundColor = "purple";
+				tileMessage = "Remain careful, this is still a spikey tile.";
+			break;
+			case "p": tileStyle.backgroundColor = "red";
+				tileMessage = "Looks like you're here!";
+		}
+		
+		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")}></Tile>
+	}
+
+	function makeGrid( gameState : GameState) {
+		let tileList = [];
+		for (var x = 0; x < gameState.layout.length; x++) {
+			for (var y = 0; y < gameState.layout.length; y++) {
+				tileList.push(makeGridItem(gameState.layout[x][y], x, y));
+			}
+		}
+		return tileList;
+	}
+
+	return <div>
+		<div>Welcome to the little maze, {gameState.player.name}!</div>
+		<ErrorMessage>{error}</ErrorMessage>
+		
+		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
+			{makeGrid( gameState )}
+		</div>
+		
+		<Console>{playMessage}</Console>
+		
+		<button onClick={resetGame}>Restart?</button>
+
+	</div>
+}

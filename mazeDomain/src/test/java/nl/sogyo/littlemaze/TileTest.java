@@ -137,6 +137,21 @@ class TileTest {
 	}
 	
 	@Test
+	void moveLeftAndRight() {
+		firstTile.moveTo(aPlayer);
+		aPlayer.moveDownward();
+		aPlayer.moveRight();
+		int[] expectedPosition = {1, 1};
+		assertArrayEquals(expectedPosition, aPlayer.getPosition());
+
+		aPlayer.moveLeft();
+		
+		expectedPosition[1] = 0;
+		assertArrayEquals(expectedPosition, aPlayer.getPosition());
+
+	}
+	
+	@Test
 	void invalidMoveBack() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveBackward();
