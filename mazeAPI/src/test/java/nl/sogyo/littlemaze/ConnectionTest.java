@@ -2,6 +2,7 @@ package nl.sogyo.littlemaze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import nl.sogyo.littlemaze.mazeapi.dbconnect.DataRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
+import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
 
 class ConnectionTest {
 	
@@ -70,7 +72,7 @@ class ConnectionTest {
 			DataRow data = myConnect.getUserInfo(newName);
 			ID = data.getUserID();
 			password = data.getPassword();
-			myConnect.removeUser();
+			myConnect.removeTestUser();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -89,6 +91,35 @@ class ConnectionTest {
 			SqlConnect myConnect = new SqlConnect(url);
 			myConnect.getUserInfo("non-existing-p");
 		});
+	}
+	
+	@Test
+	void enterGame() {
+		Grid mazeGrid = new Grid(2);
+		mazeGrid.putPlayer("someone");	
+		MazeDto gameState = new MazeDto(mazeGrid, "someone");
+		
+		try {
+			SqlConnect myConnect = new SqlConnect(url);
+			myConnect.saveGame(gameState, "someone");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		
+		String savedGame = "";
+		
+		try {
+			SqlConnect myConnect = new SqlConnect(url);
+			DataRow data = myConnect.getUserInfo("someone");
+			savedGame = data.getGameStateJSON();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		assertNotNull(savedGame);
 	}
 
 }

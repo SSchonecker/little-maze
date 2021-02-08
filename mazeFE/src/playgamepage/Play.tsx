@@ -12,6 +12,7 @@ interface PlayProps { // The type of input for the Play function
 	resetGame() : void;
 	displayPlayerInfo() : void;
 	displayRules() : void;
+	saveGame() : void;
 }
 
 const ErrorMessage = styled.p`
@@ -31,24 +32,13 @@ const Tile = styled.button`
 	width: 30px;
 `; // Fixed sized floor tile
 
-export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, resetGame, displayPlayerInfo, displayRules, playMessage, error }: PlayProps) {
-	
-	/* Forming the options */
-	const resetButtonMessage = "Restart game";
-	const playerButtonMessage = "Player info";
-	const rulesButtonMessage = "The Rules";
+export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, resetGame, displayPlayerInfo, displayRules, saveGame, playMessage, error }: PlayProps) {
 	
 	/* Creation of the maze grid, where a tile is a grid cell */
 	let columnString = "";
 	for (var count = 0; count < gameState.layout.length; count ++) {
 		columnString = columnString + "auto ";
 	} // the number of columns is the amount of auto's, auto means automatic resizing of the width
-
-	async function selectTile(tileMessage : string, tileID : string) {
-		let result = await onTileSelect(tileMessage, tileID);
-		
-		consolePrint(result);
-	}
 
 	function makeGridItem(tileInfo: string, posX: number, posY: number) {
 		let tileID = posX.toString() + posY.toString();
@@ -108,9 +98,10 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		<div className="dropdown">
 			<button onClick={() => dropdownFunction()} className="dropbtn">Options</button>
 			<div id="myDropdown" className="dropdown-content">
-				<button onClick={() => displayPlayerInfo()}> {playerButtonMessage} </button>
-				<button onClick={() => displayRules()}> {rulesButtonMessage} </button>
-				<button className="resetbutton" onClick={() => resetGame()}>{resetButtonMessage}</button>
+				<button onClick={() => displayPlayerInfo()}>Player info</button>
+				<button onClick={() => displayRules()}>The Rules</button>
+				<button onClick={() => saveGame()}>Save this game</button>
+				<button className="resetbutton" onClick={() => resetGame()}>Start a new game</button>
 			</div>
 		</div>
 		

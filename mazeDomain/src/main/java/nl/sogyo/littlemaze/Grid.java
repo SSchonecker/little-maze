@@ -50,6 +50,11 @@ public class Grid {
 		myPlayer = new Player(playerName);
 		firstTile.moveTo(myPlayer);
 	}
+	
+	public void putPlayer(String playerName, int[] position) {
+		myPlayer = new Player(playerName);
+		firstTile.getTileAt(position).moveTo(myPlayer);
+	}
 
 	public String getPlayerName() {
 		if (myPlayer != null) {

@@ -189,6 +189,29 @@ function GamePage() {
 		}
 	}
 	
+	async function SaveGameFunction() {
+		
+		setErrorPlayMessage("");
+
+		try {
+			const response = await fetch("littlemaze/api/save/", {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'User-Name': userName,
+					'Access-token': token
+				},
+			});
+
+			if (response.ok) {
+				setErrorPlayMessage("Successfully saved the game.");
+			}
+			else {setErrorPlayMessage("Failed to save the game. Try again.");}
+		} catch (error) {
+			setErrorPlayMessage(error.toString());
+		}
+	}
+	
 	/* End of game state setter */
 	if (gameState!.gameStatus.endgame) {
 		if (gameState!.player.health == 0) {
@@ -212,6 +235,7 @@ function GamePage() {
 				resetGame={resetGame}
 				displayPlayerInfo={displayPlayerInfo}
 				displayRules={displayRules}
+				saveGame={SaveGameFunction}
 				playMessage={playMessage}
 				error={errorPlayMessage}
 	/>

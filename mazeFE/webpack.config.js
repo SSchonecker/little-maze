@@ -27,15 +27,18 @@ module.exports = {
     output: {
         filename: "bundle.js",
         path: path.resolve("dist"),
+		publicPath: '/'
     },
     watch: true,
 	target: "node",
     mode: "development",
     devServer: {
         contentBase: path.join(__dirname, 'public'),
+		watchContentBase: true,
         host: '0.0.0.0',
         port: 2200,
         disableHostCheck: true,
+		historyApiFallback: true,
         headers: {
           'Cache-Control': 'no-cache, no-store',
           'Expires': '-1',

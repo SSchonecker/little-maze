@@ -5,6 +5,7 @@ public class DataRow {
 	private int userID;
 	private String username;
 	private String password;
+	private String gameStateJSON;
 	
 	public int getUserID() {
 		return userID;
@@ -28,6 +29,14 @@ public class DataRow {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getGameStateJSON() {
+		return gameStateJSON;
+	}
+
+	public void setGameStateJSON(String gameStateJSON) {
+		this.gameStateJSON = gameStateJSON;
 	}
 
 }

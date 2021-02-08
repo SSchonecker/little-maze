@@ -10,11 +10,12 @@ function LoginPage() {
 	useEffect(() => {
 		const json = JSON.stringify(infoState);
 		localStorage.setItem("myUserInfo", json);
-		console.log(localStorage.getItem("myUserInfo"));
 	}, [infoState]); // Add the login info to the localStorage
 	const history = useHistory();
 	
 	async function tryLoginSend(userName : string, userPassword : string, createNew : boolean) {
+		
+		setLoginMessage("");
 
 		if (!userName) {
 			setLoginMessage("User name is required!");
@@ -29,16 +30,14 @@ function LoginPage() {
 			setLoginMessage("Password is required!");
 			return;
 		}
-		else if (userPassword.length < 6) {
-			setLoginMessage("Make your password at least 6 characters long.");
+		else if (userPassword.length < 10) {
+			setLoginMessage("Make your password at least 10 characters long.");
 			return;
 		}
 		else if (userPassword.toLowerCase().includes(userName.toLowerCase())) {
 			setLoginMessage("Don't put your name in your password...");
 			return;
 		}
-
-		setLoginMessage("");
 
 		try {
 			const response = await fetch('littlemaze/api/login', {
