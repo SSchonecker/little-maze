@@ -63,7 +63,7 @@ public class MazePlay {
 		HttpSession session = request.getSession(false);
 
 		int responseStatus = 403;
-		
+
 		if (userName.equals(session.getAttribute("userName")) &&
 				token.equals(session.getAttribute("token"))) {
 		

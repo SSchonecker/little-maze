@@ -6,7 +6,7 @@ import GamePage from "./gamepage/GamePage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 export function App() {
-	
+
 	return <div className="App">
       <Router>
         <Switch>
@@ -17,5 +17,4 @@ export function App() {
         </Switch>
       </Router>
     </div>
-
 }

@@ -44,6 +44,12 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		columnString = columnString + "auto ";
 	} // the number of columns is the amount of auto's, auto means automatic resizing of the width
 
+	async function selectTile(tileMessage : string, tileID : string) {
+		let result = await onTileSelect(tileMessage, tileID);
+		
+		consolePrint(result);
+	}
+
 	function makeGridItem(tileInfo: string, posX: number, posY: number) {
 		let tileID = posX.toString() + posY.toString();
 		let tileMessage = "Hm, that's a weird tile..."; // This should never turn up
@@ -75,7 +81,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 			case "p": tileStyle.backgroundColor = "red";
 				tileMessage = "Looks like you're here!";
 		}
-		
+
 		return <Tile id={tileID} key={tileID} style={tileStyle} className={classes.join(" ")} onClick={() => onTileSelect(tileMessage, tileID)}></Tile>
 	}
 
