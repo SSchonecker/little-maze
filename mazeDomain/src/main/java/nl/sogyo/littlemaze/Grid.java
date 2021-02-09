@@ -23,6 +23,63 @@ public class Grid {
 		makeMazeLayout();
 	}
 	
+	public Grid(String playerName, int playerHealth, int playerSteps, char[][][] layout) {
+		buildMaze(layout);
+		makeMazeLayout();
+		int[] playerPos = playerInMaze(layout);
+		firstTile = theMaze[0][0];
+		firstTile.setMaze(theMaze);
+		
+		putPlayer(playerName, playerPos);
+		myPlayer.setSteps(playerSteps);
+		myPlayer.setHealth(playerHealth);
+		
+	}
+	
+	private void buildMaze(char[][][] layout) {
+		theMaze = new Tile[layout.length][layout.length];
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				if (layout[x][y][0] == 's' || layout[x][y][0] == 'h') {
+					theMaze[x][y] = new Spike(x, y);
+					if (layout[x][y][0] == 'h') {
+						theMaze[x][y].select();
+					}
+				}
+				else {
+					theMaze[x][y] = new Tile(x, y);
+					if (layout[x][y][0] == 'c') {
+						theMaze[x][y].putChest();
+					}
+				}
+			}
+		}
+		
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				for (Direction dir : Direction.values()) {
+					if (layout[x][y][dir.nr + 1] == '.') {
+						theMaze[x][y].neighbours[dir.nr] = theMaze[x+dir.dx][y+dir.dy];
+					}
+				}
+			}
+		}
+	}
+	
+	private int[] playerInMaze(char[][][] layout) {
+		int[] playerPos = new int[2];
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				if (layout[x][y][0] == 'p') {
+					playerPos[0] = x;
+					playerPos[1] = y;
+					return playerPos;
+				}
+			}
+		}
+		return playerPos;
+	}
+
 	private void makeMazeLayout() {
 		mazeLayout = new char[theMaze.length][theMaze.length][5];
 		for (int x = 0; x < theMaze.length; x++) {
@@ -49,6 +106,11 @@ public class Grid {
 	public void putPlayer(String playerName) {
 		myPlayer = new Player(playerName);
 		firstTile.moveTo(myPlayer);
+	}
+	
+	public void putPlayer(String playerName, int[] position) {
+		myPlayer = new Player(playerName);
+		firstTile.getTileAt(position).moveTo(myPlayer);
 	}
 
 	public String getPlayerName() {
@@ -103,8 +165,14 @@ public class Grid {
 	 * @return grid[x][y]{type, North, East, South, West}
 	 */
 	public char[][][] getLayout() {
-		mazeLayout[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
-		return mazeLayout;
+		char[][][] currentMaze = new char[mazeLayout.length][mazeLayout.length][5];  
+		for(int i = 0; i < mazeLayout.length; i++) {
+			for(int j=0; j < mazeLayout[i].length; j++) {
+				System.arraycopy(mazeLayout[i][j], 0, currentMaze[i][j], 0, 5);
+			}
+		}
+		currentMaze[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
+		return currentMaze;
 	}
 
 	public int getSteps() {
@@ -124,16 +192,22 @@ public class Grid {
 	public void stirPlayer(String key) throws InvalidKeyException {
 		switch (key.toLowerCase()) {
 		case("w"):
-			myPlayer.moveForward();
+			myPlayer.moveUpward();
 			break;
 		case("s"):
-			myPlayer.moveBackward();
+			myPlayer.moveDownward();
 			break;
-		case("a"):
+		case("q"):
 			myPlayer.turnLeft();
 			break;
-		case("d"):
+		case("e"):
 			myPlayer.turnRight();
+			break;
+		case("a"):
+			myPlayer.moveLeft();
+			break;
+		case("d"):
+			myPlayer.moveRight();
 			break;
 		default:
 			throw new InvalidKeyException("Not a valid key.");
@@ -147,15 +221,18 @@ public class Grid {
 		return null;
 	}
 
-	public void selectTile(int i, int j) {
+	public boolean selectTile(int i, int j) {
 		int[] target = {i, j};
 		for (int n = 0; n < 4; n++) {
 			Tile aNeighbour = firstTile.getTileAt(myPlayer.getPosition()).getNeighbour(n);
 			if (aNeighbour != null 
 					&& Arrays.equals(target, aNeighbour.getPosition())) {
 				aNeighbour.select();
+				makeMazeLayout();
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public boolean getTileRevealed(int x, int y) {

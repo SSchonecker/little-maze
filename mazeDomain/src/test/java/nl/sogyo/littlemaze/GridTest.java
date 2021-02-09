@@ -69,43 +69,90 @@ class GridTest {
 		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
 		 * each cell should know its type and where the walls _ are
 		 */
-		char[][][] expected = 	{{{'p','_', '.', '_', '_'}, {'c','_', '.', '_', '_'}}, 
-							{{'t','.', '_', '_', '.'},{'s','_', '_', '.', '.'}}};
+		char[][][] expected = 	{{{'p','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+							{{'t','.', '.', '_', '_'},{'s','.', '_', '_', '.'}}};
+		assertArrayEquals(expected, miniGrid.getLayout());
+	}
+	
+	@Test
+	void getCorrectMazeLayoutOnSpikeSelect() {
+		/*
+		 * The layout consists of cells 0.0, 0.1, 1.0, 1.1,
+		 * each cell should know its type and where the walls _ are
+		 */
+		try {
+			miniGrid.stirPlayer("s"); // Moving south
+		} catch (Exception e) { assertFalse(true);}
+		miniGrid.selectTile(1, 1);
+		char[][][] expected = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+							{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
 		assertArrayEquals(expected, miniGrid.getLayout());
 	}
 	
 	@Test
 	void movePlayer() {
 		try {
-			miniGrid.stirPlayer("w");
+			miniGrid.stirPlayer("s"); // Moving south
 		} catch (Exception e) { assertFalse(true);}
-		int[] expected = {1,0};
+		int[] expected = {1, 0};
 		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		try {
-			miniGrid.stirPlayer("a");
-		} catch (Exception e) { assertFalse(true);}
-		assertEquals(Direction.NORTH.toString(), miniGrid.getPlayerOrientation());
-		
-		try {
-			miniGrid.stirPlayer("s");
-		} catch (Exception e) { assertFalse(true);}
-		assertArrayEquals(expected, miniGrid.getPlayerLocation());
-		
-		try {
-			miniGrid.stirPlayer("d");
+			miniGrid.stirPlayer("q"); // Turning left from south to east
 		} catch (Exception e) { assertFalse(true);}
 		assertEquals(Direction.EAST.toString(), miniGrid.getPlayerOrientation());
+		
+		expected[0] = 0; // Move north, back to {0, 0}
+		try {
+			miniGrid.stirPlayer("w");
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
+		
+		try {
+			miniGrid.stirPlayer("s"); // Move south again
+		} catch (Exception e) { assertFalse(true);}
+		
+		try {
+			miniGrid.stirPlayer("e"); // Turn right, from east to south
+		} catch (Exception e) { assertFalse(true);}
+		assertEquals(Direction.SOUTH.toString(), miniGrid.getPlayerOrientation());
+		
+		expected[0] = 1;
+		expected[1] = 1;
+		try {
+			miniGrid.stirPlayer("d"); // Move to the east
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
+		
+		expected[1] = 0;
+		try {
+			miniGrid.stirPlayer("a"); // Move to the west
+		} catch (Exception e) { assertFalse(true);}
+		assertArrayEquals(expected, miniGrid.getPlayerLocation());
 		
 		assertThrows(Exception.class, () -> miniGrid.stirPlayer("g"));
 	}
 	
 	@Test
 	void tileSelect() {
-		miniGrid.selectTile(1, 0);
+		assertTrue(miniGrid.selectTile(1, 0));
 		assertTrue(miniGrid.getTileRevealed(1, 0));
-		assertEquals("t", miniGrid.getTileType(1, 0));
+		assertFalse(miniGrid.selectTile(1, 1));
 		
+		assertEquals("t", miniGrid.getTileType(1, 0));
 		assertEquals("c", miniGrid.getTileType(0, 1));
+	}
+	
+	@Test
+	void buildGridFromLayout() {
+		//String[][] initialLayout = {{"t__._", "c__._"}, 
+		//		{"p..__", "h.__."}};
+		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
+		Grid thisGrid = new Grid("R", 10, 10, initialLayout);
+		
+		char[][][] expectedLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};		
+		assertArrayEquals(expectedLayout, thisGrid.getLayout());
 	}
 }

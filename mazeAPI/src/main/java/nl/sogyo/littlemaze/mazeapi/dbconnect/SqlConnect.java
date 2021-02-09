@@ -1,0 +1,131 @@
+package nl.sogyo.littlemaze.mazeapi.dbconnect;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
+
+public class SqlConnect {
+	
+	private String user = "mazewalker";
+	private String dbpw = "runT0mrun!";
+	private String url = "";
+	private String schema = "";
+	
+	public SqlConnect(String url) {
+		this.url = url;
+		schema = url.split("/")[3];
+	}
+	
+	public int makeConnection() throws SQLException {
+		int version = 0;
+		try (
+			Connection conn = DriverManager.getConnection(url, user, dbpw);
+		) {
+			DatabaseMetaData data = conn.getMetaData();
+			version = data.getDatabaseMajorVersion();
+		}
+		return version;
+	}
+
+	public DataRow getUserInfo(String name) throws SQLException {
+		DataRow data = new DataRow();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("SELECT * FROM " + schema + ".user WHERE userName=?");
+			stmt.setString(1, name);
+			resultSet = stmt.executeQuery();
+			resultSet.next();
+			data.setUserID(resultSet.getInt("userID"));
+			data.setUsername(resultSet.getString("username"));
+			data.setPassword(resultSet.getString("password"));
+			data.setGameStateJSON(resultSet.getString("savedgameone"));
+			data.setGameStateJSONtwo(resultSet.getString("savedgametwo"));
+		}
+		finally {
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+		return data;
+	}
+
+	public void addUser(String newName, String newPassword) throws SQLException {
+		
+		PreparedStatement stmt = null;
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("INSERT INTO " + schema + ".user (username, password) VALUES (?, ?);");
+			stmt.setString(1, newName);
+			stmt.setString(2, newPassword);
+			stmt.execute();
+		}
+		finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+		
+	}
+
+	public void saveGame(MazeDto gameState, String username, String saveSlot) throws SQLException {
+		PreparedStatement stmt = null;
+		ObjectMapper mapper = new ObjectMapper(); 
+		String jsonResult = "";
+		try {
+			jsonResult = mapper.writeValueAsString(gameState);
+		} catch (JsonProcessingException e) {
+			throw new SQLException(e.getMessage());
+		}
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			if (saveSlot.equals("1")) {
+				stmt = conn.prepareStatement("UPDATE " + schema + ".user SET savedgameone = ? WHERE userName=?;");
+			}
+			else {
+				stmt = conn.prepareStatement("UPDATE " + schema + ".user SET savedgametwo = ? WHERE userName=?;");
+			}
+			stmt.setString(1, jsonResult);
+			stmt.setString(2, username);
+			stmt.execute();
+		}
+		finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+	}
+	
+	public void removeTestUser() throws SQLException {
+		PreparedStatement stmt = null;
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("DELETE FROM `test_maze`.`user` WHERE (`username` = 'someguy');");
+			stmt.execute();
+		}
+		finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+	}
+
+	public String loadGame(String userName, String slot) throws SQLException {
+		DataRow userData = null;
+		String loadedGame = "";
+		try {
+			userData = getUserInfo(userName);
+			loadedGame = userData.getGameStateJSON(slot);
+		} catch (SQLException err) {
+			throw new SQLException(err);
+		}
+		return loadedGame;
+	}
+	
+}

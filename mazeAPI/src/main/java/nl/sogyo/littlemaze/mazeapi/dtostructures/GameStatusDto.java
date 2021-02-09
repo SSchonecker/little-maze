@@ -6,6 +6,8 @@ public class GameStatusDto {
 	
 	boolean endgame;
 	int score;
+	
+	public GameStatusDto() {}
 
 	public GameStatusDto(Grid mazeGrid) {
 		this.endgame = mazeGrid.getGameStatus();
@@ -18,6 +20,14 @@ public class GameStatusDto {
 
 	public int getScore() {
 		return score;
+	}
+
+	public void setEndgame(boolean endgame) {
+		this.endgame = endgame;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }

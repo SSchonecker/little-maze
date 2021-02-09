@@ -1,0 +1,46 @@
+CREATE SCHEMA `maze_safe` ;
+
+CREATE SCHEMA `test_maze` ;
+
+CREATE TABLE `maze_safe`.`user` (
+  `userID` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `savedgameone` JSON NULL,
+  `savedgametwo` JSON NULL,
+  PRIMARY KEY (`userID`),
+  UNIQUE INDEX `userID_UNIQUE` (`userID` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE);
+
+ALTER TABLE `maze_safe`.`user` 
+CHANGE COLUMN `userID` `userID` INT UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `maze_safe`.`user` 
+CHANGE COLUMN `password` `password` VARCHAR(64) NOT NULL ,
+ADD UNIQUE INDEX `password_UNIQUE` (`password` ASC) VISIBLE;
+;
+
+CREATE TABLE `maze_safe`.`score` (
+  `scoreID` INT NOT NULL AUTO_INCREMENT,
+  `scorevalue` INT NOT NULL,
+  `gridsize` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `userID` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`scoreID`),
+  UNIQUE INDEX `scoreID_UNIQUE` (`scoreID` ASC) VISIBLE,
+  CONSTRAINT `fk_userID`
+    FOREIGN KEY (userID)
+    REFERENCES `maze_safe`.`user` (userID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `test_maze`.`user` (
+  `userID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
+  `savedgameone` JSON NULL,
+  `savedgametwo` JSON NULL,
+  PRIMARY KEY (`userID`),
+  UNIQUE INDEX `userID_UNIQUE` (`userID` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `password_UNIQUE` (`password` ASC) VISIBLE);

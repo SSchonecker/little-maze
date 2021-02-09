@@ -7,6 +7,8 @@ public class MazeDto {
 	GameStatusDto gameStatus;
 	char[][][] layout;
 	
+	public MazeDto() {}
+	
 	public MazeDto(Grid mazeGrid, String playerName) {
         player = new PlayerDto(mazeGrid, playerName);
         gameStatus = new GameStatusDto(mazeGrid);
@@ -18,5 +20,17 @@ public class MazeDto {
     public GameStatusDto getGameStatus() { return gameStatus; }
     
     public char[][][] getLayout() { return layout; }
+
+	public void setPlayer(PlayerDto player) {
+		this.player = player;
+	}
+
+	public void setGameStatus(GameStatusDto gameStatus) {
+		this.gameStatus = gameStatus;
+	}
+
+	public void setLayout(char[][][] layout) {
+		this.layout = layout;
+	}
 	
 }

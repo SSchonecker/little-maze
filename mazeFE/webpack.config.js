@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./src/startgame.tsx",
+	entry: './src/index.tsx',
     devtool: "inline-source-map",
     module: {
         rules: [
@@ -15,7 +15,8 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [ ".tsx", ".ts", ".js" ]
+        extensions: [ ".tsx", ".ts", ".js" ],
+        modules: ["src", "node_modules"]
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -26,15 +27,18 @@ module.exports = {
     output: {
         filename: "bundle.js",
         path: path.resolve("dist"),
+		publicPath: '/'
     },
     watch: true,
 	target: "node",
     mode: "development",
     devServer: {
         contentBase: path.join(__dirname, 'public'),
+		watchContentBase: true,
         host: '0.0.0.0',
         port: 2200,
         disableHostCheck: true,
+		historyApiFallback: true,
         headers: {
           'Cache-Control': 'no-cache, no-store',
           'Expires': '-1',

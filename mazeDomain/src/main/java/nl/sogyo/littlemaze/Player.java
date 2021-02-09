@@ -6,7 +6,7 @@ public class Player {
 	private int myLife = 50;
 	private int mySteps = -1; // Initiate at -1, because the first tile will also add 1
 	private String myName;
-	private Direction facing = Direction.EAST; // Same direction as the first tile's neighbour
+	private Direction facing = Direction.SOUTH; // Same direction as the first tile's neighbour
 	private boolean endOfGame = false;
 	private int score;
 	
@@ -24,6 +24,10 @@ public class Player {
 
 	public int getHealth() {
 		return myLife;
+	}
+	
+	public void setHealth(int playerHealth) {
+		myLife = playerHealth;
 	}
 
 	public void suffer(int pain) {
@@ -87,6 +91,26 @@ public class Player {
 
 	public int getSteps() {
 		return mySteps;
+	}
+	
+	public void setSteps(int playerSteps) {
+		mySteps = playerSteps;
+	}
+
+	public void moveLeft() {
+		currentTile.walkTo(Direction.WEST, this);		
+	}
+
+	public void moveRight() {
+		currentTile.walkTo(Direction.EAST, this);		
+	}
+
+	public void moveUpward() {
+		currentTile.walkTo(Direction.NORTH, this);
+	}
+
+	public void moveDownward() {
+		currentTile.walkTo(Direction.SOUTH, this);
 	}
 
 }

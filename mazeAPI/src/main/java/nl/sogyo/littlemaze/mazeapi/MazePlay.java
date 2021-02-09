@@ -2,6 +2,7 @@ package nl.sogyo.littlemaze.mazeapi;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,47 +22,64 @@ public class MazePlay {
 	@Path("/{key}")
 	public Response playerStir(
 			@PathParam("key") String key,
+			@HeaderParam("User-Name") String userName,
+			@HeaderParam("Access-Token") String token,
 			@Context HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(false);
-		Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
 		
-		int responseStatus = 500;
-		try {
-			mazeGrid.stirPlayer(key);
-			responseStatus = 200;
-			var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
-			return Response.status(responseStatus).entity(output).build();
+		int responseStatus = 403;
+		
+		if (userName.equals(session.getAttribute("userName")) &&
+				token.equals(session.getAttribute("token"))) {
+		
+			Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
+			
+			try {
+				mazeGrid.stirPlayer(key);
+				responseStatus = 200;
+				var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
+				return Response.status(responseStatus).entity(output).build();
+			}
+			catch (Exception err) {
+				responseStatus = 406;
+				return Response.status(responseStatus).entity(err.getMessage()).build();
+			}
 		}
-		catch (Exception err) {
-			responseStatus = 406;
-			return Response.status(responseStatus).build();
-		}
+		return Response.status(responseStatus).build();
 	}
 	
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/tile/{position}")
 	public Response tileSelect(
 			@PathParam("position") String position,
+			@HeaderParam("User-Name") String userName,
+			@HeaderParam("Access-Token") String token,
 			@Context HttpServletRequest request) {
 		
-		int posX = Integer.valueOf(position.charAt(0));
-		int posY = Integer.valueOf(position.charAt(1));
+		int posX = Character.getNumericValue(position.charAt(0));
+		int posY = Character.getNumericValue(position.charAt(1));
 		
 		HttpSession session = request.getSession(false);
-		Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
+
+		int responseStatus = 403;
+
+		if (userName.equals(session.getAttribute("userName")) &&
+				token.equals(session.getAttribute("token"))) {
 		
-		int responseStatus = 500;
-		try {
-			mazeGrid.selectTile(posX, posY);
-			responseStatus = 200;
-			var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
-			return Response.status(responseStatus).entity(output).build();
+			Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
+			
+			try {
+				mazeGrid.selectTile(posX, posY);
+				responseStatus = 200;
+				var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
+				return Response.status(responseStatus).entity(output).build();
+			}
+			catch (Exception err) {
+				responseStatus = 406;
+				return Response.status(responseStatus).entity(err.getMessage()).build();
+			}
 		}
-		catch (Exception err) {
-			responseStatus = 406;
-			return Response.status(responseStatus).build();
-		}
+		return Response.status(responseStatus).build();
 	}
 }

@@ -29,7 +29,7 @@ class Tile {
 		this.maze = mazeGrid;
 		position[0] = 0;
 		position[1] = 0;
-		neighbours[Direction.EAST.nr] = new Tile(mazeGrid, Direction.EAST, this); 
+		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this); 
 	}
 	
 	/**
@@ -141,6 +141,10 @@ class Tile {
 	public Tile getTileAt(int[] position) {
 		return getTileAt(position[0], position[1]);
 	}
+	
+	public void setMaze(Tile[][] aMaze) {
+		this.maze = aMaze;
+	}
 
 	/**
 	 * Method to try to move the player to the next neighbour.
@@ -157,6 +161,10 @@ class Tile {
 
 	public boolean containsChest() {
 		return hasChest;
+	}
+	
+	public void putChest() {
+		this.hasChest = true;
 	}
 
 	public Tile getNeighbour(int n) {
