@@ -84,7 +84,7 @@ class GridTest {
 			miniGrid.stirPlayer("s"); // Moving south
 		} catch (Exception e) { assertFalse(true);}
 		miniGrid.selectTile(1, 1);
-		char[][][] expected = 	{{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+		char[][][] expected = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
 							{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
 		assertArrayEquals(expected, miniGrid.getLayout());
 	}
@@ -141,5 +141,18 @@ class GridTest {
 		
 		assertEquals("t", miniGrid.getTileType(1, 0));
 		assertEquals("c", miniGrid.getTileType(0, 1));
+	}
+	
+	@Test
+	void buildGridFromLayout() {
+		//String[][] initialLayout = {{"t__._", "c__._"}, 
+		//		{"p..__", "h.__."}};
+		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
+		Grid thisGrid = new Grid("R", 10, 10, initialLayout);
+		
+		char[][][] expectedLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};		
+		assertArrayEquals(expectedLayout, thisGrid.getLayout());
 	}
 }

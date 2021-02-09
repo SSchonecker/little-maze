@@ -41,6 +41,7 @@ public class MazeLogin {
 		String password = loginInfo.getPasswordHash();
 		
 		SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
+		int saveSlotUsed = 0;
 		
 		if (createAccount) {
 			try {
@@ -55,6 +56,9 @@ public class MazeLogin {
 				if (!loginInfo.checkPassword(data.getPassword())) {
 					error = "Invalid password";
 				}
+				else if (data.getGameStateJSON() != null) {
+					saveSlotUsed = 1;
+				}
 			} catch (SQLException exc) {
 				error = exc.getMessage();
 			}
@@ -66,7 +70,7 @@ public class MazeLogin {
 			session.setAttribute("userName", userName);
 			session.setAttribute("token", accessToken);
 
-			var output = new UserInfoDto(userName, accessToken);
+			var output = new UserInfoDto(userName, accessToken, saveSlotUsed);
 			return Response.status(200).entity(output).build();
 		}
 		else {

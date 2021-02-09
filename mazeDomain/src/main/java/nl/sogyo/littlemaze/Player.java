@@ -25,6 +25,10 @@ public class Player {
 	public int getHealth() {
 		return myLife;
 	}
+	
+	public void setHealth(int playerHealth) {
+		myLife = playerHealth;
+	}
 
 	public void suffer(int pain) {
 		if (pain < myLife) {
@@ -87,6 +91,10 @@ public class Player {
 
 	public int getSteps() {
 		return mySteps;
+	}
+	
+	public void setSteps(int playerSteps) {
+		mySteps = playerSteps;
 	}
 
 	public void moveLeft() {

@@ -94,7 +94,7 @@ class ConnectionTest {
 	}
 	
 	@Test
-	void enterGame() {
+	void saveAGame() {
 		Grid mazeGrid = new Grid(2);
 		mazeGrid.putPlayer("someone");	
 		MazeDto gameState = new MazeDto(mazeGrid, "someone");
@@ -121,5 +121,21 @@ class ConnectionTest {
 		}
 		assertNotNull(savedGame);
 	}
-
+	
+	@Test
+	void loadAGame() {
+		
+		String savedGame = "";
+		
+		try {
+			SqlConnect myConnect = new SqlConnect(url);
+			savedGame = myConnect.loadGame("someone");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		
+		assertNotNull(savedGame);
+	}
 }

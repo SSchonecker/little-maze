@@ -23,6 +23,63 @@ public class Grid {
 		makeMazeLayout();
 	}
 	
+	public Grid(String playerName, int playerHealth, int playerSteps, char[][][] layout) {
+		buildMaze(layout);
+		makeMazeLayout();
+		int[] playerPos = playerInMaze(layout);
+		firstTile = theMaze[0][0];
+		firstTile.setMaze(theMaze);
+		
+		putPlayer(playerName, playerPos);
+		myPlayer.setSteps(playerSteps);
+		myPlayer.setHealth(playerHealth);
+		
+	}
+	
+	private void buildMaze(char[][][] layout) {
+		theMaze = new Tile[layout.length][layout.length];
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				if (layout[x][y][0] == 's' || layout[x][y][0] == 'h') {
+					theMaze[x][y] = new Spike(x, y);
+					if (layout[x][y][0] == 'h') {
+						theMaze[x][y].select();
+					}
+				}
+				else {
+					theMaze[x][y] = new Tile(x, y);
+					if (layout[x][y][0] == 'c') {
+						theMaze[x][y].putChest();
+					}
+				}
+			}
+		}
+		
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				for (Direction dir : Direction.values()) {
+					if (layout[x][y][dir.nr + 1] == '.') {
+						theMaze[x][y].neighbours[dir.nr] = theMaze[x+dir.dx][y+dir.dy];
+					}
+				}
+			}
+		}
+	}
+	
+	private int[] playerInMaze(char[][][] layout) {
+		int[] playerPos = new int[2];
+		for (int x = 0; x < layout.length; x++) {
+			for (int y = 0; y < layout.length; y++) {
+				if (layout[x][y][0] == 'p') {
+					playerPos[0] = x;
+					playerPos[1] = y;
+					return playerPos;
+				}
+			}
+		}
+		return playerPos;
+	}
+
 	private void makeMazeLayout() {
 		mazeLayout = new char[theMaze.length][theMaze.length][5];
 		for (int x = 0; x < theMaze.length; x++) {

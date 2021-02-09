@@ -7,6 +7,8 @@ public class PlayerDto {
 	int health;
 	int steps;
 	int[] position;
+	
+	public PlayerDto() {}
 
 	public PlayerDto(Grid mazeGrid, String playerName) {
 		this.name = playerName;
@@ -29,6 +31,22 @@ public class PlayerDto {
 
 	public int[] getPosition() {
 		return position;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public void setSteps(int steps) {
+		this.steps = steps;
+	}
+
+	public void setPosition(int[] position) {
+		this.position = position;
 	}
 
 }

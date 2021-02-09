@@ -4,8 +4,10 @@ import styled from "styled-components";
 interface StartGameProps {
 	message: string;
 	userName: string;
+	savedSlots: number;
 	onPlayerConfirmed(playerName: string, gridSize: number): void;
 	logout(): void;
+	loadGame() : void;
 }
 
 // a button element with the specified css style applied to it
@@ -41,7 +43,7 @@ const Quote = styled.div`
 /**
  * Allows the player to enter their name and set the grid size.
  */
-export function InitGame({ message, userName, onPlayerConfirmed, logout }: StartGameProps) {
+export function InitGame({ message, userName, savedSlots, loadGame, onPlayerConfirmed, logout }: StartGameProps) {
 	
 	const [ playerName, setPlayerName ] = useState(userName);
 	const [ gridSize, setGridSize ] = useState(10); // Default grid size of 10x10 tiles
@@ -49,6 +51,13 @@ export function InitGame({ message, userName, onPlayerConfirmed, logout }: Start
 	const handleKeypress = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}
 	}; // Pressing the enter key in an input field is the same as pushing the button to enter the game
+	
+	let loadButtonStyle = {
+		display: "none"
+	};
+	if (savedSlots > 0) {
+		loadButtonStyle.display = "block";
+	}
 
 	return <div>
 		<h2>Welcome to a little dungeon crawler!</h2>
@@ -75,6 +84,10 @@ export function InitGame({ message, userName, onPlayerConfirmed, logout }: Start
 		
 		<StartButton onClick={() => onPlayerConfirmed(playerName, gridSize)}>
 			Enter the maze!
+		</StartButton>
+		
+		<StartButton onClick={loadGame} style={loadButtonStyle}>
+			Load game
 		</StartButton>
 		
 		<div id="buttonborder">

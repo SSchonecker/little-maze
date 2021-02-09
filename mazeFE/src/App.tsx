@@ -1,6 +1,4 @@
 import React from "react";
-import PlayPage from "./playgamepage/PlayPage";
-import StartGamePage from "./startgamepage/StartGamePage";
 import LoginPage from "./loginpage/LoginPage";
 import GamePage from "./gamepage/GamePage";
 import EndGame from "./gamepage/EndGame";

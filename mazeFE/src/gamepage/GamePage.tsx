@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { InitGame } from "../startgamepage/InitGame";
-import { Play } from "../playgamepage/Play";
+import { InitGame } from "./InitGame";
+import { Play } from "./Play";
 import { GameState } from "../typefiles/gameState";
 import { LoginState } from "../typefiles/loginState";
 import { withRouter , useHistory } from "react-router-dom";
@@ -72,8 +72,9 @@ function GamePage() {
 	
 	/* Info from and to the login page */
 	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
-	const userName = JSON.parse(localStorage.getItem("myUserInfo")!).userName;
-	const token = JSON.parse(localStorage.getItem("myUserInfo")!).token;
+	const userName = infoState.userName;
+	const token = infoState.token;
+	const savedSlots = infoState.saveSlotUsed;
 	function logout() {
 		localStorage.removeItem("myGameState");
 		localStorage.removeItem("myUserInfo");
@@ -119,12 +120,41 @@ function GamePage() {
 			localStorage.removeItem("myUserInfo");
 		}
 	}
+	
+	async function loadGame() {
+		setErrorMessage("");
+		localStorage.removeItem("myGameState");
+
+		try {
+			const response = await fetch('littlemaze/api/start/load', {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'User-Name': userName,
+					'Access-token': token
+				},
+			});
+
+			if (response.ok) {
+				const gameState = await response.json();
+				setGameState(gameState);
+			}
+			setErrorMessage("Failed to start the game. Try again.");
+			localStorage.removeItem("myGameState");
+		} catch (error) {
+			console.log(error.toString());
+			localStorage.removeItem("myGameState");
+			localStorage.removeItem("myUserInfo");
+		}
+	}
 
 	if (!gameState) {
 		return <InitGame onPlayerConfirmed={tryStartGame}
 					logout={logout}
 					userName={infoState.userName}
 					message={errorMessage}
+					savedSlots={savedSlots}
+					loadGame={loadGame}
 		/>
 	}
 

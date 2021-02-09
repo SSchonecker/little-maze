@@ -8,10 +8,9 @@ const Container = styled.div`
 	color: var(--light-sogyo);
 	background-color: black;
 	position: absolute;
-	top: 40%;
-	right: 20%;
-	width: 60%;
-	height: 30%;
+	top: 20%;
+	right: 15%;
+	width: 70%;
 	text-align: center;
 	border-style: dotted;
 	border-width: thick;
@@ -24,12 +23,13 @@ const Main = styled.p`
 `;
 
 const Info = styled.p`
-
+	margin: 5%;
 `;
 
 const Score = styled.p`
 	font-size: 1.5em;
 	color: yellow;
+	margin-bottom: 5%;
 `;
 
 const Tile = styled.div`
@@ -42,10 +42,9 @@ const RestartButton = styled.button`
 	font-size: 1em;
 	color: white;
 	border-color: white;
-	position: absolute;
-	bottom: 20%;
-	left: 46%;
-	width: 8%;
+	position: relative;
+	width: 140px;
+	margin-bottom: 2%;
 `;
 
 function EndGame() {
@@ -108,6 +107,7 @@ function EndGame() {
 			return (<Container>
 				<Main style={{color: "red"}}>Game over!</Main>
 				<Info>Oops... you lost all your health...</Info>
+				<RestartButton onClick={newGame}>New grid?</RestartButton>
 				</Container>);
 		}
 		
@@ -119,6 +119,7 @@ function EndGame() {
 					With the chest's treasure, that leaves you with a score of:
 			</Info>
 			<Score>{gameState.gameStatus.score}</Score>
+			<RestartButton onClick={newGame}>New grid?</RestartButton>
 			</Container>
 		
 	}
@@ -129,8 +130,6 @@ function EndGame() {
 		</div>
 		
 		{InfoBox()}
-		
-		<RestartButton onClick={newGame}>New grid?</RestartButton>
 
 	</div>
 }

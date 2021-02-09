@@ -7,6 +7,8 @@ public class MazeDto {
 	GameStatusDto gameStatus;
 	char[][][] layout;
 	
+	public MazeDto() {}
+	
 	public MazeDto(Grid mazeGrid, String playerName) {
         player = new PlayerDto(mazeGrid, playerName);
         gameStatus = new GameStatusDto(mazeGrid);

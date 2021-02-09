@@ -109,5 +109,17 @@ public class SqlConnect {
 			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		}
 	}
+
+	public String loadGame(String userName) throws SQLException {
+		DataRow userData = null;
+		String loadedGame = "";
+		try {
+			userData = getUserInfo(userName);
+			loadedGame = userData.getGameStateJSON();
+		} catch (SQLException err) {
+			throw new SQLException(err);
+		}
+		return loadedGame;
+	}
 	
 }
