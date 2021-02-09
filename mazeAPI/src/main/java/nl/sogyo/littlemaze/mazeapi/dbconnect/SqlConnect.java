@@ -50,6 +50,7 @@ public class SqlConnect {
 			data.setUsername(resultSet.getString("username"));
 			data.setPassword(resultSet.getString("password"));
 			data.setGameStateJSON(resultSet.getString("savedgameone"));
+			data.setGameStateJSONtwo(resultSet.getString("savedgametwo"));
 		}
 		finally {
 			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
@@ -75,7 +76,7 @@ public class SqlConnect {
 		
 	}
 
-	public void saveGame(MazeDto gameState, String username) throws SQLException {
+	public void saveGame(MazeDto gameState, String username, String saveSlot) throws SQLException {
 		PreparedStatement stmt = null;
 		ObjectMapper mapper = new ObjectMapper(); 
 		String jsonResult = "";
@@ -87,7 +88,12 @@ public class SqlConnect {
 		try (
 			Connection conn = DriverManager.getConnection(url,user,dbpw);
 		) {
-			stmt = conn.prepareStatement("UPDATE " + schema + ".user SET savedgameone = ? WHERE userName=?;");
+			if (saveSlot.equals("1")) {
+				stmt = conn.prepareStatement("UPDATE " + schema + ".user SET savedgameone = ? WHERE userName=?;");
+			}
+			else {
+				stmt = conn.prepareStatement("UPDATE " + schema + ".user SET savedgametwo = ? WHERE userName=?;");
+			}
 			stmt.setString(1, jsonResult);
 			stmt.setString(2, username);
 			stmt.execute();
@@ -110,12 +116,12 @@ public class SqlConnect {
 		}
 	}
 
-	public String loadGame(String userName) throws SQLException {
+	public String loadGame(String userName, String slot) throws SQLException {
 		DataRow userData = null;
 		String loadedGame = "";
 		try {
 			userData = getUserInfo(userName);
-			loadedGame = userData.getGameStateJSON();
+			loadedGame = userData.getGameStateJSON(slot);
 		} catch (SQLException err) {
 			throw new SQLException(err);
 		}

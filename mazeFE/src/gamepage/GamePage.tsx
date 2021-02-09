@@ -121,12 +121,13 @@ function GamePage() {
 		}
 	}
 	
-	async function loadGame() {
+	async function loadGame(slot : string) {
 		setErrorMessage("");
 		localStorage.removeItem("myGameState");
-
+		
+		const urlPath = "littlemaze/api/start/load/" + slot;
 		try {
-			const response = await fetch('littlemaze/api/start/load', {
+			const response = await fetch(urlPath, {
 				method: 'PUT',
 				headers: {
 					'Accept': 'application/json',
@@ -151,7 +152,7 @@ function GamePage() {
 	if (!gameState) {
 		return <InitGame onPlayerConfirmed={tryStartGame}
 					logout={logout}
-					userName={infoState.userName}
+					userName={userName}
 					message={errorMessage}
 					savedSlots={savedSlots}
 					loadGame={loadGame}
@@ -217,12 +218,17 @@ function GamePage() {
 		}
 	}
 	
-	async function SaveGameFunction() {
+	async function SaveGameFunction(slot : string) {
 		
 		setErrorPlayMessage("");
-
+		if (savedSlots == 0) {
+			slot = "1";
+		}
+		console.log("littlemaze/api/save/"+slot);
+		console.log("I exist");
+		const urlPath = "littlemaze/api/save/"+slot;
 		try {
-			const response = await fetch("littlemaze/api/save/", {
+			const response = await fetch(urlPath, {
 				method: 'PUT',
 				headers: {
 					'Accept': 'application/json',

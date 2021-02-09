@@ -1,8 +1,5 @@
 package nl.sogyo.littlemaze.mazeapi;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -10,13 +7,12 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.sogyo.littlemaze.Grid;
@@ -57,16 +53,15 @@ public class MazeInitiate {
 		return Response.status(responseStatus).build();
 	}
 	
-	//@Path("load/{slot}")
-	@Path("load")
+	@Path("load/{slot}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response initializeFromLoad(
-			//@PathParam("slot") String saveSlot,
+			@PathParam("slot") String saveSlot,
 			@Context HttpServletRequest request,
 			@HeaderParam("User-Name") String userName,
 			@HeaderParam("Access-Token") String token
-			) throws JsonParseException, JsonMappingException, IOException {
+			) {
 		
 		HttpSession session = request.getSession(false);
 
@@ -78,7 +73,7 @@ public class MazeInitiate {
 			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
 			
 			try {
-				String gameStateJSON = dbConnect.loadGame(userName);
+				String gameStateJSON = dbConnect.loadGame(userName, saveSlot);
 				
 				ObjectMapper mapper = new ObjectMapper();
 				LoadMazeDto gameState = mapper.readValue(gameStateJSON, LoadMazeDto.class);

@@ -101,7 +101,7 @@ class ConnectionTest {
 		
 		try {
 			SqlConnect myConnect = new SqlConnect(url);
-			myConnect.saveGame(gameState, "someone");
+			myConnect.saveGame(gameState, "someone", "1");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -113,7 +113,7 @@ class ConnectionTest {
 		try {
 			SqlConnect myConnect = new SqlConnect(url);
 			DataRow data = myConnect.getUserInfo("someone");
-			savedGame = data.getGameStateJSON();
+			savedGame = data.getGameStateJSON("1");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -125,17 +125,16 @@ class ConnectionTest {
 	@Test
 	void loadAGame() {
 		
-		String savedGame = "";
-		
+		String loadedGame = "";
 		try {
 			SqlConnect myConnect = new SqlConnect(url);
-			savedGame = myConnect.loadGame("someone");
+			loadedGame = myConnect.loadGame("someone", "1");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			assertTrue(false);
 		}
 		
-		assertNotNull(savedGame);
+		assertNotNull(loadedGame);
 	}
 }

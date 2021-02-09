@@ -7,7 +7,7 @@ interface StartGameProps {
 	savedSlots: number;
 	onPlayerConfirmed(playerName: string, gridSize: number): void;
 	logout(): void;
-	loadGame() : void;
+	loadGame(slot : string) : void;
 }
 
 // a button element with the specified css style applied to it
@@ -52,11 +52,16 @@ export function InitGame({ message, userName, savedSlots, loadGame, onPlayerConf
 		if (e.key === "Enter") {onPlayerConfirmed(playerName, gridSize);}
 	}; // Pressing the enter key in an input field is the same as pushing the button to enter the game
 	
-	let loadButtonStyle = {
-		display: "none"
-	};
-	if (savedSlots > 0) {
-		loadButtonStyle.display = "block";
+	
+	function getLoadButtons() {
+		if (savedSlots == 0) {
+			return <div></div>;
+		}
+		let buttonList = [];
+		for (let i = 1; i <= savedSlots; i++) {
+			buttonList.push(<StartButton key={i.toString()} onClick={() => loadGame(i.toString())}>Load game {i}</StartButton>)
+		}
+		return buttonList;
 	}
 
 	return <div>
@@ -70,11 +75,11 @@ export function InitGame({ message, userName, savedSlots, loadGame, onPlayerConf
 		/>
 
 		<div className="inputinfo">
-			Pick a maze size (between 2 and 50):
+			Pick a maze size (between 2 and 25):
 		</div>
 		<input
 			type="number"
-			min={2} max={50}
+			min={2} max={25}
 			value={gridSize}
 			onChange={(e) => setGridSize(Number(e.target.value))}
 			onKeyPress={handleKeypress}
@@ -85,10 +90,8 @@ export function InitGame({ message, userName, savedSlots, loadGame, onPlayerConf
 		<StartButton onClick={() => onPlayerConfirmed(playerName, gridSize)}>
 			Enter the maze!
 		</StartButton>
-		
-		<StartButton onClick={loadGame} style={loadButtonStyle}>
-			Load game
-		</StartButton>
+		<br></br>
+		{getLoadButtons()}
 		
 		<div id="buttonborder">
 			<LogoutButton onClick={logout}>Logout

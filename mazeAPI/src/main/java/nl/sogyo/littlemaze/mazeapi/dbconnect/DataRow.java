@@ -6,6 +6,7 @@ public class DataRow {
 	private String username;
 	private String password;
 	private String gameStateJSON;
+	private String gameStateJSONtwo;
 	
 	public int getUserID() {
 		return userID;
@@ -31,12 +32,32 @@ public class DataRow {
 		this.password = password;
 	}
 
-	public String getGameStateJSON() {
-		return gameStateJSON;
+	public String getGameStateJSON(String slot) {
+		if(slot.equals("1")) {
+			return gameStateJSON;
+		}
+		else {
+			return gameStateJSONtwo;
+		}
 	}
 
 	public void setGameStateJSON(String gameStateJSON) {
 		this.gameStateJSON = gameStateJSON;
+	}
+	
+	public void setGameStateJSONtwo(String gameStateJSONtwo) {
+		this.gameStateJSONtwo = gameStateJSONtwo;
+	}
+
+	public int slotsUsed() {
+		int slotsUsed = 0;
+		if (gameStateJSON != null) {
+			slotsUsed += 1;
+		}
+		if (gameStateJSONtwo != null) {
+			slotsUsed += 1;
+		}
+		return slotsUsed;
 	}
 
 }

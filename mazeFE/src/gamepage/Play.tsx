@@ -12,7 +12,7 @@ interface PlayProps { // The type of input for the Play function
 	resetGame() : void;
 	displayPlayerInfo() : void;
 	displayRules() : void;
-	saveGame() : void;
+	saveGame(slot : string) : void;
 }
 
 const ErrorMessage = styled.p`
@@ -101,7 +101,8 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 			<div id="myDropdown" className="dropdown-content">
 				<button onClick={() => displayPlayerInfo()}>Player info</button>
 				<button onClick={() => displayRules()}>The Rules</button>
-				<button onClick={() => saveGame()}>Save this game</button>
+				<button onClick={() => saveGame("1")}>Save in slot 1</button>
+				<button onClick={() => saveGame("2")}>Save in slot 2</button>
 				<button className="resetbutton" onClick={() => resetGame()}>Start a new game</button>
 			</div>
 		</div>

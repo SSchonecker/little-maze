@@ -56,8 +56,8 @@ public class MazeLogin {
 				if (!loginInfo.checkPassword(data.getPassword())) {
 					error = "Invalid password";
 				}
-				else if (data.getGameStateJSON() != null) {
-					saveSlotUsed = 1;
+				else {
+					saveSlotUsed = data.slotsUsed();
 				}
 			} catch (SQLException exc) {
 				error = exc.getMessage();
