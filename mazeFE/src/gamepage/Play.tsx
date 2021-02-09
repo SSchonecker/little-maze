@@ -94,7 +94,14 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 			{makeGrid( gameState )}
 		</div>
 		
-		<Console>{playMessage}</Console>
+		<Console>
+			{playMessage.split("\n").map(line => (
+				<React.Fragment>
+				{line}
+				<br />
+				</React.Fragment>
+			))}
+		</Console>
 		
 		<div className="dropdown">
 			<button onClick={() => dropdownFunction()} className="dropbtn">Options</button>
