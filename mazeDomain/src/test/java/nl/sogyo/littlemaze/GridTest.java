@@ -145,8 +145,6 @@ class GridTest {
 	
 	@Test
 	void buildGridFromLayout() {
-		//String[][] initialLayout = {{"t__._", "c__._"}, 
-		//		{"p..__", "h.__."}};
 		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
 				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
 		Grid thisGrid = new Grid("R", 10, 10, initialLayout);

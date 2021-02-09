@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//import java.time.Duration;
-//import java.time.Instant;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +18,7 @@ class TileTest {
 	private Tile miniMaze;
 	private Player aPlayer;
 	
-	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the east, this is a fixed maze
+	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the south, this is a fixed maze
 	
 	@BeforeEach
 	void setTiles() {
@@ -58,7 +55,7 @@ class TileTest {
 		firstTile.moveTo(aPlayer);
 		
 		assertEquals(firstTile.getPosition(), aPlayer.getPosition());
-		assertEquals(50, aPlayer.getHealth());
+		assertEquals(100, aPlayer.getHealth());
 	}
 	
 	@Test
@@ -66,7 +63,7 @@ class TileTest {
 		spikedTile.moveTo(aPlayer);
 		
 		assertEquals(spikedTile.getPosition(), aPlayer.getPosition());
-		assertTrue(50 > aPlayer.getHealth());
+		assertTrue(100 > aPlayer.getHealth());
 	}
 	
 	@Test
@@ -75,7 +72,7 @@ class TileTest {
 		spikedTile.moveTo(aPlayer);
 		
 		assertEquals(spikedTile.getPosition(), aPlayer.getPosition());
-		assertEquals(50, aPlayer.getHealth());
+		assertEquals(100, aPlayer.getHealth());
 	}
 	
 	@Test
@@ -111,7 +108,7 @@ class TileTest {
 		aPlayer.turnLeft();
 		aPlayer.moveForward();
 		
-		assertTrue(50 > aPlayer.getHealth());
+		assertTrue(100 > aPlayer.getHealth());
 	}
 	
 	@Test
@@ -174,7 +171,7 @@ class TileTest {
 		int[] expectedPosition = {0, 1};
 		
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-		assertEquals(127, aPlayer.getScore());
+		assertEquals(82, aPlayer.getScore());
 		assertTrue(aPlayer.isGameOver());
 		
 		aPlayer.moveBackward();

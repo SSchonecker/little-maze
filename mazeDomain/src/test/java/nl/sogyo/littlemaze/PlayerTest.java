@@ -36,18 +36,18 @@ class PlayerTest {
 	
 	@Test
 	void getPlayerHealth() {
-		assertEquals(50, thePlayer.getHealth());
+		assertEquals(100, thePlayer.getHealth());
 	}
 	
 	@Test
 	void hurtPlayer() {
 		thePlayer.suffer(4);
-		assertEquals(46, thePlayer.getHealth());
+		assertEquals(96, thePlayer.getHealth());
 	}
 	
 	@Test
 	void killPlayer() {
-		thePlayer.suffer(52);
+		thePlayer.suffer(102);
 		assertEquals(0, thePlayer.getHealth());
 		assertTrue(thePlayer.isGameOver());
 	}

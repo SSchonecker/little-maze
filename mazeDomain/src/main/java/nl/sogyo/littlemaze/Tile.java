@@ -2,6 +2,7 @@ package nl.sogyo.littlemaze;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 
 class Tile {
 	
@@ -9,7 +10,7 @@ class Tile {
 	private boolean revealed = false;
 	Tile[] neighbours = new Tile[4]; // Lists the neighbours according to the direction they lie in
 	private boolean hasChest = false;
-	private static final int TREASURE = 100; // Value of the chest content, required for the score
+	private static final int TREASURE = 5; // Value of the chest content, required for the score
 	private Tile[][] maze;
 
 	/**
@@ -22,14 +23,15 @@ class Tile {
 	
 	/**
 	 * Constructor for the first tile of a mazeGrid.
-	 * Saves the grid and creates its first neighbour to the EAST
+	 * Saves the grid and creates its first neighbour to the SOUTH
 	 */
 	public Tile(Tile[][] mazeGrid) {
 		mazeGrid[0][0] = this;
 		this.maze = mazeGrid;
 		position[0] = 0;
 		position[1] = 0;
-		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this); 
+		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this);
+		shouldPutChest();
 	}
 	
 	/**
@@ -50,16 +52,12 @@ class Tile {
 			int ny = position[1] + dir.dy; // Pick a new cell in this direction
 			if (between(nx, mazeGrid.length) && between(ny, mazeGrid.length)
 					&& (mazeGrid[nx][ny] == null)) { // Ensure this cell is within the grid and empty
-				if (nx == ny) { //TODO Place spikes randomly?
-					neighbours[dir.nr] = new Spike(mazeGrid, dir, this); // Put spikes on the diagonals
+				if (nx == ny || (new Random().nextDouble() < 0.1 && nx > 1)) {
+					neighbours[dir.nr] = new Spike(mazeGrid, dir, this); // Put spikes on the diagonals and randomly
 				}
 				else {
 					neighbours[dir.nr] = new Tile(mazeGrid, dir, this);
 				}
-			}
-			
-			if (shouldPutChest(mazeGrid)) {
-				this.hasChest = true;
 			}
 		}
 	}
@@ -68,15 +66,29 @@ class Tile {
 	 * Method to determine whether a tile should put a chest on itself.
 	 * Only returns true if the whole maze has been filled and no other tile has a chest
 	 */
-	private boolean shouldPutChest(Tile[][] mazeGrid) {
-		for (int i = (mazeGrid.length - 1); i >= 0; i = i-1) {
-			for (int j = (mazeGrid.length - 1); j >= 0; j = j-1) {
-				if (mazeGrid[i][j] == null || mazeGrid[i][j].hasChest) {
-					return false;
+	private void shouldPutChest() {
+		if (maze.length == 2) {
+			maze[0][1].putChest();
+			return;
+		}
+		
+		for (int i = (maze.length - 1); i >= 0; i = i-1) {
+			for (int j = (maze.length - 1); j >= 0; j = j-1) {
+				if (maze[i][j].type().equals("s")) {
+					continue;
+				}
+				int nrOfNghs = 0;
+				for (Tile Ngh : maze[i][j].neighbours) {
+					if (Ngh != null) {
+						nrOfNghs += 1;
+					}
+				}
+				if (nrOfNghs == 1) {
+					maze[i][j].putChest();
+					return;
 				}
 			}
 		}
-		return true;
 	}
 
 	private boolean between(int value, int max) {
@@ -115,8 +127,9 @@ class Tile {
 	 */
 	public void moveTo(Player aPlayer) {
 		aPlayer.putHere(this);
+		int content = (maze == null) ? TREASURE : TREASURE * maze.length * maze.length;
 		if (hasChest) {
-			aPlayer.setScore(TREASURE);
+			aPlayer.setScore(content);
 			Arrays.fill(this.neighbours, null); // Remove all neighbours, so player can't keep walking
 		}
 	}
