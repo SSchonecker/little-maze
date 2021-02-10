@@ -10,7 +10,8 @@ class Tile {
 	private boolean revealed = false;
 	Tile[] neighbours = new Tile[4]; // Lists the neighbours according to the direction they lie in
 	private boolean hasChest = false;
-	private static final int TREASURE = 5; // Value of the chest content, required for the score
+	private static final int TREASURE = 5; // Base value of the chest content, required for the score
+	private int content; // Chest content based on TREASURE and grid size
 	private Tile[][] maze;
 
 	/**
@@ -31,6 +32,7 @@ class Tile {
 		position[0] = 0;
 		position[1] = 0;
 		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this);
+
 		shouldPutChest();
 	}
 	
@@ -67,8 +69,10 @@ class Tile {
 	 * Only returns true if the whole maze has been filled and no other tile has a chest
 	 */
 	private void shouldPutChest() {
+		content = (maze == null) ? TREASURE : TREASURE * maze.length * maze.length;
+		
 		if (maze.length == 2) {
-			maze[0][1].putChest();
+			maze[0][1].putChest(content);
 			return;
 		}
 		
@@ -84,7 +88,7 @@ class Tile {
 					}
 				}
 				if (nrOfNghs == 1) {
-					maze[i][j].putChest();
+					maze[i][j].putChest(content);
 					return;
 				}
 			}
@@ -127,7 +131,6 @@ class Tile {
 	 */
 	public void moveTo(Player aPlayer) {
 		aPlayer.putHere(this);
-		int content = (maze == null) ? TREASURE : TREASURE * maze.length * maze.length;
 		if (hasChest) {
 			aPlayer.setScore(content);
 			Arrays.fill(this.neighbours, null); // Remove all neighbours, so player can't keep walking
@@ -176,8 +179,13 @@ class Tile {
 		return hasChest;
 	}
 	
-	public void putChest() {
+	public void putChest(int content) {
 		this.hasChest = true;
+		this.content = content;
+	}
+	
+	public int getContent() {
+		return content;
 	}
 
 	public Tile getNeighbour(int n) {

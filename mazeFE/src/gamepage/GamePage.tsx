@@ -88,7 +88,7 @@ function GamePage() {
 			return;
 		}
 		
-		if (gridSize > 50 || gridSize < 2) {
+		if (gridSize > 25 || gridSize < 2) {
 			setErrorMessage("Pick a decent grid size!");
 			return;
 		}

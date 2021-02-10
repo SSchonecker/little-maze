@@ -70,8 +70,12 @@ public class MazePlay {
 			Grid mazeGrid = (Grid) session.getAttribute("mazegrid");
 			
 			try {
-				mazeGrid.selectTile(posX, posY);
-				responseStatus = 200;
+				if(mazeGrid.selectTile(posX, posY)) {
+					responseStatus = 200;
+				}
+				else {
+					responseStatus = 204;
+				}
 				var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
 				return Response.status(responseStatus).entity(output).build();
 			}

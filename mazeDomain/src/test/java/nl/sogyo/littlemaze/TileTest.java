@@ -2,6 +2,7 @@ package nl.sogyo.littlemaze;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -171,7 +172,7 @@ class TileTest {
 		int[] expectedPosition = {0, 1};
 		
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-		assertEquals(82, aPlayer.getScore());
+		assertEquals(97, aPlayer.getScore());
 		assertTrue(aPlayer.isGameOver());
 		
 		aPlayer.moveBackward();
@@ -182,14 +183,19 @@ class TileTest {
 		Tile[][] bigMaze = new Tile[10][10];
 		@SuppressWarnings("unused")
 		Tile firstTile = new Tile(bigMaze);
+		
 		int nrOfChests = 0;
+		Tile chestTile = null;
 		for (Tile[] row : bigMaze) {
 			for (Tile aTile : row ) {
 				if (aTile.containsChest()) {
 					nrOfChests++;
+					chestTile = aTile;
 				}
 			}
 		}
 		assertEquals(1, nrOfChests);
+		assertNotNull(chestTile);
+		assertEquals(500, chestTile.getContent());
 	}
 }

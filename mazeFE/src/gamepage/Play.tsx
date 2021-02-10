@@ -1,6 +1,7 @@
 import React from "react";
-import { GameState } from "../typefiles/gameState";
+import { uuid } from "uuidv4";
 import styled from "styled-components";
+import { GameState } from "../typefiles/gameState";
 
 interface PlayProps { // The type of input for the Play function
 	gameState: GameState;
@@ -95,10 +96,10 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		</div>
 		
 		<Console>
-			{playMessage.split("\n").map(line => (
-				<React.Fragment>
-				{line}
-				<br />
+			{playMessage.split("\n").map((line) => (
+				<React.Fragment /*key={uuid()}*/>
+					{line}
+					<br/>
 				</React.Fragment>
 			))}
 		</Console>

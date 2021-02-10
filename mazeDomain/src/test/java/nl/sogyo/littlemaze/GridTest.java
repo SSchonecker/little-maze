@@ -46,7 +46,7 @@ class GridTest {
 		assertFalse(myGrid.getGameStatus());
 		assertEquals(0, myGrid.getScore());
 		assertEquals(0, myGrid.getSteps());
-		assertEquals(50, myGrid.getPlayerHealth());
+		assertEquals(100, myGrid.getPlayerHealth());
 	}
 	
 	@Test
@@ -152,5 +152,16 @@ class GridTest {
 		char[][][] expectedLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
 				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};		
 		assertArrayEquals(expectedLayout, thisGrid.getLayout());
+	}
+	
+	@Test
+	void correctChestContents() {
+		// Check for the basic newly generated maze and for the rebuild one
+		assertEquals(20, miniGrid.getChestContent());
+		
+		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
+		Grid thisGrid = new Grid("R", 10, 10, initialLayout);
+		assertEquals(20, thisGrid.getChestContent());
 	}
 }
