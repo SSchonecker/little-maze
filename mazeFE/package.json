@@ -7,8 +7,7 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint src/**/*",
     "start": "node_modules/.bin/webpack-dev-server",
-    "start-https": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem",
-    "start-full": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem --cacert ./ca.pem"
+    "start-https": "node_modules/.bin/webpack-dev-server --https --key ./localhost-key.pem --cert ./localhost.pem"
   },
   "author": "Silke Schoenecker",
   "dependencies": {
