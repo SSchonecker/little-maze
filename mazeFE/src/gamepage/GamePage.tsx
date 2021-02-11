@@ -38,6 +38,7 @@ function GamePage() {
 		localStorage.removeItem("myGameState");
 		setErrorMessage("");
 		setGameState(undefined);
+		setPlayMessage("");
 	};
 	
 	useEffect(() => {
@@ -158,11 +159,18 @@ function GamePage() {
 					loadGame={loadGame}
 		/>
 	}
+	
+	/* End of game state setter */
+	if (gameState!.gameStatus.endgame) {
+		history.push("/end");
+	}
 
 /* The part for the play game page */
 	async function MakeMove(key: string) {
 		
 		setErrorPlayMessage("");
+		
+		const oldHealth = gameState!.player.health;
 
 		try {
 			const urlPath = "littlemaze/api/stir/"+key;
@@ -178,6 +186,10 @@ function GamePage() {
 			if (response.ok) {
 				if (response.status === 200) {
 					const newState = await response.json();
+					if (newState.player.health < oldHealth) {
+						consolePrint("Ouch! That was a spikey tile... You lost " +
+							(oldHealth - newState.player.health).toString() + "hp.");
+					}
 					setGameState(newState);
 				}
 			}
@@ -206,6 +218,8 @@ function GamePage() {
 			if (response.ok) {
 				if (response.status === 200) {
 					consolePrint(tileMessage);
+					const newState = await response.json();
+					setGameState(newState);
 				}
 				else if (response.status === 204) {
 					consolePrint("You can't see this tile from here.");
@@ -238,17 +252,12 @@ function GamePage() {
 			});
 
 			if (response.ok) {
-				setErrorPlayMessage("Successfully saved the game.");
+				setErrorPlayMessage("Successfully saved the game. The load option may not be visible until you log in again.");
 			}
 			else {setErrorPlayMessage("Failed to save the game. Try again.");}
 		} catch (error) {
 			setErrorPlayMessage(error.toString());
 		}
-	}
-	
-	/* End of game state setter */
-	if (gameState!.gameStatus.endgame) {
-		history.push("/end");
 	}
 	
 	return <Play gameState={gameState}

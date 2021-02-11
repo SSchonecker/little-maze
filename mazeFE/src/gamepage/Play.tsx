@@ -1,5 +1,4 @@
 import React from "react";
-import { uuid } from "uuidv4";
 import styled from "styled-components";
 import { GameState } from "../typefiles/gameState";
 
@@ -64,7 +63,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 			case "c": tileStyle.backgroundColor = "yellow";
 				tileMessage = "There's a chest here!";
 			break;
-			case "s": tileStyle.backgroundColor = "grey";
+			case "s": tileStyle.backgroundColor = "var(--light-sogyo)";
 				tileMessage = "Careful now! This looks like a spikey tile...";
 			break;
 			case "h": tileStyle.backgroundColor = "purple";
@@ -96,10 +95,10 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		</div>
 		
 		<Console>
-			{playMessage.split("\n").map((line) => (
-				<React.Fragment /*key={uuid()}*/>
+			{playMessage.split("\n").map((line, index) => (
+				<React.Fragment key={line + index.toString()}>
 					{line}
-					<br/>
+					<br key={line + index.toString() + "2"}/>
 				</React.Fragment>
 			))}
 		</Console>
