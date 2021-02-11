@@ -6,6 +6,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -126,6 +130,42 @@ public class SqlConnect {
 			throw new SQLException(err);
 		}
 		return loadedGame;
+	}
+
+	/**
+	 * Method to return a sorted list of rows from the score table
+	 * for a particular user's name
+	 * @param name The user's name
+	 * @return List<ScoreRow> Sorted list of rows of score data
+	 * @throws SQLException 
+	 */
+	public List<ScoreRow> getScores(String name) throws SQLException {
+		List<ScoreRow> scoreRows = new ArrayList<>(5);
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE (userID = (SELECT userID FROM " + schema + ".user WHERE username=?));");
+			stmt.setString(1, name);
+			resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				ScoreRow aRow = new ScoreRow();
+				aRow.setScoreID(resultSet.getInt("scoreID"));
+				aRow.setScorevalue(resultSet.getInt("scorevalue"));
+				aRow.setGridSize(resultSet.getInt("gridsize"));
+				aRow.setDatetime(resultSet.getTimestamp("date"));
+				scoreRows.add(aRow);
+			}
+		}
+		finally {
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+
+		return scoreRows.stream()
+				.sorted(Comparator.comparing(ScoreRow::getScorevalue))
+				.collect(Collectors.toList());
 	}
 	
 }

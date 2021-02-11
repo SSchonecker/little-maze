@@ -7,10 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import nl.sogyo.littlemaze.mazeapi.dbconnect.DataRow;
+import nl.sogyo.littlemaze.mazeapi.dbconnect.ScoreRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
 
@@ -136,5 +139,22 @@ class ConnectionTest {
 		}
 		
 		assertNotNull(loadedGame);
+	}
+	
+	@Test
+	void getUsersScore() {
+		List<ScoreRow> scoreRowList = new ArrayList<>();
+		try {
+			SqlConnect myConnect = new SqlConnect(url);
+			scoreRowList = myConnect.getScores("someone");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		
+		assertNotEquals(0, scoreRowList.get(0).getGridSize());
+		assertEquals(50, scoreRowList.get(0).getScorevalue());
+		assertEquals(20, scoreRowList.get(1).getScorevalue());
 	}
 }
