@@ -143,18 +143,23 @@ class ConnectionTest {
 	
 	@Test
 	void getUsersScore() {
-		List<ScoreRow> scoreRowList = new ArrayList<>();
+		List<ScoreRow> scoreRowList1 = new ArrayList<>();
+		List<ScoreRow> scoreRowList2 = new ArrayList<>();
 		try {
 			SqlConnect myConnect = new SqlConnect(url);
-			scoreRowList = myConnect.getScores("someone");
+			scoreRowList1 = myConnect.getScores("someone", 20, 4);
+			scoreRowList2 = myConnect.getScores("someone else", 48, 4);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			assertTrue(false);
 		}
 		
-		assertNotEquals(0, scoreRowList.get(0).getGridSize());
-		assertEquals(50, scoreRowList.get(0).getScorevalue());
-		assertEquals(20, scoreRowList.get(1).getScorevalue());
+		assertNotEquals(0, scoreRowList1.get(0).getGridSize());
+		assertEquals(50, scoreRowList1.get(0).getScorevalue());
+		assertEquals(20, scoreRowList1.get(2).getScorevalue());
+		
+		assertEquals(48, scoreRowList2.get(2).getScorevalue());
+		assertEquals(5, scoreRowList2.size());
 	}
 }

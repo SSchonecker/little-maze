@@ -219,6 +219,10 @@ public class Grid {
 		currentMaze[myPlayer.getPosition()[0]][myPlayer.getPosition()[1]][0] = 'p';
 		return currentMaze;
 	}
+	
+	public int getSize() {
+		return mazeLayout.length;
+	}
 
 	public int getSteps() {
 		if (myPlayer != null) {
@@ -301,6 +305,7 @@ public class Grid {
 		Tile chestTile = theMaze[chestLoc[0]][chestLoc[1]];
 		return chestTile.getContent();
 	}
+
 }
 
 class InvalidKeyException extends Exception {

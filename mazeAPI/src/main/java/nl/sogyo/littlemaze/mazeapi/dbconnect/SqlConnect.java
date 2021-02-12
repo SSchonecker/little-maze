@@ -77,7 +77,6 @@ public class SqlConnect {
 		finally {
 			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		}
-		
 	}
 
 	public void saveGame(MazeDto gameState, String username, String saveSlot) throws SQLException {
@@ -136,10 +135,11 @@ public class SqlConnect {
 	 * Method to return a sorted list of rows from the score table
 	 * for a particular user's name
 	 * @param name The user's name
+	 * @param newScroe The user's last score
 	 * @return List<ScoreRow> Sorted list of rows of score data
 	 * @throws SQLException 
 	 */
-	public List<ScoreRow> getScores(String name) throws SQLException {
+	public List<ScoreRow> getScores(String name, int newScore, int gridSize) throws SQLException {
 		List<ScoreRow> scoreRows = new ArrayList<>(5);
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
@@ -155,6 +155,7 @@ public class SqlConnect {
 				aRow.setScorevalue(resultSet.getInt("scorevalue"));
 				aRow.setGridSize(resultSet.getInt("gridsize"));
 				aRow.setDatetime(resultSet.getTimestamp("date"));
+				aRow.setUserID(resultSet.getInt("userID"));
 				scoreRows.add(aRow);
 			}
 		}
@@ -163,9 +164,82 @@ public class SqlConnect {
 			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		}
 
-		return scoreRows.stream()
-				.sorted(Comparator.comparing(ScoreRow::getScorevalue))
+		List<ScoreRow> sortedScores = scoreRows.stream()
+				.sorted(Comparator.comparing(ScoreRow::getScorevalue).reversed())
+				.collect(Collectors.toList());
+		
+		if (sortedScores.size() >= 5 && newScore < sortedScores.get(sortedScores.size() - 1).getScorevalue()) {
+			return sortedScores;
+		}
+		
+		ScoreRow newRow = null;
+
+		if (sortedScores.size() >= 5) {
+			newRow = updateScores(newScore, sortedScores.get(sortedScores.size() - 1).getScoreID(), gridSize);
+			sortedScores.remove(sortedScores.size() - 1);
+		}
+		else {
+			newRow = addToScores(newScore, gridSize, name);
+		}
+		
+		sortedScores.add(newRow);
+		return sortedScores.stream()
+				.sorted(Comparator.comparing(ScoreRow::getScorevalue).reversed())
 				.collect(Collectors.toList());
 	}
+
+	private ScoreRow updateScores(int newScore, int oldScoreID, int gridSize) throws SQLException {
+		PreparedStatement stmt = null;
+		ScoreRow aRow = new ScoreRow();
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("CALL " + schema + ".UpdateScore(?, ?, ?);");
+			stmt.setLong(1, newScore);
+			stmt.setLong(2, gridSize);
+			stmt.setLong(3, oldScoreID);
+			ResultSet resultSet = stmt.executeQuery();
+			resultSet.next();
+			aRow.setScoreID(resultSet.getInt("scoreID"));
+			aRow.setScorevalue(resultSet.getInt("scorevalue"));
+			aRow.setGridSize(resultSet.getInt("gridsize"));
+			aRow.setDatetime(resultSet.getTimestamp("date"));
+			aRow.setUserID(resultSet.getInt("userID"));
+		}
+		finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		}
+		return aRow;
+	}
 	
+	
+	private ScoreRow addToScores(int score, int gridSize, String name) throws SQLException {
+		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		ScoreRow aRow = new ScoreRow();
+		try (
+			Connection conn = DriverManager.getConnection(url,user,dbpw);
+		) {
+			stmt = conn.prepareStatement("INSERT INTO " + schema + ".score (scorevalue, gridsize, date, userID) VALUES (?, ?, NOW(), (SELECT userID FROM "+ schema + ".user WHERE username=?));");
+			stmt.setLong(1, score);
+			stmt.setLong(2, gridSize);
+			stmt.setString(3, name);
+			stmt.execute();
+			
+			stmt2 = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE userID=(SELECT userID FROM "+ schema + ".user WHERE username=?);");
+			stmt2.setString(1, name);
+			ResultSet resultSet = stmt2.executeQuery();
+			resultSet.next();
+			aRow.setScoreID(resultSet.getInt("scoreID"));
+			aRow.setScorevalue(resultSet.getInt("scorevalue"));
+			aRow.setGridSize(resultSet.getInt("gridsize"));
+			aRow.setDatetime(resultSet.getTimestamp("date"));
+			aRow.setUserID(resultSet.getInt("userID"));
+		}
+		finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			if (stmt2 != null) try { stmt2.close(); } catch (SQLException ignore) {}
+		}
+		return aRow;
+	}
 }

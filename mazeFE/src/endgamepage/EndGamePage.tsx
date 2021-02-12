@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { GameState } from "../typefiles/gameState";
+import { scoreItem } from "../typefiles/ScoreItem";
 import { EndGameBox } from "./EndGameBox";
 import styled from "styled-components";
 import { withRouter , useHistory } from "react-router-dom";
@@ -9,9 +10,24 @@ const Tile = styled.div`
 	width: 30px;
 `; // Fixed sized floor tile
 
+const ErrorMessage = styled.p`
+	height: 1em;
+	color: red;
+	position: fixed;
+	bottom: 2%;
+`;
+
+
 function EndGame() {
 	const history = useHistory();
 	const gameState = JSON.parse(localStorage.getItem("myGameState")!);
+	const [showScores, setShowScores] = useState(false);
+	const [scoreList, setScoreList] = useState<scoreItem[]>([]);
+	const [error, setError] = useState("");
+	
+	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
+	const userName = infoState.userName;
+	const token = infoState.token;
 	
 	const newGame = () => {
 		localStorage.removeItem("myGameState");
@@ -63,13 +79,47 @@ function EndGame() {
 		}
 		return tileList;
 	}
+	
+	async function getScoreData() {
+		setError("");
+		
+		const urlPath = "littlemaze/api/end/" + gameState.gameStatus.score;
+		try {
+			const response = await fetch(urlPath, {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'User-Name': userName,
+					'Access-token': token
+				},
+			});
+
+			if (response.ok) {
+				const scores = await response.json();
+				console.log(scores);
+				console.log(typeof scores);
+				setScoreList(scores);
+			}
+		} catch (error) {
+			console.log(error.toString());
+			setError(error.toString());
+		}
+		
+		setShowScores(true);
+	}
 
 	return <div>
 		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
 			{makeGrid( gameState )}
 		</div>
 		
-		<EndGameBox gameState = gameState />
+		<EndGameBox gameState={gameState}
+					getScoreData={getScoreData}
+					showAllScores={showScores}
+					scoreList={scoreList}
+					newGame={newGame}/>
+					
+		<ErrorMessage>{error}</ErrorMessage>
 
 	</div>
 }

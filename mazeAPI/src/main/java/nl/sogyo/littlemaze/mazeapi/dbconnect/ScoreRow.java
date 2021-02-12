@@ -8,6 +8,7 @@ public class ScoreRow {
 	private int scorevalue; 
 	private int gridSize;
 	private String datetime;
+	private int userID;
 	
 	public int getScoreID() {
 		return scoreID;
@@ -32,6 +33,12 @@ public class ScoreRow {
 	}
 	public void setDatetime(Timestamp timestamp) {
 		this.datetime = timestamp.toString();
+	}
+	public int getUserID() {
+		return userID;
+	}
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 }

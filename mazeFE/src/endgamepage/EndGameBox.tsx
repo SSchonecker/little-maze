@@ -1,5 +1,6 @@
 import React from "react";
 import { GameState } from "../typefiles/gameState";
+import { scoreItem } from "../typefiles/ScoreItem";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const Main = styled.p`
 	font-size: 1.5em;
 `;
 
-const Info = styled.p`
+const Info = styled.div`
 	margin: 5%;
 `;
 
@@ -43,10 +44,13 @@ const RestartButton = styled.button`
 
 interface BoxProps {
 	gameState : GameState;
-	showScores() : void;
+	getScoreData() : void;
+	showAllScores : boolean;
+	scoreList : scoreItem[];
+	newGame() : void;
 }
 
-export function EndGameBox( { gameState } : BoxProps) {
+export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList, newGame } : BoxProps) {
 	
 	if (gameState.player.health == 0) {
 		return (<Container>
@@ -56,15 +60,28 @@ export function EndGameBox( { gameState } : BoxProps) {
 			</Container>);
 	}
 	
-	return <Container>
-		<Main style={{color: "yellow"}}>You won!</Main>
-		<Info>You found the chest!<br></br>
-				It took you {gameState.player.steps} steps to get here
-				and you have {gameState.player.health} hp left.<br></br>
-				With the chest's treasure, that leaves you with a score of:
-		</Info>
-		<Score>{gameState.gameStatus.score}</Score>
-		<RestartButton onClick={newGame}>New grid?</RestartButton>
-		</Container>
+	else if (!showAllScores) {
+		return <Container>
+			<Main style={{color: "yellow"}}>You won!</Main>
+			<Info>You found the chest!<br></br>
+					It took you {gameState.player.steps} steps to get here
+					and you have {gameState.player.health} hp left.<br></br>
+					With the chest's treasure, that leaves you with a score of:
+			</Info>
+			<Score>{gameState.gameStatus.score}</Score>
+			<RestartButton onClick={getScoreData}>Continue</RestartButton>
+			</Container>
+	}
 	
+	return <Container>
+			<Main style={{color: "yellow"}}>You won!</Main>
+			<Info>
+				{scoreList!.map((score, index) => (
+				//ScoreElement(score, index)
+				<div key={index}>{score.scorevalue} Gridsize: {score.gridSize} Date: {score.datetime} </div>
+				))}
+			</Info>
+			<Score>New score: {gameState.gameStatus.score}</Score>
+			<RestartButton onClick={newGame}>New grid?</RestartButton>
+			</Container>
 }

@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import nl.sogyo.littlemaze.Grid;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.ScoreRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 
@@ -36,13 +37,13 @@ public class MazeEnd {
 		if (userName.equals(session.getAttribute("userName")) &&
 				token.equals(session.getAttribute("token"))) {
 			
-			int newScore = Integer.valueOf(score);
+			int newScore = Integer.parseInt(score);
 			
 			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
 			
 			try {
-				dbConnect.addScore();
-				List<ScoreRow> scoreRowList = dbConnect.getScores(userName); 
+				List<ScoreRow> scoreRowList = dbConnect.getScores(userName, newScore, 
+						((Grid) session.getAttribute("mazegrid")).getSize()); 
 				responseStatus = 200;
 				return Response.status(responseStatus).entity(scoreRowList).build();
 			}
