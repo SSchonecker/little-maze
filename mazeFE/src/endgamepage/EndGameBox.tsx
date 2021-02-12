@@ -56,6 +56,7 @@ export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList,
 		return (<Container>
 			<Main style={{color: "red"}}>Game over!</Main>
 			<Info>Oops... you lost all your health...</Info>
+			<Score>{gameState.gameStatus.score}</Score>
 			<RestartButton onClick={newGame}>New grid?</RestartButton>
 			</Container>);
 	}
@@ -75,13 +76,12 @@ export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList,
 	
 	return <Container>
 			<Main style={{color: "yellow"}}>You won!</Main>
+			<Score>New score: {gameState.gameStatus.score}</Score>
 			<Info>
 				{scoreList!.map((score, index) => (
-				//ScoreElement(score, index)
 				<div key={index}>{score.scorevalue} Gridsize: {score.gridSize} Date: {score.datetime} </div>
 				))}
 			</Info>
-			<Score>New score: {gameState.gameStatus.score}</Score>
 			<RestartButton onClick={newGame}>New grid?</RestartButton>
 			</Container>
 }

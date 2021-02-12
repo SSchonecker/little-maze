@@ -16,7 +16,6 @@ class TileTest {
 	
 	private Tile firstTile;
 	private Tile spikedTile;
-	private Tile miniMaze;
 	private Player aPlayer;
 	
 	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the south, this is a fixed maze
@@ -24,8 +23,7 @@ class TileTest {
 	@BeforeEach
 	void setTiles() {
 		aPlayer = new Player("R");
-		miniMaze = new Tile(testMaze);
-		firstTile = miniMaze.getTileAt(0, 0);
+		firstTile = new Tile(testMaze);
 		spikedTile = new Spike(2, 5);
 	}
 	
@@ -47,7 +45,7 @@ class TileTest {
 		assertEquals("s", spikedTile.type());
 		spikedTile.select();
 		assertEquals("h", spikedTile.type());
-		assertEquals("c", miniMaze.getTileAt(0,1).type());
+		assertEquals("c", firstTile.getTileAt(0,1).type());
 	}
 	
 	@Test
@@ -77,19 +75,19 @@ class TileTest {
 	}
 	
 	@Test
-	void makeMiniMaze() {
+	void makeTestMaze() {
 		int[] expectedPosition = {0, 0};
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileAt(0,0).getPosition());
+				firstTile.getPosition());
 		
 		expectedPosition[0] = 1;
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileAt(1,0).getPosition());
+				firstTile.getTileAt(1,0).getPosition());
 	}
 	
 	@Test
 	void tryGetWrongTile() {
-		assertNull(miniMaze.getTileAt(2,4));
+		assertNull(firstTile.getTileAt(2,4));
 	}
 	
 	@Test
@@ -107,7 +105,7 @@ class TileTest {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
 		aPlayer.turnLeft();
-		aPlayer.moveForward();
+		aPlayer.moveForward(); // Here, the player moved unto a spikey tile
 		
 		assertTrue(100 > aPlayer.getHealth());
 	}
@@ -116,7 +114,7 @@ class TileTest {
 	void invalidMove() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
-		aPlayer.moveForward();
+		aPlayer.moveForward(); // The player can't make this step and should stay put
 		
 		int[] expectedPosition = {1, 0};
 		
@@ -146,7 +144,6 @@ class TileTest {
 		
 		expectedPosition[1] = 0;
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-
 	}
 	
 	@Test

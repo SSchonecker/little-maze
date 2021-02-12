@@ -19,7 +19,7 @@ public class Spike extends Tile {
 	/**
 	 * Method to get the spike type
 	 * @return returns either "s" for spike or "h" for harmless,
-	 * i.e. if the spikes are revealed
+	 * i.e. if the spike is revealed
 	 */
 	@Override
 	public String type() {

@@ -1,5 +1,10 @@
 package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
+/**
+ * Class for the input from the start game page,
+ * used in MazeInitiate
+ * 
+ */
 public class PlayerInput {
 
 	String playerName;

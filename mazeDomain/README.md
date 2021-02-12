@@ -14,8 +14,8 @@ The Grid holds the information of the game state and will be used to create the 
 
 ## Input
 
-- A stirring of the Player (move forward, backward or turn left, right) entered through the keys _w, a, s, d_
-- The selection of a tile, to see whether it is spikey or contains a chest
+- A stirring of the Player (move forward, backward or turn left, right) entered through the keys _w, a, s, d, e, q_
+- The selection of a tile, to see whether it is spikey or contains a chest, if it is near the player location
 
 ## Usage
 

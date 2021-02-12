@@ -1,8 +1,8 @@
 
 export interface scoreItem {
-	scoreID : int;
-	scorevalue : int;
-	gridSize : int;
+	scoreID : number;
+	scorevalue : number;
+	gridSize : number;
 	datetime : string;
-	userID : int;
+	userID : number;
 }

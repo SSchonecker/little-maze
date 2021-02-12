@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * This class contains all the information on one Player object
- * and one maze, built from the firstTile.
+ * and one maze, built from the Tile firstTile.
  * It is constructed with the maze size
  * or from a previous grid.
  */
@@ -37,7 +37,7 @@ public class Grid {
 	 */
 	public Grid(String playerName, int playerHealth, int playerSteps, char[][][] layout) {
 		buildMaze(layout);
-		makeMazeLayout();
+		makeMazeLayout(); // Recreates the layout without the player in it
 		int[] playerPos = playerInMaze(layout);
 		firstTile = theMaze[0][0];
 		firstTile.setMaze(theMaze);
@@ -45,7 +45,6 @@ public class Grid {
 		putPlayer(playerName, playerPos);
 		myPlayer.setSteps(playerSteps);
 		myPlayer.setHealth(playerHealth);
-		
 	}
 	
 	/**
@@ -59,12 +58,14 @@ public class Grid {
 		theMaze = new Tile[layout.length][layout.length];
 		for (int x = 0; x < layout.length; x++) {
 			for (int y = 0; y < layout.length; y++) {
+				// Putting in spikey tiles
 				if (layout[x][y][0] == 's' || layout[x][y][0] == 'h') {
 					theMaze[x][y] = new Spike(x, y);
 					if (layout[x][y][0] == 'h') {
 						theMaze[x][y].select();
 					}
 				}
+				// Putting in normal tiles and the chest
 				else {
 					theMaze[x][y] = new Tile(x, y);
 					if (layout[x][y][0] == 'c') {
@@ -110,7 +111,8 @@ public class Grid {
 	 * on each cell saving the cell type (tile, chest, spike),
 	 * and the object in each direction
 	 * ('_' for a wall, '.' for an opening).
-	 * This one should only be set once.
+	 * This one is set once at the creation of a Grid and
+	 * then during selection of a Tile, to represent the change in a selected spikey tile.
 	 * 
 	 * Makes grid[x][y]{type, North, East, South, West}
 	 */

@@ -16,7 +16,10 @@ import nl.sogyo.littlemaze.mazeapi.dbconnect.DataRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.ScoreRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
-
+/**
+ * Test class for the SQLconnector class
+ * Without a running database on the correct port, this won't work
+ */
 class ConnectionTest {
 	
 	private String url = "jdbc:mysql://localhost:2220/test_maze";

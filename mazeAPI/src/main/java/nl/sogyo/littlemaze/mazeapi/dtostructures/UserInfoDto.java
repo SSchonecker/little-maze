@@ -1,5 +1,11 @@
 package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
+/**
+ * Class containing the relevant information on a logged in user.
+ * A json of an object of this type is sent to the FE.
+ * Used in MazeLogin.
+ *
+ */
 public class UserInfoDto {
 	
 	private String userName;

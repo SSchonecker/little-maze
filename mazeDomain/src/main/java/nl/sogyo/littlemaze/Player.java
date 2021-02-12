@@ -70,6 +70,22 @@ public class Player {
 	public void moveBackward() {
 		currentTile.walkTo(facing.opposite, this);
 	}
+	
+	public void moveLeft() {
+		currentTile.walkTo(Direction.WEST, this);
+	}
+
+	public void moveRight() {
+		currentTile.walkTo(Direction.EAST, this);
+	}
+
+	public void moveUpward() {
+		currentTile.walkTo(Direction.NORTH, this);
+	}
+
+	public void moveDownward() {
+		currentTile.walkTo(Direction.SOUTH, this);
+	}
 
 	/**
 	 * Method for finishing the game and setting the score, once the chest is found. 
@@ -95,22 +111,6 @@ public class Player {
 	
 	public void setSteps(int playerSteps) {
 		mySteps = playerSteps;
-	}
-
-	public void moveLeft() {
-		currentTile.walkTo(Direction.WEST, this);
-	}
-
-	public void moveRight() {
-		currentTile.walkTo(Direction.EAST, this);
-	}
-
-	public void moveUpward() {
-		currentTile.walkTo(Direction.NORTH, this);
-	}
-
-	public void moveDownward() {
-		currentTile.walkTo(Direction.SOUTH, this);
 	}
 
 }

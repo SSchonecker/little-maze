@@ -33,7 +33,7 @@ class Tile {
 		position[1] = 0;
 		neighbours[Direction.SOUTH.nr] = new Tile(mazeGrid, Direction.SOUTH, this);
 
-		shouldPutChest();
+		shouldPutChest(); // After the new maze has been build, put a chest in it
 	}
 	
 	/**
@@ -65,13 +65,13 @@ class Tile {
 	}
 
 	/**
-	 * Method to determine whether a tile should put a chest on itself.
-	 * Only returns true if the whole maze has been filled and no other tile has a chest
+	 * Method to put a chest in the maze.
+	 * Only places one chest on a normal Tile at a dead end
 	 */
 	private void shouldPutChest() {
 		content = (maze == null) ? TREASURE : TREASURE * maze.length * maze.length;
 		
-		if (maze.length == 2) {
+		if (maze.length == 2) { // The 2x2 maze is fixed
 			maze[0][1].putChest(content);
 			return;
 		}
@@ -164,7 +164,7 @@ class Tile {
 
 	/**
 	 * Method to try to move the player to the next neighbour.
-	 * Only forwards the player if he can move in the particular direction
+	 * Only forwards the player if he can move in the particular direction.
 	 * 
 	 * @param dir Direction the player wants to move toward
 	 * @param aPlayer The player to be moved to the neighbour

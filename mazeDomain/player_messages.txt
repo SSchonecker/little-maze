@@ -1,4 +1,0 @@
-Messages to player:
-	"Ouch! You lost " + pain + " hp..." : when player loses health
-	"This is a spikey tile!" : when stepping on unrevealed spike tile
-	"You move carefully past the spikes." : when stepping on revealed spike tile

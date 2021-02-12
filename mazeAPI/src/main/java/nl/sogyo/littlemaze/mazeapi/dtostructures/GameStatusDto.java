@@ -2,6 +2,11 @@ package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
 import nl.sogyo.littlemaze.Grid;
 
+/**
+ * Class for generating json object for the game status
+ * Used as a sub-class in MazeDto and LoadMazeDto
+ *
+ */
 public class GameStatusDto {
 	
 	boolean endgame;

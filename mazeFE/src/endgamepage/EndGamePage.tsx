@@ -96,8 +96,6 @@ function EndGame() {
 
 			if (response.ok) {
 				const scores = await response.json();
-				console.log(scores);
-				console.log(typeof scores);
 				setScoreList(scores);
 			}
 		} catch (error) {

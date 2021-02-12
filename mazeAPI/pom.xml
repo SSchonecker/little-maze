@@ -140,34 +140,7 @@
           </execution>
         </executions>
       </plugin>
-	  <!--<plugin>
-		<groupId>org.eclipse.jetty</groupId>
-		<artifactId>jetty-maven-plugin</artifactId>
-		<version>${jettyVersion}</version>
-		<configuration>
-			<httpConnector>
-				<port>2222</port>
-			</httpConnector>
-			<webApp>
-				<contextPath>/littlemaze</contextPath>
-			</webApp>
-		</configuration>
-	  </plugin>-->
-
-	  <!--<plugin>
-		  <groupId>org.eclipse.jetty</groupId>
-		  <artifactId>jetty-maven-plugin</artifactId>
-		  <version>${jettyVersion}</version>
-		  <configuration>
-			<jettyXml>src/main/jetty/jetty.xml,src/main/jetty/jetty-ssl3.xml,src/main/jetty/jetty-https.xml</jettyXml>
-			<httpConnector>
-				<port>2222</port>
-			</httpConnector>
-			<webApp>
-				<contextPath>/littlemaze</contextPath>
-			</webApp>
-		  </configuration>
-	  </plugin>-->
+	  
 	  <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
