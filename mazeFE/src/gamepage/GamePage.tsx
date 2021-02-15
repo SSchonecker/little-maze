@@ -76,6 +76,7 @@ function GamePage() {
 	const userName = infoState.userName;
 	const token = infoState.token;
 	const savedSlots = infoState.saveSlotUsed;
+	
 	function logout() {
 		localStorage.removeItem("myGameState");
 		localStorage.removeItem("myUserInfo");
@@ -238,8 +239,7 @@ function GamePage() {
 		if (savedSlots == 0) {
 			slot = "1";
 		}
-		console.log("littlemaze/api/save/"+slot);
-		console.log("I exist");
+		
 		const urlPath = "littlemaze/api/save/"+slot;
 		try {
 			const response = await fetch(urlPath, {

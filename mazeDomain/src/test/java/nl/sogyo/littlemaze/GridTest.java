@@ -138,6 +138,7 @@ class GridTest {
 		assertTrue(miniGrid.selectTile(1, 0));
 		assertTrue(miniGrid.getTileRevealed(1, 0));
 		assertFalse(miniGrid.selectTile(1, 1));
+		assertTrue(miniGrid.selectTile(0, 0));
 		
 		assertEquals("t", miniGrid.getTileType(1, 0));
 		assertEquals("c", miniGrid.getTileType(0, 1));

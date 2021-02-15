@@ -52,7 +52,6 @@ function LoginPage() {
 			if (response.ok) {
 				const userInfo = await response.json();
 				setInfoState(userInfo);
-				//history.push('/gamestart');
 				history.push('/game');
 			}
 			else if (response.status == 406) {

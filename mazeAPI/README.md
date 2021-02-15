@@ -21,3 +21,9 @@ Just run the `../runAPIserver.bash` file from the project's main folder. It will
 To start a new game, a POST request with the name of the player and the required grid size should be sent to 2222/littlemaze/api/start, which will return the maze layout and player information.<br/>
 To make a move or turn (=stir), a PUT request with the key used for the move is to be sent to 2222/littlemaze/api/stir/{key}, where the {key} parameter will be used to make a move on the grid object of this session. **Note that this is only possible as long as the session exists**
 A start of the handling of the selection of a tile is also included.
+
+## On HTTPS
+This server only listens to HTTPS requests. The server setup is mostly determined by the jetty configuration files in /src/main/resources/ (most helpful resource: https://stackoverflow.com/questions/3794892/howto-use-https-ssl-with-maven-mortbay-jetty-plugin/3795116#3795116). <br/>
+For the SSL-certificates/key-pairs, the keytool generator is used automatically during the build of the project through maven. This means that on each build a new pair of keys is generated. These are self-signed keys, but webpack-devserver (the FE server) knows how to ignore this fact.
+
+## On password hashing

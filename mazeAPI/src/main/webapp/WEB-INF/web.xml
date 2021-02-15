@@ -1,3 +1,6 @@
+<!-- 	Mostly standard configuration file for the jersey servlet.
+		listens to calls to the port defined in the pom.xml file in the main folder mazeAPI/
+		where the path contains /api/ -->
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" metadata-complete="false" version="3.1">
   <servlet>
@@ -20,7 +23,7 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <security-constraint>
+  <!--<security-constraint>
       <web-resource-collection>
          <web-resource-name>All</web-resource-name>
          <url-pattern>/*</url-pattern>

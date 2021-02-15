@@ -79,7 +79,7 @@ export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList,
 			<Score>New score: {gameState.gameStatus.score}</Score>
 			<Info>
 				{scoreList!.map((score, index) => (
-				<div key={index}>{score.scorevalue} Gridsize: {score.gridSize} Date: {score.datetime} </div>
+				<div key={index}>{score.scorevalue} | Gridsize: {score.gridSize} | Date: {score.datetime} </div>
 				))}
 			</Info>
 			<RestartButton onClick={newGame}>New grid?</RestartButton>

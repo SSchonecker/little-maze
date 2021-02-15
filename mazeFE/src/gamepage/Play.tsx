@@ -115,13 +115,15 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		</div>
 		
 		<div className="movebuttons">
-			<button onClick={() => onMoving("q")}> q </button>
-			<button onClick={() => onMoving("w")}> w </button>
-			<button onClick={() => onMoving("e")}> e </button>
+			<button onClick={() => onMoving("q")}>q</button>
+			<button onClick={() => onMoving("w")}>w</button>
+			<button onClick={() => onMoving("e")}>e</button>
+			<button onClick={displayRules}>r</button>
 			<br></br>
-			<button onClick={() => onMoving("a")}> a </button>
-			<button onClick={() => onMoving("s")}> s </button>
-			<button onClick={() => onMoving("d")}> d </button>
+			<button onClick={() => onMoving("a")}>a</button>
+			<button onClick={() => onMoving("s")}>s</button>
+			<button onClick={() => onMoving("d")}>d</button>
+			<button onClick={displayPlayerInfo}>f</button>
 		</div>
 	</div>
 }

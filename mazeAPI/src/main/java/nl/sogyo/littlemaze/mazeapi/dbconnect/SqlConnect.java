@@ -179,7 +179,7 @@ public class SqlConnect {
 	 * Method to return a sorted list of rows from the score table
 	 * for a particular user's name
 	 * @param name The user's name
-	 * @param newScore The user's last score
+	 * @param newScore The user's latest score
 	 * @return List<ScoreRow> Sorted list of rows of score data
 	 * @throws SQLException 
 	 */
@@ -212,8 +212,9 @@ public class SqlConnect {
 				.sorted(Comparator.comparing(ScoreRow::getScorevalue).reversed())
 				.collect(Collectors.toList());
 		
+		/* If the new score is lower than the lowest previous one, don't store it */
 		if (sortedScores.size() >= 5 && newScore < sortedScores.get(sortedScores.size() - 1).getScorevalue()) {
-			return sortedScores; // If the new score is lower than the lowest previous one, don't store it
+			return sortedScores;
 		}
 		
 		/* The new score needs to be added to the table */
@@ -221,7 +222,7 @@ public class SqlConnect {
 
 		if (sortedScores.size() >= 5) {
 			newRow = updateScores(newScore, sortedScores.get(sortedScores.size() - 1).getScoreID(), gridSize);
-			sortedScores.remove(sortedScores.size() - 1);
+			sortedScores.remove(sortedScores.size() - 1); // Remove the last score
 		}
 		else {
 			newRow = addToScores(newScore, gridSize, name);
@@ -230,11 +231,11 @@ public class SqlConnect {
 		sortedScores.add(newRow);
 		return sortedScores.stream()
 				.sorted(Comparator.comparing(ScoreRow::getScorevalue).reversed())
-				.collect(Collectors.toList());
+				.collect(Collectors.toList()); // Sort the scores again with the new score added
 	}
 
 	/**
-	 * Method to remove an old score and place new one
+	 * Method to remove an old score and place a new one
 	 * using a stored procedure in MySQL
 	 * @param newScore
 	 * @param oldScoreID
@@ -287,8 +288,11 @@ public class SqlConnect {
 			stmt.setString(3, name);
 			stmt.execute();
 			
-			stmt2 = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE userID=(SELECT userID FROM "+ schema + ".user WHERE username=?);");
-			stmt2.setString(1, name);
+			stmt2 = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE scoreID=("
+									+ "SELECT max(scoreID) FROM " + schema + ".score WHERE"
+									+ "scorevalue=? AND gridsize=?);");
+			stmt2.setLong(1, score);
+			stmt2.setLong(2, gridSize);
 			ResultSet resultSet = stmt2.executeQuery();
 			resultSet.next();
 			aRow.setScoreID(resultSet.getInt("scoreID"));

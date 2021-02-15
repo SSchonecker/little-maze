@@ -1,5 +1,9 @@
 package nl.sogyo.littlemaze.mazeapi.dbconnect;
 
+/**
+ * Class that represents a row in the user-table of the DB
+ *
+ */
 public class DataRow {
 	
 	private int userID;
@@ -49,6 +53,10 @@ public class DataRow {
 		this.gameStateJSONtwo = gameStateJSONtwo;
 	}
 
+	/**
+	 * Method to indicate how many of the save slots are used
+	 * @return int the number of slots used
+	 */
 	public int slotsUsed() {
 		int slotsUsed = 0;
 		if (gameStateJSON != null) {

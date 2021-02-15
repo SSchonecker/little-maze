@@ -2,4 +2,5 @@
 export interface LoginState {
 	userName : string;
 	token : string;
+	saveSlotUsed : number;
 }

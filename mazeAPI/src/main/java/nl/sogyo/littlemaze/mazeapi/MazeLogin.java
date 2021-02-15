@@ -20,11 +20,22 @@ import nl.sogyo.littlemaze.mazeapi.dtostructures.JsonError;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.UserInfoDto;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.UserInput;
 
+/**
+ * Class handling login requests.
+ * 
+ * It listens to POST requests to /login
+ * and expects a json containing userName, password and createAccount fields.
+ * The latter is a boolean indicating whether a new account should be created.
+ * 
+ * The OK response gives a json with userName, accessToken and saveSlotUsed fields.
+ * In case of an error, it is forwarded through a json error object, containing the error message.
+ */
 @Path("login")
 public class MazeLogin {
 	
-	private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
-	private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
+	// Fields for the generation of the access token
+	private static final SecureRandom secureRandom = new SecureRandom();
+	private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -68,7 +79,7 @@ public class MazeLogin {
 			String accessToken = generateNewToken();
 			
 			session.setAttribute("userName", userName);
-			session.setAttribute("token", accessToken);
+			session.setAttribute("accessToken", accessToken);
 
 			var output = new UserInfoDto(userName, accessToken, saveSlotUsed);
 			return Response.status(200).entity(output).build();
@@ -79,6 +90,10 @@ public class MazeLogin {
 		}
 	}
 	
+	/**
+	 * Method to generate a random access token
+	 * @return String the token
+	 */
 	public static String generateNewToken() {
 		byte[] randomBytes = new byte[24];
 		secureRandom.nextBytes(randomBytes);

@@ -13,7 +13,7 @@ const PasswordNote = styled.p`
 	color: var(--sogyo-color);
 	position: fixed;
 	bottom: 2%;
-	width: 90%;
+	width: 50%;
 `;
 
 const LoginButton = styled.button`

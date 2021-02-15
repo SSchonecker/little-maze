@@ -2,6 +2,10 @@ package nl.sogyo.littlemaze.mazeapi.dbconnect;
 
 import java.sql.Timestamp;
 
+/**
+ * Class representing a row in the score-table of the DB
+ *
+ */
 public class ScoreRow {
 	
 	private int scoreID;

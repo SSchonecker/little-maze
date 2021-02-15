@@ -17,7 +17,15 @@ import nl.sogyo.littlemaze.Grid;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.ScoreRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 
-
+/**
+ * Class handling the score requests at the end of the game.
+ * 
+ * It listens to PUT requests to /end/{score}
+ * and only works if the correct userName and accessToken are passed in the header.
+ * 
+ * The response is a list of score-rows as obtained from the DB.
+ * 
+ */
 @Path("/end")
 public class MazeEnd {
 	
@@ -27,15 +35,15 @@ public class MazeEnd {
 	public Response playerStir(
 			@PathParam("score") String score,
 			@HeaderParam("User-Name") String userName,
-			@HeaderParam("Access-Token") String token,
+			@HeaderParam("Access-Token") String accessToken,
 			@Context HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(false);
 		
-		int responseStatus = 403;
+		int responseStatus = 403; // Forbidden access
 		
 		if (userName.equals(session.getAttribute("userName")) &&
-				token.equals(session.getAttribute("token"))) {
+				accessToken.equals(session.getAttribute("accessToken"))) {
 			
 			int newScore = Integer.parseInt(score);
 			

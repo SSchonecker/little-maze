@@ -274,7 +274,8 @@ public class Grid {
 
 	/**
 	 * Method to select a tile
-	 * if it is next to the player and reachable (no wall)
+	 * if it is the tile the player is standing on 
+	 * or next to the player and reachable (no wall)
 	 * 
 	 * @param i: x coordinate of tile
 	 * @param j: y coordinate of tile
@@ -282,6 +283,11 @@ public class Grid {
 	 */
 	public boolean selectTile(int i, int j) {
 		int[] target = {i, j};
+		
+		if (Arrays.equals(firstTile.getTileAt(myPlayer.getPosition()).getPosition(), target)) {
+			return true;
+		}
+			
 		for (int n = 0; n < 4; n++) {
 			Tile aNeighbour = firstTile.getTileAt(myPlayer.getPosition()).getNeighbour(n);
 			if (aNeighbour != null 
