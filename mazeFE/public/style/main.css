@@ -1,3 +1,6 @@
+/* Most of the main styling choices are managed here,
+	however, particular components are styled directly in the tsx files */
+
 body {
 	font-family: 'courier new', monospace;
 	height: 100%;
@@ -58,6 +61,7 @@ body {
 /* Show the dropdown menu (use script to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
+/* The maze background */
 .grid-container {
 	display: inline-grid;
 	background-color: 2px solid var(--light-sogyo);
@@ -86,6 +90,16 @@ body {
 	border-bottom: 2px solid var(--sogyo-color);
 }
 
+/* The buttons underneath the maze for non-keyboard screens */
+.movebuttons button {
+	width: 30px;
+	background-color: black;
+	font-size: 1em;
+	color: white;
+	border-color: white;
+}
+
+/* Manage the background depending on screen size */
 @media screen and (min-width: 815px) {
 	body {
 		background-image: url('/style/mazeplantsinverted.jpg');

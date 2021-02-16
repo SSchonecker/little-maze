@@ -288,9 +288,7 @@ public class SqlConnect {
 			stmt.setString(3, name);
 			stmt.execute();
 			
-			stmt2 = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE scoreID=("
-									+ "SELECT max(scoreID) FROM " + schema + ".score WHERE"
-									+ "scorevalue=? AND gridsize=?);");
+			stmt2 = conn.prepareStatement("SELECT * FROM " + schema + ".score WHERE scoreID=(SELECT max(scoreID) FROM " + schema + ".score WHERE scorevalue=? AND gridsize=?);");
 			stmt2.setLong(1, score);
 			stmt2.setLong(2, gridSize);
 			ResultSet resultSet = stmt2.executeQuery();

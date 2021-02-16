@@ -52,6 +52,7 @@ interface BoxProps {
 
 export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList, newGame } : BoxProps) {
 	
+	// If the player lost, their negative score is shown
 	if (gameState.player.health == 0) {
 		return (<Container>
 			<Main style={{color: "red"}}>Game over!</Main>
@@ -61,6 +62,8 @@ export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList,
 			</Container>);
 	}
 	
+	/* If the player won, first their new score is shown,
+	 * along with a continue option to load the scores from the DB */
 	else if (!showAllScores) {
 		return <Container>
 			<Main style={{color: "yellow"}}>You won!</Main>
@@ -73,7 +76,8 @@ export function EndGameBox( { gameState, getScoreData, showAllScores, scoreList,
 			<RestartButton onClick={getScoreData}>Continue</RestartButton>
 			</Container>
 	}
-	
+
+	// If continue has been pressed, show an overview of past scores from the DB
 	return <Container>
 			<Main style={{color: "yellow"}}>You won!</Main>
 			<Score>New score: {gameState.gameStatus.score}</Score>

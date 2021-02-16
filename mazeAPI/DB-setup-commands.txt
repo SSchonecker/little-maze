@@ -67,3 +67,5 @@ END$$
 DELIMITER ;
 ;
 
+////////////////// Same for maze_safe
+

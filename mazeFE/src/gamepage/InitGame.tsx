@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-interface StartGameProps {
-	message: string;
-	userName: string;
-	savedSlots: number;
-	onPlayerConfirmed(playerName: string, gridSize: number): void;
-	logout(): void;
-	loadGame(slot : string) : void;
-}
-
-// a button element with the specified css style applied to it
 const LogoutButton = styled.button`
 	background-color: black;
 	font-size: 1em;
@@ -30,7 +20,6 @@ const StartButton = styled.button`
 	border-color: white;
 `;
 
-// a p element with the specified css style applied to it
 const ErrorMessage = styled.p`
 	height: 1em;
 	color: red;
@@ -41,6 +30,15 @@ const Quote = styled.div`
 	position: absolute;
 	bottom: 5%;
 `;
+
+interface StartGameProps {
+	message: string;
+	userName: string;
+	savedSlots: number;
+	onPlayerConfirmed(playerName: string, gridSize: number): void;
+	logout(): void;
+	loadGame(slot : string) : void;
+}
 
 /**
  * Allows the player to enter their name and set the grid size.
@@ -55,7 +53,7 @@ export function InitGame({ message, userName, savedSlots, loadGame, onPlayerConf
 	}; // Pressing the enter key in an input field is the same as pushing the button to enter the game
 	
 	
-	function getLoadButtons() {
+	function getLoadButtons() { // Show the right number of load buttons based on the save slots used
 		if (savedSlots == 0) {
 			return <div></div>;
 		}

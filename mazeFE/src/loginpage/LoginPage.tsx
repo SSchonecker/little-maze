@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Login } from "./Login";
 import { LoginState } from "../typefiles/loginState";
-import { Link, withRouter , useHistory } from "react-router-dom";
+import { withRouter , useHistory } from "react-router-dom";
 
 function LoginPage() {
-/* Part for the login */
+
 	const [ loginMessage, setLoginMessage ] = useState("");
 	const [ infoState, setInfoState ] = useState<LoginState | undefined>(undefined);
 	useEffect(() => {
 		const json = JSON.stringify(infoState);
 		localStorage.setItem("myUserInfo", json);
 	}, [infoState]); // Add the login info to the localStorage
-	const history = useHistory();
 	
+	const history = useHistory(); // Required to change the page
+	
+	/**
+	 * Method to check the userName and the password and send a login request to the API	
+	 */
 	async function tryLoginSend(userName : string, userPassword : string, createNew : boolean) {
-		
+
 		setLoginMessage("");
 
 		if (!userName) {
@@ -52,7 +56,7 @@ function LoginPage() {
 			if (response.ok) {
 				const userInfo = await response.json();
 				setInfoState(userInfo);
-				history.push('/game');
+				history.push('/game'); // Send the user to the game page
 			}
 			else if (response.status == 406) {
 				const errorInfo = await response.json();

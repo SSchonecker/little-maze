@@ -17,9 +17,8 @@ const ErrorMessage = styled.p`
 	bottom: 2%;
 `;
 
-
 function EndGame() {
-	const history = useHistory();
+	
 	const gameState = JSON.parse(localStorage.getItem("myGameState")!);
 	const [showScores, setShowScores] = useState(false);
 	const [scoreList, setScoreList] = useState<scoreItem[]>([]);
@@ -27,8 +26,9 @@ function EndGame() {
 	
 	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
 	const userName = infoState.userName;
-	const token = infoState.token;
+	const accessToken = infoState.accessToken;
 	
+	const history = useHistory();
 	const newGame = () => {
 		localStorage.removeItem("myGameState");
 		history.push("/game");
@@ -90,7 +90,7 @@ function EndGame() {
 				headers: {
 					'Accept': 'application/json',
 					'User-Name': userName,
-					'Access-token': token
+					'Access-token': accessToken
 				},
 			});
 

@@ -20,7 +20,7 @@ public class UserInfoDto {
 	
 	public String getUserName() { return userName; }
 	
-	public String getToken() { return accessToken; }
+	public String getAccessToken() { return accessToken; }
 	
 	public int getSaveSlotUsed() { return saveSlotUsed; }
 

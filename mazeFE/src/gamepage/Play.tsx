@@ -2,19 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { GameState } from "../typefiles/gameState";
 
-interface PlayProps { // The type of input for the Play function
-	gameState: GameState;
-	onMoving(key : string) : void;
-	onTileSelect(tileMessage : string, tileID : string) : void;
-	playMessage : string;
-	error : string;
-	dropdownFunction() : void;
-	resetGame() : void;
-	displayPlayerInfo() : void;
-	displayRules() : void;
-	saveGame(slot : string) : void;
-}
-
 const ErrorMessage = styled.p`
 	height: 1em;
 	color: red;
@@ -32,6 +19,19 @@ const Tile = styled.button`
 	height: 30px;
 	width: 30px;
 `; // Fixed sized floor tile
+
+interface PlayProps { // The type of input for the Play function
+	gameState: GameState;
+	onMoving(key : string) : void;
+	onTileSelect(tileMessage : string, tileID : string) : void;
+	playMessage : string;
+	error : string;
+	dropdownFunction() : void;
+	resetGame() : void;
+	displayPlayerInfo() : void;
+	displayRules() : void;
+	saveGame(slot : string) : void;
+}
 
 export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, resetGame, displayPlayerInfo, displayRules, saveGame, playMessage, error }: PlayProps) {
 	
@@ -52,7 +52,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		if (tileInfo[3] == "_") { classes.push("bottomborder"); }
 		if (tileInfo[4] == "_") { classes.push("leftborder"); }
 		
-		/* Color the tiles dependent on their type */
+		/* Color the tiles depending on their type */
 		let tileStyle = {
 			backgroundColor: "black"
 		};
@@ -87,7 +87,6 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 	}
 
 	return <div>
-		<div>Welcome to the little maze, {gameState.player.name}!</div>
 		<ErrorMessage>{error}</ErrorMessage>
 		
 		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
