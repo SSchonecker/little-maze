@@ -7,13 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import nl.sogyo.littlemaze.mazeapi.dbconnect.DataRow;
+import nl.sogyo.littlemaze.mazeapi.dbconnect.ScoreRow;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
-
+/**
+ * Test class for the SQLconnector class
+ * Without a running database on the correct port, this won't work
+ */
 class ConnectionTest {
 	
 	private String url = "jdbc:mysql://localhost:2220/test_maze";
@@ -136,5 +142,27 @@ class ConnectionTest {
 		}
 		
 		assertNotNull(loadedGame);
+	}
+	
+	@Test
+	void getUsersScore() {
+		List<ScoreRow> scoreRowList1 = new ArrayList<>();
+		List<ScoreRow> scoreRowList2 = new ArrayList<>();
+		try {
+			SqlConnect myConnect = new SqlConnect(url);
+			scoreRowList1 = myConnect.getScores("someone", 20, 4);
+			scoreRowList2 = myConnect.getScores("someone else", 48, 4);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		
+		assertNotEquals(0, scoreRowList1.get(0).getGridSize());
+		assertEquals(50, scoreRowList1.get(0).getScorevalue());
+		assertEquals(20, scoreRowList1.get(2).getScorevalue());
+		
+		assertEquals(48, scoreRowList2.get(2).getScorevalue());
+		assertEquals(5, scoreRowList2.size());
 	}
 }

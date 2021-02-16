@@ -90,7 +90,7 @@
 		<!-- https://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
 		<dependency>
 			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
+			<artifactId>jbcrypt</artifactId> <!-- Handles password hashing -->
 			<version>0.4</version>
 		</dependency> 
   </dependencies>
@@ -140,26 +140,52 @@
           </execution>
         </executions>
       </plugin>
+	  
 	  <plugin>
-		<groupId>org.eclipse.jetty</groupId>
-		<artifactId>jetty-maven-plugin</artifactId>
-		<version>${jettyVersion}</version>
-		<configuration>
-			<httpConnector>
-				<port>2222</port>
-			</httpConnector>
-			<webApp>
-				<contextPath>/littlemaze</contextPath>
-			</webApp>
-		</configuration>
-	  </plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>keytool-maven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <phase>generate-resources</phase>
+                    <id>clean</id>
+                    <goals>
+                        <goal>clean</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <phase>generate-resources</phase>
+                    <id>genkey</id>
+                    <goals>
+                        <goal>generateKeyPair</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                <dname>cn=localhost</dname><!-- put your CN here -->
+                <keypass>secret</keypass>
+                <storepass>secret</storepass>
+                <alias>jetty</alias>
+                <keyalg>RSA</keyalg>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>${jettyVersion}</version>
+            <configuration>
+                <jettyXml>src/main/resources/jetty.xml,src/main/resources/jetty-ssl.xml,src/main/resources/jetty-https.xml</jettyXml>
+				<webApp>
+					<contextPath>/littlemaze</contextPath>
+				</webApp>
+            </configuration>
+        </plugin>    
+	  
 	  <plugin>
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
 		<version>0.8.6</version>
-		<!--<configuration>
-			<destFile>target/jacoco.xml</destFile>
-		</configuration> -->
 		<executions>
 			<!-- to avoid bugs in some situations -->
 			<execution>
@@ -169,7 +195,7 @@
 				</goals>
 			</execution>
 
-			<!-- create report during maven verify phase -->
+			<!-- create jacoco report during maven verify phase -->
 			<execution>
 				<id>report</id>
 				<phase>verify</phase>
@@ -177,27 +203,7 @@
 					<goal>report</goal>
 				</goals>
 			</execution>
-			
-			<execution>
-				<id>jacoco-check</id>
-				<goals>
-					<goal>check</goal>
-				</goals>
-				<configuration>
-					<rules>
-						<rule>
-							<element>PACKAGE</element>
-							<limits>
-								<limit>
-									<counter>LINE</counter>
-									<value>COVEREDRATIO</value>
-								<minimum>0.50</minimum>
-								</limit>
-							</limits>
-						</rule>
-					</rules>
-				</configuration>
-			</execution>
+
 		  </executions>
 		</plugin>
     </plugins>

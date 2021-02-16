@@ -2,6 +2,11 @@ package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
 import nl.sogyo.littlemaze.Grid;
 
+/**
+ * Class containing the elementary information on a Player object
+ * from the domain.
+ * Used as a sub-class in MazeDto and LoadMazeDto
+ */
 public class PlayerDto {
 	String name;
 	int health;

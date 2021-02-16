@@ -1,56 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { GameState } from "../typefiles/gameState";
+import { scoreItem } from "../typefiles/ScoreItem";
+import { EndGameBox } from "./EndGameBox";
 import styled from "styled-components";
 import { withRouter , useHistory } from "react-router-dom";
-
-const Container = styled.div`
-	font-size: 1em;
-	color: var(--light-sogyo);
-	background-color: black;
-	position: absolute;
-	top: 20%;
-	right: 15%;
-	width: 70%;
-	text-align: center;
-	border-style: dotted;
-	border-width: thick;
-	border-color: yellow;
-	border-radius: 25px;
-`;
-
-const Main = styled.p`
-	font-size: 1.5em;
-`;
-
-const Info = styled.p`
-	margin: 5%;
-`;
-
-const Score = styled.p`
-	font-size: 1.5em;
-	color: yellow;
-	margin-bottom: 5%;
-`;
 
 const Tile = styled.div`
 	height: 30px;
 	width: 30px;
 `; // Fixed sized floor tile
 
-const RestartButton = styled.button`
-	background-color: black;
-	font-size: 1em;
-	color: white;
-	border-color: white;
-	position: relative;
-	width: 140px;
-	margin-bottom: 2%;
+const ErrorMessage = styled.p`
+	height: 1em;
+	color: red;
+	position: fixed;
+	bottom: 2%;
 `;
 
 function EndGame() {
-	const history = useHistory();
-	const gameState = JSON.parse(localStorage.getItem("myGameState")!);
 	
+	const gameState = JSON.parse(localStorage.getItem("myGameState")!);
+	const [showScores, setShowScores] = useState(false);
+	const [scoreList, setScoreList] = useState<scoreItem[]>([]);
+	const [error, setError] = useState("");
+	
+	const infoState = JSON.parse(localStorage.getItem("myUserInfo")!);
+	const userName = infoState.userName;
+	const accessToken = infoState.accessToken;
+	
+	const history = useHistory();
 	const newGame = () => {
 		localStorage.removeItem("myGameState");
 		history.push("/game");
@@ -102,26 +80,30 @@ function EndGame() {
 		return tileList;
 	}
 	
-	function InfoBox() {
-		if (gameState.player.health == 0) {
-			return (<Container>
-				<Main style={{color: "red"}}>Game over!</Main>
-				<Info>Oops... you lost all your health...</Info>
-				<RestartButton onClick={newGame}>New grid?</RestartButton>
-				</Container>);
+	async function getScoreData() {
+		setError("");
+		
+		const urlPath = "littlemaze/api/end/" + gameState.gameStatus.score;
+		try {
+			const response = await fetch(urlPath, {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'User-Name': userName,
+					'Access-token': accessToken
+				},
+			});
+
+			if (response.ok) {
+				const scores = await response.json();
+				setScoreList(scores);
+			}
+		} catch (error) {
+			console.log(error.toString());
+			setError(error.toString());
 		}
 		
-		return <Container>
-			<Main style={{color: "yellow"}}>You won!</Main>
-			<Info>You found the chest!<br></br>
-					It took you {gameState.player.steps} steps to get here
-					and you have {gameState.player.health} hp left.<br></br>
-					With the chest's treasure, that leaves you with a score of:
-			</Info>
-			<Score>{gameState.gameStatus.score}</Score>
-			<RestartButton onClick={newGame}>New grid?</RestartButton>
-			</Container>
-		
+		setShowScores(true);
 	}
 
 	return <div>
@@ -129,7 +111,13 @@ function EndGame() {
 			{makeGrid( gameState )}
 		</div>
 		
-		{InfoBox()}
+		<EndGameBox gameState={gameState}
+					getScoreData={getScoreData}
+					showAllScores={showScores}
+					scoreList={scoreList}
+					newGame={newGame}/>
+					
+		<ErrorMessage>{error}</ErrorMessage>
 
 	</div>
 }

@@ -1,19 +1,6 @@
 import React from "react";
-import { GameState } from "../typefiles/gameState";
 import styled from "styled-components";
-
-interface PlayProps { // The type of input for the Play function
-	gameState: GameState;
-	onMoving(key : string) : void;
-	onTileSelect(tileMessage : string, tileID : string) : void;
-	playMessage : string;
-	error : string;
-	dropdownFunction() : void;
-	resetGame() : void;
-	displayPlayerInfo() : void;
-	displayRules() : void;
-	saveGame(slot : string) : void;
-}
+import { GameState } from "../typefiles/gameState";
 
 const ErrorMessage = styled.p`
 	height: 1em;
@@ -32,6 +19,19 @@ const Tile = styled.button`
 	height: 30px;
 	width: 30px;
 `; // Fixed sized floor tile
+
+interface PlayProps { // The type of input for the Play function
+	gameState: GameState;
+	onMoving(key : string) : void;
+	onTileSelect(tileMessage : string, tileID : string) : void;
+	playMessage : string;
+	error : string;
+	dropdownFunction() : void;
+	resetGame() : void;
+	displayPlayerInfo() : void;
+	displayRules() : void;
+	saveGame(slot : string) : void;
+}
 
 export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, resetGame, displayPlayerInfo, displayRules, saveGame, playMessage, error }: PlayProps) {
 	
@@ -52,7 +52,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		if (tileInfo[3] == "_") { classes.push("bottomborder"); }
 		if (tileInfo[4] == "_") { classes.push("leftborder"); }
 		
-		/* Color the tiles dependent on their type */
+		/* Color the tiles depending on their type */
 		let tileStyle = {
 			backgroundColor: "black"
 		};
@@ -63,7 +63,7 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 			case "c": tileStyle.backgroundColor = "yellow";
 				tileMessage = "There's a chest here!";
 			break;
-			case "s": tileStyle.backgroundColor = "grey";
+			case "s": tileStyle.backgroundColor = "var(--light-sogyo)";
 				tileMessage = "Careful now! This looks like a spikey tile...";
 			break;
 			case "h": tileStyle.backgroundColor = "purple";
@@ -87,7 +87,6 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 	}
 
 	return <div>
-		<div>Welcome to the little maze, {gameState.player.name}!</div>
 		<ErrorMessage>{error}</ErrorMessage>
 		
 		<div id="grid" className="grid-container" style={{gridTemplateColumns: columnString}}>
@@ -95,10 +94,10 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		</div>
 		
 		<Console>
-			{playMessage.split("\n").map(line => (
-				<React.Fragment>
-				{line}
-				<br />
+			{playMessage.split("\n").map((line, index) => (
+				<React.Fragment key={line + index.toString()}>
+					{line}
+					<br key={line + index.toString() + "2"}/>
 				</React.Fragment>
 			))}
 		</Console>
@@ -115,13 +114,15 @@ export function Play({ gameState, onMoving, onTileSelect, dropdownFunction, rese
 		</div>
 		
 		<div className="movebuttons">
-			<button onClick={() => onMoving("q")}> q </button>
-			<button onClick={() => onMoving("w")}> w </button>
-			<button onClick={() => onMoving("e")}> e </button>
+			<button onClick={() => onMoving("q")}>q</button>
+			<button onClick={() => onMoving("w")}>w</button>
+			<button onClick={() => onMoving("e")}>e</button>
+			<button onClick={displayRules}>r</button>
 			<br></br>
-			<button onClick={() => onMoving("a")}> a </button>
-			<button onClick={() => onMoving("s")}> s </button>
-			<button onClick={() => onMoving("d")}> d </button>
+			<button onClick={() => onMoving("a")}>a</button>
+			<button onClick={() => onMoving("s")}>s</button>
+			<button onClick={() => onMoving("d")}>d</button>
+			<button onClick={displayPlayerInfo}>f</button>
 		</div>
 	</div>
 }

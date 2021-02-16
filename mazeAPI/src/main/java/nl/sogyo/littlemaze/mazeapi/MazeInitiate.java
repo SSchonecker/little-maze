@@ -21,6 +21,18 @@ import nl.sogyo.littlemaze.mazeapi.dtostructures.LoadMazeDto;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.PlayerInput;
 
+/**
+ * Class handling login requests.
+ * 
+ * It listens to POST requests to /start
+ * or PUT requests to /start/load/{slot}, where {slot} is the slot to load from.
+ * The POST listener expects a json containing playerName and gridSize fields.
+ * 
+ * Both only work if the correct userName and accessToken are passed in the header.
+ * Both produce a grid object, that is saved in the session
+ * and respond with a MazeDto json.
+ * 
+ */
 @Path("start")
 public class MazeInitiate {
 	
@@ -30,22 +42,19 @@ public class MazeInitiate {
 	public Response initialize(
 			@Context HttpServletRequest request,
 			@HeaderParam("User-Name") String userName,
-			@HeaderParam("Access-Token") String token,
+			@HeaderParam("Access-Token") String accessToken,
 			PlayerInput player) {
 		
 		HttpSession session = request.getSession(false);
 
-		int responseStatus = 403;
+		int responseStatus = 403; // Forbidden access
 		
 		if (userName.equals(session.getAttribute("userName")) &&
-				token.equals(session.getAttribute("token"))) {
+				accessToken.equals(session.getAttribute("accessToken"))) {
 			Grid mazeGrid = new Grid(Integer.parseInt(player.getGridSize()));
-			
 			String namePlayer = player.getPlayerName();
-			
 			mazeGrid.putPlayer(namePlayer);
-			
-			session.setAttribute("mazegrid", mazeGrid);		
+			session.setAttribute("mazegrid", mazeGrid);
 	
 			var output = new MazeDto(mazeGrid, namePlayer);
 			return Response.status(200).entity(output).build();
@@ -60,15 +69,15 @@ public class MazeInitiate {
 			@PathParam("slot") String saveSlot,
 			@Context HttpServletRequest request,
 			@HeaderParam("User-Name") String userName,
-			@HeaderParam("Access-Token") String token
+			@HeaderParam("Access-Token") String accessToken
 			) {
 		
 		HttpSession session = request.getSession(false);
 
-		int responseStatus = 403;
+		int responseStatus = 403; //Forbidden access
 		
 		if (userName.equals(session.getAttribute("userName")) &&
-				token.equals(session.getAttribute("token"))) {
+				accessToken.equals(session.getAttribute("accessToken"))) {
 			
 			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
 			
@@ -83,7 +92,7 @@ public class MazeInitiate {
 						gameState.getPlayer().getSteps(),
 						gameState.getLayout());
 				
-				session.setAttribute("mazegrid", mazeGrid);		
+				session.setAttribute("mazegrid", mazeGrid);
 		
 				var output = new MazeDto(mazeGrid, mazeGrid.getPlayerName());
 				return Response.status(200).entity(output).build();

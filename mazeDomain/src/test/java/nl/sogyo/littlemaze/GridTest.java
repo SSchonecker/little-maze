@@ -46,7 +46,7 @@ class GridTest {
 		assertFalse(myGrid.getGameStatus());
 		assertEquals(0, myGrid.getScore());
 		assertEquals(0, myGrid.getSteps());
-		assertEquals(50, myGrid.getPlayerHealth());
+		assertEquals(100, myGrid.getPlayerHealth());
 	}
 	
 	@Test
@@ -138,6 +138,7 @@ class GridTest {
 		assertTrue(miniGrid.selectTile(1, 0));
 		assertTrue(miniGrid.getTileRevealed(1, 0));
 		assertFalse(miniGrid.selectTile(1, 1));
+		assertTrue(miniGrid.selectTile(0, 0));
 		
 		assertEquals("t", miniGrid.getTileType(1, 0));
 		assertEquals("c", miniGrid.getTileType(0, 1));
@@ -145,8 +146,6 @@ class GridTest {
 	
 	@Test
 	void buildGridFromLayout() {
-		//String[][] initialLayout = {{"t__._", "c__._"}, 
-		//		{"p..__", "h.__."}};
 		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
 				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
 		Grid thisGrid = new Grid("R", 10, 10, initialLayout);
@@ -154,5 +153,16 @@ class GridTest {
 		char[][][] expectedLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
 				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};		
 		assertArrayEquals(expectedLayout, thisGrid.getLayout());
+	}
+	
+	@Test
+	void correctChestContents() {
+		// Check for the basic newly generated maze and for the rebuild one
+		assertEquals(20, miniGrid.getChestContent());
+		
+		char[][][] initialLayout = {{{'t','_', '_', '.', '_'}, {'c','_', '_', '.', '_'}}, 
+				{{'p','.', '.', '_', '_'},{'h','.', '_', '_', '.'}}};
+		Grid thisGrid = new Grid("R", 10, 10, initialLayout);
+		assertEquals(20, thisGrid.getChestContent());
 	}
 }

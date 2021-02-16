@@ -38,13 +38,16 @@ module.exports = {
         host: '0.0.0.0',
         port: 2200,
         disableHostCheck: true,
-		historyApiFallback: true,
+		historyApiFallback: true, // on page refresh on eg "/game", falls back to "/" and react-router takes it from there
         headers: {
           'Cache-Control': 'no-cache, no-store',
           'Expires': '-1',
         },
         proxy: {
-            '/littlemaze/*': 'http://localhost:2222/', // <-- change 2222 to a different port if necessary
+            '/littlemaze/*': {
+				target: 'https://localhost:2222/', // <-- change 2222 to a different port if necessary
+				secure: false, // accept self-signed certificates
+			},
         }
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-// a p element with the specified css style applied to it
+/* Styling of components used on the login page */
 const ErrorMessage = styled.p`
 	font-size: 1em;
 	color: red;
@@ -13,7 +13,7 @@ const PasswordNote = styled.p`
 	color: var(--sogyo-color);
 	position: fixed;
 	bottom: 2%;
-	width: 90%;
+	width: 50%;
 `;
 
 const LoginButton = styled.button`

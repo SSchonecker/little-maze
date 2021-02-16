@@ -1,4 +1,4 @@
-/* Interfaces for these objects for typescript */
+
 export interface GameState {
     player: Player;
     gameStatus: GameStatus;

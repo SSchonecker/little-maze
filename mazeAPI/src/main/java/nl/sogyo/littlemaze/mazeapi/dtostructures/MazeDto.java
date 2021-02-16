@@ -2,6 +2,11 @@ package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
 import nl.sogyo.littlemaze.Grid;
 
+/**
+ * Class to contain the necessary information to OUTPUT a game.
+ * Note that for loading a game, the LoadMazeDto should be used.
+ * Used in MazeInitiate, MazeSave and MazePlay.
+ */
 public class MazeDto {
 	PlayerDto player;
 	GameStatusDto gameStatus;

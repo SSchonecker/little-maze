@@ -13,6 +13,14 @@ import nl.sogyo.littlemaze.Grid;
 import nl.sogyo.littlemaze.mazeapi.dbconnect.SqlConnect;
 import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
 
+/**
+ * Class handling save requests.
+ * 
+ * It listens to PUT requests to /save/{slot}
+ * where {slot} is the slot into which to save the session's grid.
+ * Only works if the userName and access token from the header correspond to the session's.
+ * 
+ */
 @Path("save/{slot}")
 public class MazeSave {
 	
@@ -21,7 +29,7 @@ public class MazeSave {
 			@PathParam("slot") String saveSlot,
 			@Context HttpServletRequest request,
 			@HeaderParam("User-Name") String userName,
-			@HeaderParam("Access-Token") String token
+			@HeaderParam("Access-Token") String accessToken
 			) {
 		
 		HttpSession session = request.getSession(false);
@@ -30,9 +38,8 @@ public class MazeSave {
 		int responseStatus = 403;
 		
 		if (userName.equals(session.getAttribute("userName")) &&
-				token.equals(session.getAttribute("token"))) {
+				accessToken.equals(session.getAttribute("accessToken"))) {
 			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
-			
 			try {
 				dbConnect.saveGame(gameState, userName, saveSlot);
 				responseStatus = 200;
@@ -44,7 +51,5 @@ public class MazeSave {
 			}
 		}
 		return Response.status(responseStatus).build();
-		
 	}
-
 }

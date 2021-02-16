@@ -2,11 +2,9 @@ package nl.sogyo.littlemaze;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-//import java.time.Duration;
-//import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +16,14 @@ class TileTest {
 	
 	private Tile firstTile;
 	private Tile spikedTile;
-	private Tile miniMaze;
 	private Player aPlayer;
 	
-	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the east, this is a fixed maze
+	private Tile[][] testMaze = new Tile[2][2]; // Because of the first neighbour being build to the south, this is a fixed maze
 	
 	@BeforeEach
 	void setTiles() {
 		aPlayer = new Player("R");
-		miniMaze = new Tile(testMaze);
-		firstTile = miniMaze.getTileAt(0, 0);
+		firstTile = new Tile(testMaze);
 		spikedTile = new Spike(2, 5);
 	}
 	
@@ -49,7 +45,7 @@ class TileTest {
 		assertEquals("s", spikedTile.type());
 		spikedTile.select();
 		assertEquals("h", spikedTile.type());
-		assertEquals("c", miniMaze.getTileAt(0,1).type());
+		assertEquals("c", firstTile.getTileAt(0,1).type());
 	}
 	
 	@Test
@@ -58,7 +54,7 @@ class TileTest {
 		firstTile.moveTo(aPlayer);
 		
 		assertEquals(firstTile.getPosition(), aPlayer.getPosition());
-		assertEquals(50, aPlayer.getHealth());
+		assertEquals(100, aPlayer.getHealth());
 	}
 	
 	@Test
@@ -66,7 +62,7 @@ class TileTest {
 		spikedTile.moveTo(aPlayer);
 		
 		assertEquals(spikedTile.getPosition(), aPlayer.getPosition());
-		assertTrue(50 > aPlayer.getHealth());
+		assertTrue(100 > aPlayer.getHealth());
 	}
 	
 	@Test
@@ -75,23 +71,23 @@ class TileTest {
 		spikedTile.moveTo(aPlayer);
 		
 		assertEquals(spikedTile.getPosition(), aPlayer.getPosition());
-		assertEquals(50, aPlayer.getHealth());
+		assertEquals(100, aPlayer.getHealth());
 	}
 	
 	@Test
-	void makeMiniMaze() {
+	void makeTestMaze() {
 		int[] expectedPosition = {0, 0};
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileAt(0,0).getPosition());
+				firstTile.getPosition());
 		
 		expectedPosition[0] = 1;
 		assertArrayEquals(expectedPosition,
-				miniMaze.getTileAt(1,0).getPosition());
+				firstTile.getTileAt(1,0).getPosition());
 	}
 	
 	@Test
 	void tryGetWrongTile() {
-		assertNull(miniMaze.getTileAt(2,4));
+		assertNull(firstTile.getTileAt(2,4));
 	}
 	
 	@Test
@@ -109,16 +105,16 @@ class TileTest {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
 		aPlayer.turnLeft();
-		aPlayer.moveForward();
+		aPlayer.moveForward(); // Here, the player moved unto a spikey tile
 		
-		assertTrue(50 > aPlayer.getHealth());
+		assertTrue(100 > aPlayer.getHealth());
 	}
 	
 	@Test
 	void invalidMove() {
 		firstTile.moveTo(aPlayer);
 		aPlayer.moveForward();
-		aPlayer.moveForward();
+		aPlayer.moveForward(); // The player can't make this step and should stay put
 		
 		int[] expectedPosition = {1, 0};
 		
@@ -148,7 +144,6 @@ class TileTest {
 		
 		expectedPosition[1] = 0;
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-
 	}
 	
 	@Test
@@ -174,7 +169,7 @@ class TileTest {
 		int[] expectedPosition = {0, 1};
 		
 		assertArrayEquals(expectedPosition, aPlayer.getPosition());
-		assertEquals(127, aPlayer.getScore());
+		assertEquals(97, aPlayer.getScore());
 		assertTrue(aPlayer.isGameOver());
 		
 		aPlayer.moveBackward();
@@ -185,14 +180,19 @@ class TileTest {
 		Tile[][] bigMaze = new Tile[10][10];
 		@SuppressWarnings("unused")
 		Tile firstTile = new Tile(bigMaze);
+		
 		int nrOfChests = 0;
+		Tile chestTile = null;
 		for (Tile[] row : bigMaze) {
 			for (Tile aTile : row ) {
 				if (aTile.containsChest()) {
 					nrOfChests++;
+					chestTile = aTile;
 				}
 			}
 		}
 		assertEquals(1, nrOfChests);
+		assertNotNull(chestTile);
+		assertEquals(500, chestTile.getContent());
 	}
 }

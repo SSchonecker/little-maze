@@ -1,4 +1,18 @@
+# for self-signed key pairs:
 openssl genrsa -out key.pem
 openssl req -new -key key.pem -out csr.pem
 openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
 rm csr.pem
+
+# for certifite key pairs:
+choco install mkcert
+mkcert -install
+
+# in the folder where the pem's should end up
+mkcert localhost
+export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
+
+# also, add the rootCA.pem to firefox on windows:
+# about:preferences#privacy -> "view cretificates" -> import
+# select the rootCA.pem in the folder found with
+mkcert -CAROOT

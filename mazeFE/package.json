@@ -7,16 +7,19 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint src/**/*",
     "start": "node_modules/.bin/webpack-dev-server",
-    "start-https": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem",
-    "start-full": "node_modules/.bin/webpack-dev-server --https --key ./key.pem --cert ./cert.pem --cacert ./ca.pem"
+    "start-https": "node_modules/.bin/webpack-dev-server --https --key ./localhost-key.pem --cert ./localhost.pem"
   },
   "author": "Silke Schoenecker",
   "dependencies": {
+    "@types/uniqid": "^5.2.0",
     "fs": "0.0.1-security",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-native-get-random-values": "^1.5.1",
     "react-router-dom": "^5.2.0",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "uniqid": "^5.2.0",
+    "uuidv4": "^6.2.6"
   },
   "devDependencies": {
     "@types/react": "^16.9.23",

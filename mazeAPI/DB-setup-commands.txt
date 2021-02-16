@@ -44,3 +44,28 @@ CREATE TABLE `test_maze`.`user` (
   UNIQUE INDEX `userID_UNIQUE` (`userID` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `password_UNIQUE` (`password` ASC) VISIBLE);
+//////////////////////////////////////////////////////////////////////
+USE `test_maze`;
+DROP procedure IF EXISTS `UpdateScore`;
+
+USE `test_maze`;
+DROP procedure IF EXISTS `test_maze`.`UpdateScore`;
+;
+
+DELIMITER $$
+USE `test_maze`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateScore`(newScore INT, gridSize INT, oldScoreID INT)
+BEGIN
+SET @userIDparameter = (SELECT userID FROM test_maze.score WHERE scoreID=oldScoreID);
+DELETE FROM test_maze.score WHERE scoreID=oldScoreID;
+INSERT INTO test_maze.score (scorevalue, gridsize, date, userID) values (newScore, gridSize, NOW(), @userIDparameter);
+SELECT * FROM test_maze.score WHERE scoreID=(
+    SELECT max(scoreID) FROM test_maze.score WHERE
+    scorevalue=newScore AND gridsize=gridSize);
+END$$
+
+DELIMITER ;
+;
+
+////////////////// Same for maze_safe
+

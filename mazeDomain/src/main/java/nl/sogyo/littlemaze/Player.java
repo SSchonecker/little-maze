@@ -3,7 +3,7 @@ package nl.sogyo.littlemaze;
 public class Player {
 
 	private Tile currentTile;
-	private int myLife = 50;
+	private int myLife = 100;
 	private int mySteps = -1; // Initiate at -1, because the first tile will also add 1
 	private String myName;
 	private Direction facing = Direction.SOUTH; // Same direction as the first tile's neighbour
@@ -70,6 +70,22 @@ public class Player {
 	public void moveBackward() {
 		currentTile.walkTo(facing.opposite, this);
 	}
+	
+	public void moveLeft() {
+		currentTile.walkTo(Direction.WEST, this);
+	}
+
+	public void moveRight() {
+		currentTile.walkTo(Direction.EAST, this);
+	}
+
+	public void moveUpward() {
+		currentTile.walkTo(Direction.NORTH, this);
+	}
+
+	public void moveDownward() {
+		currentTile.walkTo(Direction.SOUTH, this);
+	}
 
 	/**
 	 * Method for finishing the game and setting the score, once the chest is found. 
@@ -95,22 +111,6 @@ public class Player {
 	
 	public void setSteps(int playerSteps) {
 		mySteps = playerSteps;
-	}
-
-	public void moveLeft() {
-		currentTile.walkTo(Direction.WEST, this);		
-	}
-
-	public void moveRight() {
-		currentTile.walkTo(Direction.EAST, this);		
-	}
-
-	public void moveUpward() {
-		currentTile.walkTo(Direction.NORTH, this);
-	}
-
-	public void moveDownward() {
-		currentTile.walkTo(Direction.SOUTH, this);
 	}
 
 }

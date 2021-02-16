@@ -1,11 +1,17 @@
 package nl.sogyo.littlemaze.mazeapi.dtostructures;
 
+/**
+ * Class meant as expansion on MazeDto, deals with loaded json
+ * from the DB.
+ * Handles the transformation of the layout String matrix
+ * into a usable matrix of chars' list.
+ * Used in MazeInitiate.
+ *
+ */
 public class LoadMazeDto{
 	PlayerDto player;
 	GameStatusDto gameStatus;
 	String[][] layoutFromJSON;
-	
-	public LoadMazeDto() {}
 	
 	public PlayerDto getPlayer() {
 		return player;
@@ -22,11 +28,6 @@ public class LoadMazeDto{
 	public void setGameStatus(GameStatusDto gameStatus) {
 		this.gameStatus = gameStatus;
 	}
-
-	public void setLayoutFromJSON(String[][] layoutFromJSON) {
-		this.layoutFromJSON = layoutFromJSON;
-	}
-
 	
 	public char[][][] getLayout() {
 		char[][][] layout = new char[layoutFromJSON.length][layoutFromJSON.length][5];
