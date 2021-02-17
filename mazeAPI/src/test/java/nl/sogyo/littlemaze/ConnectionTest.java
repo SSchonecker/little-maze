@@ -22,7 +22,7 @@ import nl.sogyo.littlemaze.mazeapi.dtostructures.MazeDto;
  */
 class ConnectionTest {
 	
-	private String url = "jdbc:mysql://localhost:2220/test_maze";
+	private String url = "jdbc:mysql://localhost:4444/test_maze";
 	
 	/**
 	 * Check if the connection is set up by requesting the DB major version number
