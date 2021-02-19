@@ -79,7 +79,7 @@ public class MazeInitiate {
 		if (userName.equals(session.getAttribute("userName")) &&
 				accessToken.equals(session.getAttribute("accessToken"))) {
 			
-			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
+			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:4444/maze_safe");
 			
 			try {
 				String gameStateJSON = dbConnect.loadGame(userName, saveSlot);

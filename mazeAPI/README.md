@@ -24,7 +24,8 @@ The MazeEnd class responds to PUT requests to 2222/littlemaze/api/end/{score} wi
 
 Just run the `../runAPIserver.bash` file from the project's main folder. It will install the domain jar and then start the server, installing all dependencies in the API folder.
 
-To change the port number, the defaults in src/main/resources/jetty.xml and src/main/resources/jetty-https.xml need to be adjusted, as well as the proxy port of the webpack-configuration file of the FE server.
+To change the port number, the defaults in src/main/resources/jetty.xml and src/main/resources/jetty-https.xml need to be adjusted, as well as the proxy port of the webpack-configuration file of the FE server. <br/>
+To change the outgoing port number for the database, change the urls passed to SQLConnect in the five main MazeXxx-classes.
 
 To login, a POST request with a userName and password should be sent to 2222/littlemaze/api/login, which will return an access token required for further communication with the server.
 To start a new game, a POST request with the name of the player and the required grid size should be sent to 2222/littlemaze/api/start, which will return the maze layout and player information.<br/>

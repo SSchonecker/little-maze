@@ -47,7 +47,7 @@ public class MazeEnd {
 			
 			int newScore = Integer.parseInt(score);
 			
-			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
+			SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:4444/maze_safe");
 			
 			try {
 				List<ScoreRow> scoreRowList = dbConnect.getScores(userName, newScore, 

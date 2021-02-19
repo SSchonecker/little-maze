@@ -51,7 +51,7 @@ public class MazeLogin {
 		boolean createAccount = loginInfo.getCreateAccount();
 		String password = loginInfo.getPasswordHash();
 		
-		SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:2220/maze_safe");
+		SqlConnect dbConnect = new SqlConnect("jdbc:mysql://localhost:4444/maze_safe");
 		int saveSlotUsed = 0;
 		
 		if (createAccount) {
