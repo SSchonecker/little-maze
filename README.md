@@ -14,5 +14,4 @@ The front-end or FE creates the website for a user to play on.
 Additional and detailed information can be found in each of the sub-folders.
 
 Provided a correct database, the entire app should start with the /runXXserver.bash files and the site can then be found at https://localhost:2200/. <br/>
-**The database set-up might be an issue at this point...**<br/>
 The ports used are 2200 for the FE server, 2222 for the API server and 4444 for the docker-based database.
